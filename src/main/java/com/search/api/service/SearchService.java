@@ -165,14 +165,14 @@ public class SearchService {
 
         if (req.getCategory() != null && !req.getCategory().isBlank()) {
             filters.add(TermQuery.of(t -> t
-                    .field("category.keyword")
+                    .field("category")
                     .value(FieldValue.of(req.getCategory()))
             )._toQuery());
         }
 
         if (req.getBrand() != null && !req.getBrand().isBlank()) {
             filters.add(TermQuery.of(t -> t
-                    .field("brand.keyword")
+                    .field("brand")
                     .value(FieldValue.of(req.getBrand()))
             )._toQuery());
         }

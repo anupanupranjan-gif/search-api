@@ -1,0 +1,8 @@
+target/
+*.jar
+.idea/
+*.iml
+.vscode/
+*.log
+.djl.ai/
+*.parquet

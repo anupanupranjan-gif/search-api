@@ -1,0 +1,16 @@
+com/search/api/model/SearchResponse.class
+com/search/api/embedding/SentenceEmbeddingTranslator.class
+com/search/api/service/EmbeddingService$SentenceTranslator.class
+com/search/api/model/SearchResponse$SearchHit.class
+com/search/api/service/EmbeddingService.class
+com/search/api/model/SearchResult$SearchHit.class
+com/search/api/controller/GlobalExceptionHandler.class
+com/search/api/model/SearchRequest.class
+com/search/api/model/ProductDocument.class
+com/search/api/model/SearchResult$SearchHit$Builder.class
+com/search/api/config/ElasticsearchConfig.class
+com/search/api/SearchApiApplication.class
+com/search/api/config/EmbeddingConfig.class
+com/search/api/service/SearchService.class
+com/search/api/controller/SearchController.class
+com/search/api/model/SearchResult.class

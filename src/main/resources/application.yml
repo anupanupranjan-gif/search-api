@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: search-api
+
+server:
+  port: ${PORT:8080}
+
+elasticsearch:
+  host: ${ES_HOST:localhost}
+  port: ${ES_PORT:9200}
+  username: ${ES_USERNAME:elastic}
+  password: ${ES_PASSWORD:changeme}
+  scheme: ${ES_SCHEME:http}
+
+search:
+  vector:
+    k: ${SEARCH_VECTOR_K:50}
+    candidates: ${SEARCH_VECTOR_CANDIDATES:150}
+  hybrid:
+    vector-weight: ${SEARCH_HYBRID_VECTOR_WEIGHT:0.7}
+    keyword-weight: ${SEARCH_HYBRID_KEYWORD_WEIGHT:0.3}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    com.search.api: INFO
+    co.elastic: WARN

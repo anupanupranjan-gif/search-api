@@ -17,11 +17,12 @@ spec:
       containers:
         - name: search-api
           image: search-api:latest
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
           env:
             - name: ES_HOST
-              value: "elasticsearch"
+              value: "172.18.0.1"
             - name: ES_PORT
               value: "9200"
             - name: ES_USERNAME

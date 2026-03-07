@@ -1,0 +1,107 @@
+{
+  "albert-base-v2": {
+    "application": "nlp/fill_mask",
+    "downloads": 2340886,
+    "result": "success",
+    "sha1": "51dbd9db43a0c6eba97f74b91ce26fface509e0b",
+    "size": 42194813
+  },
+  "answerdotai/ModernBERT-base": {
+    "application": "nlp/fill_mask",
+    "downloads": 4825732,
+    "result": "success",
+    "sha1": null,
+    "size": 602784718
+  },
+  "answerdotai/ModernBERT-large": {
+    "application": "nlp/fill_mask",
+    "downloads": 2042882,
+    "result": "success",
+    "sha1": null,
+    "size": 1587840469
+  },
+  "armheb/DNA_bert_6": {
+    "application": "nlp/fill_mask",
+    "downloads": 619753,
+    "result": "success",
+    "sha1": "a79a8fd96ad172f964a4dbef3f4d7545a5034baa",
+    "size": 331711120
+  },
+  "bert-base-cased": {
+    "application": "nlp/fill_mask",
+    "downloads": 8639983,
+    "result": "success",
+    "sha1": "a8d257ba9925ef39f3036bfc338acf5283c512d9",
+    "size": 402593251
+  },
+  "bert-base-multilingual-cased": {
+    "application": "nlp/fill_mask",
+    "downloads": 1056978,
+    "result": "success",
+    "sha1": "cf732291d5a8eace7b973ccd13c95ec07b19e734",
+    "size": 661742414
+  },
+  "bert-base-multilingual-uncased": {
+    "application": "nlp/fill_mask",
+    "downloads": 1440068,
+    "result": "success",
+    "sha1": "800c34f3d5aa174fe531f560b44b8d14592225b7",
+    "size": 622532543
+  },
+  "bert-base-uncased": {
+    "application": "nlp/fill_mask",
+    "downloads": 23071134,
+    "result": "success",
+    "sha1": "418430c3b5df7ace92f2aede75700d22c78a0f95",
+    "size": 406049960
+  },
+  "bert-large-uncased": {
+    "application": "nlp/fill_mask",
+    "downloads": 1610187,
+    "result": "success",
+    "sha1": "3835a195d41f7ddc47d5ecab84b64f71d6f144e9",
+    "size": 1245317863
+  },
+  "distilbert-base-multilingual-cased": {
+    "application": "nlp/fill_mask",
+    "downloads": 538307,
+    "result": "success",
+    "sha1": "fb240273126596a03b35c85793d2e82a5b13ac79",
+    "size": 503312312
+  },
+  "distilbert-base-uncased": {
+    "application": "nlp/fill_mask",
+    "downloads": 7448384,
+    "result": "success",
+    "sha1": "043235d6088ecd3dd5fb5ca3592b6913fd516027",
+    "size": 247372224
+  },
+  "roberta-base": {
+    "application": "nlp/fill_mask",
+    "downloads": 6722947,
+    "result": "success",
+    "sha1": "251c3c36356d3ad6845eb0554fdb9703d632c6cc",
+    "size": 295195481
+  },
+  "roberta-large": {
+    "application": "nlp/fill_mask",
+    "downloads": 2439298,
+    "result": "success",
+    "sha1": "619fd8c2ca2bc7ac3959b7f71b6c426c897ba407",
+    "size": 833472298
+  },
+  "xlm-roberta-base": {
+    "application": "nlp/fill_mask",
+    "downloads": 3890794,
+    "result": "success",
+    "sha1": "f6d161e8f5f6f2ed433fb4023d6cb34146506b3f",
+    "size": 647325330
+  },
+  "xlm-roberta-large": {
+    "application": "nlp/fill_mask",
+    "downloads": 762830,
+    "result": "success",
+    "sha1": "b2a6150f8be56457baf80c74342cc424080260f0",
+    "size": 1303253497
+  }
+}

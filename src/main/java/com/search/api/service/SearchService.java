@@ -48,16 +48,41 @@ public class SearchService {
     public com.search.api.model.SearchResponse search(com.search.api.model.SearchRequest req) throws Exception {
         long start = System.currentTimeMillis();
 
-        List<SearchHit> hits = switch (req.getMode()) {
-            case "vector"  -> vectorSearch(req);
-            case "keyword" -> keywordSearch(req);
-            default        -> hybridSearch(req);
-        };
+        boolean isMatchAll = req.getQuery() == null || req.getQuery().isBlank()
+                || req.getQuery().trim().equals("*");
+
+        List<SearchHit> hits = isMatchAll
+                ? matchAllSearch(req)
+                : switch (req.getMode()) {
+                    case "vector"  -> vectorSearch(req);
+                    case "keyword" -> keywordSearch(req);
+                    default        -> hybridSearch(req);
+                };
 
         long took = System.currentTimeMillis() - start;
         log.info("Search [{}] query='{}' results={} took={}ms", req.getMode(), req.getQuery(), hits.size(), took);
 
         return new com.search.api.model.SearchResponse(hits.size(), req.getPage(), req.getSize(), req.getMode(), took, hits);
+    }
+
+
+    // ── Match-all: for category browsing with no query ────────────────────────
+
+    private List<SearchHit> matchAllSearch(com.search.api.model.SearchRequest req) throws Exception {
+        Query filterQuery = buildFilterQuery(req);
+
+        Query finalQuery = filterQuery != null
+                ? BoolQuery.of(b -> b.filter(filterQuery))._toQuery()
+                : new MatchAllQuery.Builder().build()._toQuery();
+
+        SearchRequest esReq = SearchRequest.of(r -> r
+                .index(INDEX)
+                .query(finalQuery)
+                .from(req.getPage() * req.getSize())
+                .size(req.getSize())
+        );
+
+        return executeSearch(esReq);
     }
 
     // ── Hybrid: weighted combination of vector + BM25 scores ─────────────────

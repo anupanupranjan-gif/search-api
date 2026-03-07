@@ -1,0 +1,130 @@
+{
+  "Davlan/bert-base-multilingual-cased-ner-hrl": {
+    "application": "nlp/token_classification",
+    "downloads": 98799,
+    "result": "success",
+    "sha1": "6f69c39cadcdba0ab1401fb1f164964e7557e471",
+    "size": 659124735
+  },
+  "Davlan/xlm-roberta-base-ner-hrl": {
+    "application": "nlp/token_classification",
+    "downloads": 41512,
+    "result": "success",
+    "sha1": "22c2ab03e20036d86e00c358e331e24bd50420b6",
+    "size": 847808582
+  },
+  "Jean-Baptiste/roberta-large-ner-english": {
+    "application": "nlp/token_classification",
+    "downloads": 139862,
+    "result": "success",
+    "sha1": "c272484a77f6bacd3569d32936fda04555fb4006",
+    "size": 1286183422
+  },
+  "alvaroalon2/biobert_chemical_ner": {
+    "application": "nlp/token_classification",
+    "downloads": 166516,
+    "reason": "TokenClassification returns with empty result",
+    "result": "failed",
+    "sha1": "a5c41a966542076b2cea6a0ffca62d5610277e6f",
+    "size": -1
+  },
+  "cahya/xlm-roberta-large-indonesian-NER": {
+    "application": "nlp/token_classification",
+    "downloads": 53221,
+    "result": "success",
+    "sha1": "d0ef1c27f757b1c21ab299ccfb25fe858ac77ed4",
+    "size": 1741906613
+  },
+  "dbmdz/bert-large-cased-finetuned-conll03-english": {
+    "application": "nlp/token_classification",
+    "downloads": 99757,
+    "result": "success",
+    "sha1": "f2482bf01f5da0f0eb8e183ffd8cc3885aa90b14",
+    "size": 1235684749
+  },
+  "disham993/electrical-ner-ModernBERT-base": {
+    "application": "nlp/token_classification",
+    "downloads": 91,
+    "result": "success",
+    "sha1": null,
+    "size": 602665576
+  },
+  "dslim/bert-base-NER": {
+    "application": "nlp/token_classification",
+    "downloads": 557922,
+    "result": "success",
+    "sha1": "f7c2808a659015eeb8828f3f809a2f1be67a2446",
+    "size": 400311082
+  },
+  "dslim/bert-base-NER-uncased": {
+    "application": "nlp/token_classification",
+    "downloads": 272464,
+    "result": "success",
+    "sha1": "1f52ebe0381dc9e285c0aa7c2971b350894f1efa",
+    "size": 403766931
+  },
+  "dslim/bert-large-NER": {
+    "application": "nlp/token_classification",
+    "downloads": 463170,
+    "result": "success",
+    "sha1": "95c62bc0d4109bd97d0578e5ff482e6b84c2b8b9",
+    "size": 1235686034
+  },
+  "felflare/bert-restore-punctuation": {
+    "application": "nlp/token_classification",
+    "downloads": 30946,
+    "reason": "Unexpected inference result",
+    "result": "failed",
+    "sha1": "954108a105ef1f89f08b71c25d6e33bb89cde724",
+    "size": -1
+  },
+  "guishe/nuner-v1_orgs": {
+    "application": "nlp/token_classification",
+    "downloads": 8238,
+    "result": "success",
+    "sha1": null,
+    "size": 500192032
+  },
+  "hf-internal-testing/tiny-bert-for-token-classification": {
+    "application": "nlp/token_classification",
+    "downloads": 37955,
+    "result": "success",
+    "sha1": "f89ef50d84f2959688279d4b2c09faf823da2069",
+    "size": 458028
+  },
+  "ml6team/bert-base-uncased-city-country-ner": {
+    "application": "nlp/token_classification",
+    "downloads": 44962,
+    "result": "success",
+    "sha1": "e38e683af1174120b192661dbdcbc2358fe56964",
+    "size": 403751943
+  },
+  "oliverguhr/fullstop-punctuation-multilang-large": {
+    "application": "nlp/token_classification",
+    "downloads": 44674,
+    "result": "success",
+    "sha1": "4740a83c496dc2416c0cf8ae3c6572dfb6851228",
+    "size": 1779988178
+  },
+  "sanketrai/modernbert-base-conll2003-english-ner": {
+    "application": "nlp/token_classification",
+    "downloads": 147,
+    "result": "success",
+    "sha1": null,
+    "size": 602644887
+  },
+  "vblagoje/bert-english-uncased-finetuned-pos": {
+    "application": "nlp/token_classification",
+    "downloads": 57825,
+    "result": "success",
+    "sha1": "46ec120264b121e8d92bef19b45c107d06d2cb99",
+    "size": 403785387
+  },
+  "xlm-roberta-large-finetuned-conll03-english": {
+    "application": "nlp/token_classification",
+    "downloads": 366025,
+    "result": "success",
+    "sha1": "33a83d9855a119c0453ce450858c07835a0bdbed",
+    "size": 1742399458
+  }
+}

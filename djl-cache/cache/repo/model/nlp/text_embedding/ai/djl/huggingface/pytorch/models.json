@@ -1,0 +1,2967 @@
+{
+  "AI-Growth-Lab/PatentSBERTa": {
+    "application": "nlp/text_embedding",
+    "downloads": 2771,
+    "reason": "Failed to run inference on jit model",
+    "result": "failed",
+    "sha1": "7550939f981e2236a4cabfe3bd6cb6996d317a63",
+    "size": -1
+  },
+  "AIDA-UPM/mstsb-paraphrase-multilingual-mpnet-base-v2": {
+    "application": "nlp/text_embedding",
+    "downloads": 2916,
+    "result": "success",
+    "sha1": "7c1614a46aa544de7d3bfecf05de0734cc72d0ed",
+    "size": 1013943643
+  },
+  "Alibaba-NLP/gte-modernbert-base": {
+    "application": "nlp/text_embedding",
+    "downloads": 19822,
+    "result": "success",
+    "sha1": null,
+    "size": 600216526
+  },
+  "AnnaWegmann/Style-Embedding": {
+    "application": "nlp/text_embedding",
+    "downloads": 352,
+    "result": "success",
+    "sha1": "c098de52c64898eaf32d1eeb36fc19ed27695525",
+    "size": 463617820
+  },
+  "BAAI/bge-base-en-v1.5": {
+    "application": "nlp/text_embedding",
+    "downloads": 117466,
+    "result": "success",
+    "sha1": "617ca489d9e86b49b8167676d8220688b99db36e",
+    "size": 254044650
+  },
+  "BAAI/bge-base-zh-v1.5": {
+    "application": "nlp/text_embedding",
+    "downloads": 3199,
+    "result": "success",
+    "sha1": "f03589ceff5aac7111bd60cfc7d497ca17ecac65",
+    "size": 238470996
+  },
+  "BAAI/bge-large-en-v1.5": {
+    "application": "nlp/text_embedding",
+    "downloads": 331990,
+    "result": "success",
+    "sha1": "0e76a14a47548a15db4aa81d7fb50dba76d5e2c6",
+    "size": 777897151
+  },
+  "BAAI/bge-m3": {
+    "application": "nlp/text_embedding",
+    "downloads": 2940109,
+    "requires": "0.33.0",
+    "result": "success",
+    "sha1": null,
+    "size": 2288996732
+  },
+  "BAAI/bge-small-en-v1.5": {
+    "application": "nlp/text_embedding",
+    "downloads": 331494,
+    "result": "success",
+    "sha1": "982532469af0dff5df8e70b38075b0940e863662",
+    "size": 78264418
+  },
+  "Blaxzter/LaBSE-sentence-embeddings": {
+    "application": "nlp/text_embedding",
+    "downloads": 148,
+    "result": "success",
+    "sha1": "d42ba8d4f60dc8ca2279e03e8764f8edb769b9e2",
+    "size": 1755464597
+  },
+  "Craig/paraphrase-MiniLM-L6-v2": {
+    "application": "nlp/text_embedding",
+    "downloads": 221,
+    "result": "success",
+    "sha1": "7f1c6a384b3f870bdefcb13114cd8a9d2fd06dd1",
+    "size": 83672315
+  },
+  "DMetaSoul/sbert-chinese-general-v1": {
+    "application": "nlp/text_embedding",
+    "downloads": 324,
+    "result": "success",
+    "sha1": "4632e9e22d7df9134d96f1a3b717b71a83112c61",
+    "size": 380116882
+  },
+  "DMetaSoul/sbert-chinese-general-v2": {
+    "application": "nlp/text_embedding",
+    "downloads": 363,
+    "result": "success",
+    "sha1": "14b486c50cdb0e7cff9792488021c905abfd9a57",
+    "size": 380130305
+  },
+  "DataikuNLP/paraphrase-multilingual-MiniLM-L12-v2": {
+    "application": "nlp/text_embedding",
+    "downloads": 2101,
+    "result": "success",
+    "sha1": "4f806dbc260d6ce3d6aed0cbf875f668cc1b5480",
+    "size": 435765295
+  },
+  "DecisionOptimizationSystem/DeepFeatEmbeddingLargeContext": {
+    "application": "nlp/text_embedding",
+    "downloads": 1447,
+    "reason": "Unexpected inference result",
+    "result": "failed",
+    "sha1": "f1f2f2563038b834cb04d707ff6f1a296a9a408e",
+    "size": -1
+  },
+  "DrSebastianK/medbedding": {
+    "application": "nlp/text_embedding",
+    "downloads": 205,
+    "result": "success",
+    "sha1": "0475e6bc010fdc3d3e8e9680a6f60920b0e0af0a",
+    "size": 1219231459
+  },
+  "DrishtiSharma/sentence-t5-large-quora-text-similarity": {
+    "application": "nlp/text_embedding",
+    "downloads": 56,
+    "reason": "Failed to trace model",
+    "result": "failed",
+    "sha1": "2da79f0967ed82a220a33aac872c57278157646a",
+    "size": -1
+  },
+  "DylanJHJ/gtr-t5-base": {
+    "application": "nlp/text_embedding",
+    "downloads": 150,
+    "reason": "Failed to trace model",
+    "result": "failed",
+    "sha1": "ef9ace6f5136e9e0d0ef6cdf9f4bec7f37ecd263",
+    "size": -1
+  },
+  "EZlee/e-commerce-bert-base-multilingual-cased": {
+    "application": "nlp/text_embedding",
+    "downloads": 51,
+    "result": "success",
+    "sha1": "5c0c3c2b3518bae765b02c240be81ada2105b46c",
+    "size": 661339664
+  },
+  "Equall/english-beta-0.3": {
+    "application": "nlp/text_embedding",
+    "downloads": 63,
+    "result": "success",
+    "sha1": "eea9abc08ad0354cf11c35e9aff1178435c8df42",
+    "size": 1221704176
+  },
+  "FajnyKarton/st-polish-kartonberta-base-alpha-v1": {
+    "application": "nlp/text_embedding",
+    "downloads": 815,
+    "result": "success",
+    "sha1": "b012a37bd0439eb9d1a46deb36c23a86eac9405b",
+    "size": 462661880
+  },
+  "FremyCompany/BioLORD-STAMB2-v1": {
+    "application": "nlp/text_embedding",
+    "downloads": 666,
+    "reason": "Failed to trace model",
+    "result": "failed",
+    "sha1": "fb239a76a78cf6d45258949b34565597a4616b78",
+    "size": -1
+  },
+  "GanymedeNil/text2vec-base-chinese": {
+    "application": "nlp/text_embedding",
+    "downloads": 3554,
+    "result": "success",
+    "sha1": "63c5640935ea81c04763e9dc3af5a731d93e16bf",
+    "size": 379924671
+  },
+  "GanymedeNil/text2vec-large-chinese": {
+    "application": "nlp/text_embedding",
+    "downloads": 15359,
+    "result": "success",
+    "sha1": "064717f2acfd7253bea91079d59b82e50b58c886",
+    "size": 1209778546
+  },
+  "HgThinker/vietnamese-sbert": {
+    "application": "nlp/text_embedding",
+    "downloads": 52,
+    "result": "success",
+    "sha1": "158ef985d3a0ce926e82af41f82f85a056bc23d1",
+    "size": 473791494
+  },
+  "Hum-Works/lodestone-base-4096-v1": {
+    "application": "nlp/text_embedding",
+    "downloads": 2769,
+    "result": "success",
+    "sha1": "9bbc2d0b57dd2198aea029404b0f976712a7d966",
+    "size": 348463737
+  },
+  "Jerado/all-MiniLM-L6-v2-finetuned": {
+    "application": "nlp/text_embedding",
+    "downloads": 107,
+    "result": "success",
+    "sha1": "e082e38aba9c38e70410cbf0497c9795cd632b26",
+    "size": 83597594
+  },
+  "JoBeer/multi-qa-mpnet-base-dot-v1-eclass": {
+    "application": "nlp/text_embedding",
+    "downloads": 66,
+    "reason": "Failed to run inference on jit model",
+    "result": "failed",
+    "sha1": "a1a209634ab014d2ea95414a006f9fdf0e67e465",
+    "size": -1
+  },
+  "KBLab/sentence-bert-swedish-cased": {
+    "application": "nlp/text_embedding",
+    "downloads": 831,
+    "result": "success",
+    "sha1": "a65f4bc95040fb90ba94d2afca67d6f308f4d0b6",
+    "size": 463570076
+  },
+  "KDHyun08/TAACO_STS": {
+    "application": "nlp/text_embedding",
+    "downloads": 59,
+    "result": "success",
+    "sha1": "53f72d8d0c35934fe6dee16fd443411fcdcac53d",
+    "size": 411202797
+  },
+  "LLukas22/all-mpnet-base-v2-embedding-all": {
+    "application": "nlp/text_embedding",
+    "downloads": 179,
+    "reason": "Failed to run inference on jit model",
+    "result": "failed",
+    "sha1": "925ead76f73ad36080e27b04163f1b110416bd5b",
+    "size": -1
+  },
+  "LLukas22/paraphrase-multilingual-mpnet-base-v2-embedding-all": {
+    "application": "nlp/text_embedding",
+    "downloads": 79,
+    "result": "success",
+    "sha1": "6c2e6758725385cde742ca0c76fee06984f3a61e",
+    "size": 1016466803
+  },
+  "Lajavaness/CrossEncoder-camembert-large": {
+    "application": "nlp/text_embedding",
+    "downloads": 84,
+    "result": "success",
+    "sha1": "06001da47d1b4bc44a31811922799a6dce2ff8f7",
+    "size": 1235090438
+  },
+  "Muennighoff/SGPT-1.3B-weightedmean-msmarco-specb-bitfit": {
+    "application": "nlp/text_embedding",
+    "downloads": 4821,
+    "reason": "Failed to trace model",
+    "result": "failed",
+    "sha1": "bac636ea26b5b810eee6be73fe8c8f484ba1c8c4",
+    "size": -1
+  },
+  "Muennighoff/SGPT-125M-mean-nli-bitfit": {
+    "application": "nlp/text_embedding",
+    "downloads": 79,
+    "reason": "Failed to trace model",
+    "result": "failed",
+    "sha1": "7f4eec6d68aae9464b71120cd4e29e98d6f6590a",
+    "size": -1
+  },
+  "Muennighoff/SGPT-125M-weightedmean-msmarco-specb-bitfit": {
+    "application": "nlp/text_embedding",
+    "downloads": 4051,
+    "reason": "Failed to trace model",
+    "result": "failed",
+    "sha1": "c135b3471857e3d8db7fd00ee981d7d1948f0770",
+    "size": -1
+  },
+  "Muennighoff/SGPT-125M-weightedmean-nli-bitfit": {
+    "application": "nlp/text_embedding",
+    "downloads": 3500,
+    "reason": "Failed to trace model",
+    "result": "failed",
+    "sha1": "23691c8b63a42b9a9796965c152feea82e25133c",
+    "size": -1
+  },
+  "Muennighoff/SGPT-2.7B-weightedmean-msmarco-specb-bitfit": {
+    "application": "nlp/text_embedding",
+    "downloads": 2843,
+    "reason": "Failed to trace model",
+    "result": "failed",
+    "sha1": "44ec091e09d0366b9681dc853f88bfb619fedd19",
+    "size": -1
+  },
+  "Muennighoff/SGPT-5.8B-weightedmean-msmarco-specb-bitfit": {
+    "application": "nlp/text_embedding",
+    "downloads": 2994,
+    "reason": "Failed to trace model",
+    "result": "failed",
+    "sha1": "2dbba11efed19bb418811eac04be241ddc42eb99",
+    "size": -1
+  },
+  "Muennighoff/SGPT-5.8B-weightedmean-nli-bitfit": {
+    "application": "nlp/text_embedding",
+    "downloads": 2681,
+    "reason": "Failed to trace model",
+    "result": "failed",
+    "sha1": "88aafd983654e7ae20241b1f58223de316f7b003",
+    "size": -1
+  },
+  "NYTK/sentence-transformers-experimental-hubert-hungarian": {
+    "application": "nlp/text_embedding",
+    "downloads": 163,
+    "result": "success",
+    "sha1": "4bc0656f1d371bc3a86b3a6e9b9b3dfdbd74f33c",
+    "size": 411149184
+  },
+  "NbAiLab/nb-sbert-base": {
+    "application": "nlp/text_embedding",
+    "downloads": 359,
+    "result": "success",
+    "sha1": "fc0e05a9dc7300e356d291639e9e5de1089dbcd2",
+    "size": 662413495
+  },
+  "NetherlandsForensicInstitute/robbert-2022-dutch-sentence-transformers": {
+    "application": "nlp/text_embedding",
+    "downloads": 632,
+    "result": "success",
+    "sha1": "705cbfbba8b74fae19711e3026bc500ca68438bd",
+    "size": 441810852
+  },
+  "NeuML/pubmedbert-base-embeddings": {
+    "application": "nlp/text_embedding",
+    "downloads": 1644,
+    "result": "success",
+    "sha1": "ba210f40b1b6d555d675c2d1ed6372e44570fc3c",
+    "size": 406882731
+  },
+  "OctopusMind/longbert-8k-zh": {
+    "application": "nlp/text_embedding",
+    "downloads": 127,
+    "result": "success",
+    "sha1": "f8586516cc9d453fe193d464f9d7eae301d1514b",
+    "size": 401786201
+  },
+  "PM-AI/bi-encoder_msmarco_bert-base_german": {
+    "application": "nlp/text_embedding",
+    "downloads": 1979,
+    "result": "success",
+    "sha1": "a7e2f5631a974ee5d66a1042ea633baeb89ba5f1",
+    "size": 408538531
+  },
+  "RIOLITE/products_matching_aumet_fine_tune_2023-08-22": {
+    "application": "nlp/text_embedding",
+    "downloads": 207,
+    "result": "success",
+    "sha1": "c106a8952dd681398f24e201bdb025319220c8e2",
+    "size": 83579569
+  },
+  "Research2NLP/electrical_stella": {
+    "application": "nlp/text_embedding",
+    "downloads": 126,
+    "result": "success",
+    "sha1": "0e85e0188f9593b7910fb665bdf32071c9b9e6e9",
+    "size": 1194125475
+  },
+  "Sakil/sentence_similarity_semantic_search": {
+    "application": "nlp/text_embedding",
+    "downloads": 259,
+    "result": "success",
+    "sha1": "af313db6a3aaac94eea260a7cfcd79033c9b7c1b",
+    "size": 245098438
+  },
+  "Severian/embed": {
+    "application": "nlp/text_embedding",
+    "downloads": 117,
+    "reason": "Failed to load model",
+    "result": "failed",
+    "sha1": "c1824c416536dab1755bc6d55c163e00b4c70c12",
+    "size": -1
+  },
+  "SeyedAli/Multilingual-Text-Semantic-Search-Siamese-BERT-V1": {
+    "application": "nlp/text_embedding",
+    "downloads": 128,
+    "result": "success",
+    "sha1": "1c63db10a608076224e9e3a7b417d1402483fae7",
+    "size": 83571568
+  },
+  "Seznam/dist-mpnet-paracrawl-cs-en": {
+    "application": "nlp/text_embedding",
+    "downloads": 109,
+    "result": "success",
+    "sha1": "cdd3d68a1b26d931bbe32df672bd674b13f13d2b",
+    "size": 91280880
+  },
+  "Seznam/retromae-small-cs": {
+    "application": "nlp/text_embedding",
+    "downloads": 177,
+    "result": "success",
+    "sha1": "4f8c5f2fbd11caa5dd49c3fe2ab1ad41d4509d08",
+    "size": 90922891
+  },
+  "Seznam/simcse-dist-mpnet-czeng-cs-en": {
+    "application": "nlp/text_embedding",
+    "downloads": 52,
+    "result": "success",
+    "sha1": "ee9ec9f554f05bcd50249d68827c8fde80a74b95",
+    "size": 91039372
+  },
+  "Sunkyum/faq-semantic-bert-base": {
+    "application": "nlp/text_embedding",
+    "downloads": 118,
+    "result": "success",
+    "sha1": "46527e36dfd66c72d96db8119a6b516823339896",
+    "size": 661325632
+  },
+  "TaylorAI/bge-micro": {
+    "application": "nlp/text_embedding",
+    "downloads": 2770,
+    "result": "success",
+    "sha1": "22d62ff3a4b66151101f22309b6ad812de1fe038",
+    "size": 41253203
+  },
+  "TaylorAI/bge-micro-v2": {
+    "application": "nlp/text_embedding",
+    "downloads": 6222,
+    "result": "success",
+    "sha1": "efd6a5d36a162f8dd9fe3f626b257fac9841fc2c",
+    "size": 41247898
+  },
+  "TaylorAI/gte-tiny": {
+    "application": "nlp/text_embedding",
+    "downloads": 5941,
+    "result": "success",
+    "sha1": "4cc5e73d86a67c601897257b467187234aa3bca3",
+    "size": 53925289
+  },
+  "TimKoornstra/SAURON": {
+    "application": "nlp/text_embedding",
+    "downloads": 50,
+    "result": "success",
+    "sha1": "472821107fcedaa94968d33b78bd58dd6f5cd1db",
+    "size": 463597810
+  },
+  "ToolBench/ToolBench_IR_bert_based_uncased": {
+    "application": "nlp/text_embedding",
+    "downloads": 129,
+    "result": "success",
+    "sha1": "cf4a904c33cde549643aa6d9091146e68ed4932f",
+    "size": 405977443
+  },
+  "TurkuNLP/sbert-cased-finnish-paraphrase": {
+    "application": "nlp/text_embedding",
+    "downloads": 736,
+    "result": "success",
+    "sha1": "f1a793ca55932e3beeee506cebf92bda504fde52",
+    "size": 463032693
+  },
+  "TurkuNLP/sbert-uncased-finnish-paraphrase": {
+    "application": "nlp/text_embedding",
+    "downloads": 317,
+    "result": "success",
+    "sha1": "af1c35ea10a86e35da38494d0b62366bed31ddd4",
+    "size": 463016599
+  },
+  "VoVanPhuc/bge-base-vi": {
+    "application": "nlp/text_embedding",
+    "downloads": 402,
+    "result": "success",
+    "sha1": "61dcdc246c0a1ecb4ef4b51ccb9857c5c6468ee7",
+    "size": 501968803
+  },
+  "VoVanPhuc/sup-SimCSE-VietNamese-phobert-base": {
+    "application": "nlp/text_embedding",
+    "downloads": 50783,
+    "result": "success",
+    "sha1": "a298916e20e5ae4e42de720c213a1932a4ecaa44",
+    "size": 479244752
+  },
+  "Voicelab/sbert-base-cased-pl": {
+    "application": "nlp/text_embedding",
+    "downloads": 171,
+    "result": "success",
+    "sha1": "0dc2d91c5e797d9487afe280378216a5aa1136fe",
+    "size": 461715353
+  },
+  "Voicelab/sbert-large-cased-pl": {
+    "application": "nlp/text_embedding",
+    "downloads": 846,
+    "result": "success",
+    "sha1": "27ce564dbf5edf1f1e314a07411af60c818e31b1",
+    "size": 1317425114
+  },
+  "aari1995/German_Semantic_STS_V2": {
+    "application": "nlp/text_embedding",
+    "downloads": 10236,
+    "result": "success",
+    "sha1": "b1c75c90bd2148783cd8a581955bcea19105dc24",
+    "size": 1248037280
+  },
+  "abbasgolestani/ag-nli-DeTS-sentence-similarity-v1": {
+    "application": "nlp/text_embedding",
+    "downloads": 6559,
+    "result": "success",
+    "sha1": "09203c6199caae3509887b81e9929d22d8df36a1",
+    "size": 1285849693
+  },
+  "abbasgolestani/ag-nli-bert-mpnet-base-uncased-sentence-similarity-v1": {
+    "application": "nlp/text_embedding",
+    "downloads": 657,
+    "reason": "Failed to run inference on jit model",
+    "result": "failed",
+    "sha1": "acaffd30b65a600d9965d50be9d88a254cc04471",
+    "size": -1
+  },
+  "aditeyabaral/sentencetransformer-bert-base-cased": {
+    "application": "nlp/text_embedding",
+    "downloads": 358714,
+    "result": "success",
+    "sha1": "48d1c8f4623cabe13269c126cdebaf27a65fdeb5",
+    "size": 402525949
+  },
+  "alfaneo/jurisbert-base-portuguese-sts": {
+    "application": "nlp/text_embedding",
+    "downloads": 55,
+    "result": "success",
+    "sha1": "65d7c3b9a750d229ca29f816c91831019b3b9a5e",
+    "size": 405051896
+  },
+  "amu/tao": {
+    "application": "nlp/text_embedding",
+    "downloads": 1019,
+    "result": "success",
+    "sha1": "ba3d1cc51269c0bfd1d9590c24f13c740439557a",
+    "size": 611502368
+  },
+  "amu/tao-8k": {
+    "application": "nlp/text_embedding",
+    "downloads": 926,
+    "result": "success",
+    "sha1": "4649ce5aeab1b5d13c07bb4f2c1337b3ba03eb05",
+    "size": 625096938
+  },
+  "anatel/bert-augmented-pt-anatel": {
+    "application": "nlp/text_embedding",
+    "downloads": 2,
+    "result": "success",
+    "sha1": "007c0f94309ab8d6e893036ba8625c5cac93eba5",
+    "size": 404701358
+  },
+  "antoinelouis/biencoder-MiniLM-L6-all-v2-mmarcoFR": {
+    "application": "nlp/text_embedding",
+    "downloads": 519,
+    "result": "success",
+    "sha1": "109ddcf337f59fed9637ac391821609421767a44",
+    "size": 83600579
+  },
+  "antoinelouis/biencoder-camembert-base-mmarcoFR": {
+    "application": "nlp/text_embedding",
+    "downloads": 1287,
+    "result": "success",
+    "sha1": "389c149318522c7dd17e7a4afc5775f13f5e823d",
+    "size": 411396732
+  },
+  "antoinelouis/biencoder-mMiniLMv2-L12-mmarcoFR": {
+    "application": "nlp/text_embedding",
+    "downloads": 71,
+    "result": "success",
+    "sha1": "c002aa13f6526f2d3ca112902878acee9d24968d",
+    "size": 360618685
+  },
+  "antoinelouis/crossencoder-camembert-base-mmarcoFR": {
+    "application": "nlp/text_embedding",
+    "downloads": 47,
+    "result": "success",
+    "sha1": "dd25fb1edd52e57ffbae64926dc26efa7677ec22",
+    "size": 411608946
+  },
+  "antoinelouis/crossencoder-mMiniLMv2-L12-mmarcoFR": {
+    "application": "nlp/text_embedding",
+    "downloads": 432,
+    "result": "success",
+    "sha1": "308dea61c3e128c754b906f64bafedaae96dfc8e",
+    "size": 357085592
+  },
+  "barisaydin/text2vec-base-multilingual": {
+    "application": "nlp/text_embedding",
+    "downloads": 2714,
+    "result": "success",
+    "sha1": "6999a5977399cd7a6abc720490f6b1d061038767",
+    "size": 435846247
+  },
+  "basel/ATTACK-BERT": {
+    "application": "nlp/text_embedding",
+    "downloads": 146,
+    "reason": "Failed to run inference on jit model",
+    "result": "failed",
+    "sha1": "30d285aa0e641ce87a33748a7b3f8f2d8ccfaf42",
+    "size": -1
+  },
+  "bespin-global/klue-sentence-roberta-base-kornlu": {
+    "application": "nlp/text_embedding",
+    "downloads": 215,
+    "result": "success",
+    "sha1": "e0560226adca8f9a7b291528846f67d7489ee44b",
+    "size": 407919191
+  },
+  "bigscience-data/sgpt-bloom-1b7-nli": {
+    "application": "nlp/text_embedding",
+    "downloads": 503,
+    "reason": "Failed to trace model",
+    "result": "failed",
+    "sha1": "0ff3560a96157bb022180d62ddb7c3c80d1cfcef",
+    "size": -1
+  },
+  "bigscience/sgpt-bloom-7b1-msmarco": {
+    "application": "nlp/text_embedding",
+    "downloads": 2746,
+    "reason": "Failed to trace model",
+    "result": "failed",
+    "sha1": "99314f670e4d8730984201d1538333469b4f0595",
+    "size": -1
+  },
+  "biu-nlp/abstract-sim-query": {
+    "application": "nlp/text_embedding",
+    "downloads": 782,
+    "reason": "Failed to run inference on jit model",
+    "result": "failed",
+    "sha1": "3f42045a6accf6248ff90b5e1d2eb0ce501f6d99",
+    "size": -1
+  },
+  "biu-nlp/abstract-sim-query-pubmed": {
+    "application": "nlp/text_embedding",
+    "downloads": 191,
+    "result": "success",
+    "sha1": "9b99ecbadbdf1e58eef7ba6c7fa59533be81a43b",
+    "size": 409065448
+  },
+  "biu-nlp/abstract-sim-sentence": {
+    "application": "nlp/text_embedding",
+    "downloads": 1538,
+    "reason": "Failed to run inference on jit model",
+    "result": "failed",
+    "sha1": "7f41f1684d1cac7b50cc87b46ffc37743fba360b",
+    "size": -1
+  },
+  "biu-nlp/abstract-sim-sentence-pubmed": {
+    "application": "nlp/text_embedding",
+    "downloads": 444,
+    "result": "success",
+    "sha1": "c06fd72632e6e821c5c2e6a49c5ddc5c9400230f",
+    "size": 408144612
+  },
+  "bkai-foundation-models/vietnamese-bi-encoder": {
+    "application": "nlp/text_embedding",
+    "downloads": 5311,
+    "result": "success",
+    "sha1": "f268298c8b8eb10ddb66b46ca51facc9cf9957ee",
+    "size": 501951340
+  },
+  "bongsoo/kpf-sbert-v1.1": {
+    "application": "nlp/text_embedding",
+    "downloads": 221,
+    "result": "success",
+    "sha1": "5c64e410dc9e4b12598eb1e7a7e040c02414d95e",
+    "size": 423629067
+  },
+  "brjezierski/sentence-embeddings-similarity": {
+    "application": "nlp/text_embedding",
+    "downloads": 1217,
+    "result": "success",
+    "sha1": "afb1f88d155ee4911d544c635da5242870ddb682",
+    "size": 123138619
+  },
+  "caskcsg/cotmae_base_msmarco_retriever": {
+    "application": "nlp/text_embedding",
+    "downloads": 448,
+    "result": "success",
+    "sha1": "96f426a65eef0c4f883847f572d3ac1ff50f3951",
+    "size": 406494293
+  },
+  "cl-nagoya/sup-simcse-ja-base": {
+    "application": "nlp/text_embedding",
+    "downloads": 258,
+    "result": "success",
+    "sha1": "d7315d93baf2c20fffa2b6845330049963509f79",
+    "size": 412994860
+  },
+  "cl-nagoya/sup-simcse-ja-large": {
+    "application": "nlp/text_embedding",
+    "downloads": 448,
+    "result": "success",
+    "sha1": "d8e15e78b1f59d20307a810a2662808af2a52d8e",
+    "size": 1254094850
+  },
+  "cl-nagoya/unsup-simcse-ja-large": {
+    "application": "nlp/text_embedding",
+    "downloads": 470,
+    "result": "success",
+    "sha1": "09196202b9109f7c1f975b4662bb01a41b75232a",
+    "size": 1254110178
+  },
+  "clips/mfaq": {
+    "application": "nlp/text_embedding",
+    "downloads": 545,
+    "result": "success",
+    "sha1": "a49f0160e4d170a3d12e90ace3990fd6a50e35aa",
+    "size": 944825897
+  },
+  "cmarkea/distilcamembert-base-nli": {
+    "application": "nlp/text_embedding",
+    "downloads": 551,
+    "result": "success",
+    "sha1": "747965dcb5d561e210a4cce5ebdafdfb14882b67",
+    "size": 253788775
+  },
+  "cointegrated/LaBSE-en-ru": {
+    "application": "nlp/text_embedding",
+    "downloads": 103653,
+    "result": "success",
+    "sha1": "9e6d1e5fa79584f5346a5262b69bb6dc64b46f98",
+    "size": 478237102
+  },
+  "cointegrated/SONAR_200_text_encoder": {
+    "application": "nlp/text_embedding",
+    "downloads": 51,
+    "reason": "Failed to trace model",
+    "result": "failed",
+    "sha1": "c52cdabda3736a5236744bba199450519c2bc9fa",
+    "size": -1
+  },
+  "cointegrated/rubert-base-cased-dp-paraphrase-detection": {
+    "application": "nlp/text_embedding",
+    "downloads": 217,
+    "result": "success",
+    "sha1": "53ecd4f515e127595257909715f8b08cd0ddcf98",
+    "size": 660519946
+  },
+  "cointegrated/rubert-tiny": {
+    "application": "nlp/text_embedding",
+    "downloads": 11441,
+    "result": "success",
+    "sha1": "f191937ca7511ae76b44b06a460f18ab1699c54b",
+    "size": 43756245
+  },
+  "cointegrated/rubert-tiny2": {
+    "application": "nlp/text_embedding",
+    "downloads": 228150,
+    "result": "success",
+    "sha1": "dad72b8f77c5eef6995dd3e4691b758ba56b90c3",
+    "size": 108251830
+  },
+  "colorfulscoop/sbert-base-ja": {
+    "application": "nlp/text_embedding",
+    "downloads": 85148,
+    "result": "success",
+    "sha1": "ecb8a98cd5176719ff7ab0d770a27420118732cf",
+    "size": 411331058
+  },
+  "consciousAI/cai-lunaris-text-embeddings": {
+    "application": "nlp/text_embedding",
+    "downloads": 4393,
+    "result": "success",
+    "sha1": "8332c464d13505968ff7a6e2213f36fd8730b4c7",
+    "size": 1230717175
+  },
+  "consciousAI/cai-stellaris-text-embeddings": {
+    "application": "nlp/text_embedding",
+    "downloads": 2179,
+    "reason": "Failed to load model",
+    "result": "failed",
+    "sha1": "c000ec4b29588daf0f4a0b2ad4e72ee807d8efc0",
+    "size": -1
+  },
+  "d0rj/e5-base-en-ru": {
+    "application": "nlp/text_embedding",
+    "downloads": 117,
+    "result": "success",
+    "sha1": "a80ee936e03f9022ae364e214aef771218797b44",
+    "size": 313899079
+  },
+  "d0rj/e5-large-en-ru": {
+    "application": "nlp/text_embedding",
+    "downloads": 62,
+    "result": "success",
+    "sha1": "e1a47931c18468ffcbe9fad242987cb26b603584",
+    "size": 862752281
+  },
+  "d0rj/ruRoberta-distilled": {
+    "application": "nlp/text_embedding",
+    "downloads": 113,
+    "reason": "Failed to trace model",
+    "result": "failed",
+    "sha1": "67447cbd1aa83c77af8796cf9b8ace684097d317",
+    "size": -1
+  },
+  "daekeun-ml/koelectra-small-v3-korsts": {
+    "application": "nlp/text_embedding",
+    "downloads": 58,
+    "result": "success",
+    "sha1": "755e0f19c984458929a876745be665e85041aa90",
+    "size": 52702341
+  },
+  "dangvantuan/CrossEncoder-camembert-large": {
+    "application": "nlp/text_embedding",
+    "downloads": 557,
+    "result": "success",
+    "sha1": "0b8ec6ae6886d1baa5af985d23607c105ede4d9b",
+    "size": 1233655245
+  },
+  "dangvantuan/sentence-camembert-base": {
+    "application": "nlp/text_embedding",
+    "downloads": 16260,
+    "result": "success",
+    "sha1": "badc8d827cb0215b4a68b37445214acba26da2b1",
+    "size": 399347516
+  },
+  "dangvantuan/sentence-camembert-large": {
+    "application": "nlp/text_embedding",
+    "downloads": 75542,
+    "result": "success",
+    "sha1": "af9724a69b5e76012c24bd1b2bc03acbc458bdbb",
+    "size": 1234216504
+  },
+  "ddobokki/electra-small-nli-sts": {
+    "application": "nlp/text_embedding",
+    "downloads": 87,
+    "result": "success",
+    "sha1": "3246a95b1b7fba01723b63e394543900f9deaeb5",
+    "size": 51289044
+  },
+  "ddobokki/klue-roberta-small-nli-sts": {
+    "application": "nlp/text_embedding",
+    "downloads": 49,
+    "result": "success",
+    "sha1": "e2a0bafb78d6395e6f9bc8fc35338a998eaa9eb0",
+    "size": 250182802
+  },
+  "dean-ai/legal_heBERT_ft": {
+    "application": "nlp/text_embedding",
+    "downloads": 127,
+    "result": "success",
+    "sha1": "121f5101f787d021cfe13d1038b347b06bc1d50d",
+    "size": 406752209
+  },
+  "deepset/all-mpnet-base-v2-table": {
+    "application": "nlp/text_embedding",
+    "downloads": 3055,
+    "reason": "Failed to run inference on jit model",
+    "result": "failed",
+    "sha1": "ab5f9a5f0d8bf0e849b2083cab21375a16e9b424",
+    "size": -1
+  },
+  "denaya/indoSBERT-large": {
+    "application": "nlp/text_embedding",
+    "downloads": 142,
+    "result": "success",
+    "sha1": "5c64d43f07f7054dfbf33d226b3066414b6ebc4a",
+    "size": 1245314315
+  },
+  "dennlinger/bert-wiki-paragraphs": {
+    "application": "nlp/text_embedding",
+    "downloads": 340,
+    "result": "success",
+    "sha1": "82d99402a17a1e6363aa7d6fa7188807ad7a7b3d",
+    "size": 405852714
+  },
+  "deutsche-telekom/gbert-large-paraphrase-cosine": {
+    "application": "nlp/text_embedding",
+    "downloads": 8438,
+    "result": "success",
+    "sha1": "af33f5b8fb15d912c19181e7a883297a754b1a23",
+    "size": 1248113048
+  },
+  "deutsche-telekom/gbert-large-paraphrase-euclidean": {
+    "application": "nlp/text_embedding",
+    "downloads": 1686,
+    "result": "success",
+    "sha1": "24321a2607cc1e427e78ebbc8439dfb6b583b1b1",
+    "size": 1248125739
+  },
+  "digio/Twitter4SSE": {
+    "application": "nlp/text_embedding",
+    "downloads": 932,
+    "result": "success",
+    "sha1": "91e20090fe4fa7e57fd3ebfad3dd89c9538b5669",
+    "size": 489746131
+  },
+  "dimitriz/st-greek-media-bert-base-uncased": {
+    "application": "nlp/text_embedding",
+    "downloads": 60,
+    "result": "success",
+    "sha1": "6e633bd66573a107da4c724289c6c48742631d22",
+    "size": 419458350
+  },
+  "diptanuc/all-mpnet-base-v2": {
+    "application": "nlp/text_embedding",
+    "downloads": 278,
+    "reason": "Failed to run inference on jit model",
+    "result": "failed",
+    "sha1": "befcf4e64c4852f196d05f935cf78b5a1de4be88",
+    "size": -1
+  },
+  "dmlls/all-mpnet-base-v2-negation": {
+    "application": "nlp/text_embedding",
+    "downloads": 527,
+    "reason": "Failed to run inference on jit model",
+    "result": "failed",
+    "sha1": "e160887a8802532311cf9ea060e4338314355f18",
+    "size": -1
+  },
+  "ef-zulla/e5-multi-sml-torch": {
+    "application": "nlp/text_embedding",
+    "downloads": 84,
+    "result": "success",
+    "sha1": "77289031452caeefa7f0e2a8f9dcbf6192019348",
+    "size": 281474243
+  },
+  "efederici/cross-encoder-umberto-stsb": {
+    "application": "nlp/text_embedding",
+    "downloads": 55,
+    "result": "success",
+    "sha1": "7fa457e84823eb8a469800a127280212263f2409",
+    "size": 399088269
+  },
+  "efederici/e5-base-multilingual-4096": {
+    "application": "nlp/text_embedding",
+    "downloads": 2216,
+    "result": "success",
+    "sha1": "4e3c642c06a747db6534c1322cc8b91396bbfdb5",
+    "size": 665446057
+  },
+  "efederici/multilingual-e5-small-4096": {
+    "application": "nlp/text_embedding",
+    "downloads": 188,
+    "result": "success",
+    "sha1": "1322631ab15c3f6e7fb1f9df0d7bbb8aa80a7b82",
+    "size": 284736560
+  },
+  "efederici/sentence-BERTino": {
+    "application": "nlp/text_embedding",
+    "downloads": 472,
+    "reason": "Failed to trace model",
+    "result": "failed",
+    "sha1": "da6b8d116226762d4a3ea33df40c9f632d2e8456",
+    "size": -1
+  },
+  "efederici/sentence-BERTino-v2-mmarco-4m": {
+    "application": "nlp/text_embedding",
+    "downloads": 216,
+    "reason": "Failed to trace model",
+    "result": "failed",
+    "sha1": "95d8f1b1443ca3e065fd3ba2ee3f4e0c550d2194",
+    "size": -1
+  },
+  "efederici/sentence-bert-base": {
+    "application": "nlp/text_embedding",
+    "downloads": 81,
+    "result": "success",
+    "sha1": "d34e611b4983aeecfa5beee5f7e2ef1f595a5944",
+    "size": 408383061
+  },
+  "efederici/sentence-it5-small": {
+    "application": "nlp/text_embedding",
+    "downloads": 79,
+    "reason": "Failed to trace model",
+    "result": "failed",
+    "sha1": "c96933e53fe75a9cb17ad32203f0926847d8f077",
+    "size": -1
+  },
+  "embaas/sentence-transformers-e5-large-v2": {
+    "application": "nlp/text_embedding",
+    "downloads": 229,
+    "result": "success",
+    "sha1": "86001e787b4f6bda8cdc8c2095c0493dd135484e",
+    "size": 788283578
+  },
+  "embaas/sentence-transformers-multilingual-e5-base": {
+    "application": "nlp/text_embedding",
+    "downloads": 291,
+    "result": "success",
+    "sha1": "ff629add2ff80256e42173ec84299eed1c1b6393",
+    "size": 658896682
+  },
+  "embaas/sentence-transformers-multilingual-e5-large": {
+    "application": "nlp/text_embedding",
+    "downloads": 53,
+    "result": "success",
+    "sha1": "f5ce37891bfe42176585f3e74b256456ca1119a3",
+    "size": 1313574955
+  },
+  "embedding-data/deberta-sentence-transformer": {
+    "application": "nlp/text_embedding",
+    "downloads": 50,
+    "reason": "Failed to trace model",
+    "result": "failed",
+    "sha1": "424b7034e4e5f4315716c2b5800fa296b02c92d7",
+    "size": -1
+  },
+  "embedding-data/distilroberta-base-sentence-transformer": {
+    "application": "nlp/text_embedding",
+    "downloads": 72,
+    "result": "success",
+    "sha1": "ea459f9bd02c058dde7a51035cde4231af73cc25",
+    "size": 305480166
+  },
+  "emrecan/bert-base-turkish-cased-mean-nli-stsb-tr": {
+    "application": "nlp/text_embedding",
+    "downloads": 382,
+    "result": "success",
+    "sha1": "c4d66371214a20c0c91a39c83351ddc24f398800",
+    "size": 411022533
+  },
+  "espejelomar/sentece-embeddings-BETO": {
+    "application": "nlp/text_embedding",
+    "downloads": 51,
+    "result": "success",
+    "sha1": "b93a4d25f37360c1ebdbc1912100d3c1a70d0af4",
+    "size": 408296692
+  },
+  "firqaaa/indo-sentence-bert-base": {
+    "application": "nlp/text_embedding",
+    "downloads": 815,
+    "result": "success",
+    "sha1": "c513b688de2bf30bf5dd2ffd7f76a98ff1c32aa8",
+    "size": 462462523
+  },
+  "flax-sentence-embeddings/all_datasets_v3_MiniLM-L12": {
+    "application": "nlp/text_embedding",
+    "downloads": 116,
+    "result": "success",
+    "sha1": "894997f1d826887fa7c19a6194ab1f1c32e17d7a",
+    "size": 123133148
+  },
+  "flax-sentence-embeddings/all_datasets_v3_mpnet-base": {
+    "application": "nlp/text_embedding",
+    "downloads": 333,
+    "reason": "Failed to run inference on jit model",
+    "result": "failed",
+    "sha1": "d442c0e304ff575c261b9bbdf8b13fcbe6ee933c",
+    "size": -1
+  },
+  "flax-sentence-embeddings/all_datasets_v3_roberta-large": {
+    "application": "nlp/text_embedding",
+    "downloads": 370,
+    "result": "success",
+    "sha1": "8046a280a8edaf23f09931ae54b2b1ca1d35bc33",
+    "size": 1319806220
+  },
+  "flax-sentence-embeddings/all_datasets_v4_MiniLM-L6": {
+    "application": "nlp/text_embedding",
+    "downloads": 9235,
+    "result": "success",
+    "sha1": "a407cc0b7d85eec9a5617eaf51dbe7b353b0c79f",
+    "size": 83483391
+  },
+  "flax-sentence-embeddings/all_datasets_v4_mpnet-base": {
+    "application": "nlp/text_embedding",
+    "downloads": 208,
+    "reason": "Failed to run inference on jit model",
+    "result": "failed",
+    "sha1": "9d3c8ee6b0998d705f546e83d668d30397e1feea",
+    "size": -1
+  },
+  "flax-sentence-embeddings/multi-qa_v1-MiniLM-L6-cls_dot": {
+    "application": "nlp/text_embedding",
+    "downloads": 170,
+    "result": "success",
+    "sha1": "a5317238b02aea495bdcce75a51756dd2a3cccd4",
+    "size": 83566100
+  },
+  "flax-sentence-embeddings/reddit_single-context_mpnet-base": {
+    "application": "nlp/text_embedding",
+    "downloads": 246,
+    "reason": "Failed to run inference on jit model",
+    "result": "failed",
+    "sha1": "33651e090d1a29fc0e66e87603716ff5e15bb759",
+    "size": -1
+  },
+  "flax-sentence-embeddings/st-codesearch-distilroberta-base": {
+    "application": "nlp/text_embedding",
+    "downloads": 1553,
+    "result": "success",
+    "sha1": "65b0f39bfa41c59993f62b57447c942e371b7135",
+    "size": 305582071
+  },
+  "flax-sentence-embeddings/stackoverflow_mpnet-base": {
+    "application": "nlp/text_embedding",
+    "downloads": 157,
+    "reason": "Failed to run inference on jit model",
+    "result": "failed",
+    "sha1": "50529c31da1e14dc9f311ff898cc9c35abe58513",
+    "size": -1
+  },
+  "guidecare/all-mpnet-base-v2-feature-extraction": {
+    "application": "nlp/text_embedding",
+    "downloads": 1027,
+    "reason": "Failed to run inference on jit model",
+    "result": "failed",
+    "sha1": "ddcbeb096642232f88e838e9c340f8a2778d6cdb",
+    "size": -1
+  },
+  "hackathon-pln-es/paraphrase-spanish-distilroberta": {
+    "application": "nlp/text_embedding",
+    "downloads": 992,
+    "result": "success",
+    "sha1": "5ed9fdaabd705e7bd88029a3f08ce7397a666d6a",
+    "size": 460239871
+  },
+  "hiiamsid/sentence_similarity_hindi": {
+    "application": "nlp/text_embedding",
+    "downloads": 71,
+    "result": "success",
+    "sha1": "498c752284c8deb5137b1096d5eeccf7520166aa",
+    "size": 1755462606
+  },
+  "hiiamsid/sentence_similarity_spanish_es": {
+    "application": "nlp/text_embedding",
+    "downloads": 149968,
+    "result": "success",
+    "sha1": "31184319c7021ee7a3a67d99062bc4de792c7362",
+    "size": 408277868
+  },
+  "hku-nlp/instructor-base": {
+    "application": "nlp/text_embedding",
+    "downloads": 319,
+    "reason": "Failed to trace model",
+    "result": "failed",
+    "sha1": "435138da8d138c4f9ae60afcfece1d0d4b65c791",
+    "size": -1
+  },
+  "hkunlp/instructor-base": {
+    "application": "nlp/text_embedding",
+    "downloads": 58158,
+    "reason": "Failed to trace model",
+    "result": "failed",
+    "sha1": "0b2f22542d2bd6d60dbff22d22f12c15e6562736",
+    "size": -1
+  },
+  "hkunlp/instructor-large": {
+    "application": "nlp/text_embedding",
+    "downloads": 185036,
+    "reason": "Failed to trace model",
+    "result": "failed",
+    "sha1": "54e5ffb8d484de506e59443b07dc819fb15c7233",
+    "size": -1
+  },
+  "hkunlp/instructor-xl": {
+    "application": "nlp/text_embedding",
+    "downloads": 40944,
+    "reason": "Failed to trace model",
+    "result": "failed",
+    "sha1": "ce48b213095e647a6c3536364b9fa00daf57f436",
+    "size": -1
+  },
+  "imta-ai/tech_sbert": {
+    "application": "nlp/text_embedding",
+    "downloads": 48,
+    "result": "success",
+    "sha1": "8b449d611b1e82824f83ed69cac8a3809fe20212",
+    "size": 1033531690
+  },
+  "imvladikon/sentence-transformers-alephbert": {
+    "application": "nlp/text_embedding",
+    "downloads": 197,
+    "result": "success",
+    "sha1": "547db5a2028766922251e5e2be6a973674ee0c07",
+    "size": 468564639
+  },
+  "infgrad/stella-base-en-v2": {
+    "application": "nlp/text_embedding",
+    "downloads": 7745,
+    "result": "success",
+    "sha1": "0689d95799334a68ae13dc77aaa1bb806f33bbe5",
+    "size": 257109080
+  },
+  "infgrad/stella-base-zh-v2": {
+    "application": "nlp/text_embedding",
+    "downloads": 4306,
+    "result": "success",
+    "sha1": "c76f532e7b80cab85f95d9ddfcc05c7acccb63fa",
+    "size": 241901064
+  },
+  "infgrad/stella-large-zh-v2": {
+    "application": "nlp/text_embedding",
+    "downloads": 7387,
+    "result": "success",
+    "sha1": "f11c871ed1df5768a73e5bfafcec88b122648905",
+    "size": 766522110
+  },
+  "inkoziev/sbert_pq": {
+    "application": "nlp/text_embedding",
+    "downloads": 51,
+    "result": "success",
+    "sha1": "95549a630b79b965faf9128bf143513aaed20a9a",
+    "size": 108251366
+  },
+  "inkoziev/sbert_synonymy": {
+    "application": "nlp/text_embedding",
+    "downloads": 80,
+    "result": "success",
+    "sha1": "fa4f459565dfb433cafb45cf9c2595862c6c8a16",
+    "size": 108250022
+  },
+  "inokufu/bert-base-uncased-xnli-sts-finetuned-education": {
+    "application": "nlp/text_embedding",
+    "downloads": 74,
+    "result": "success",
+    "sha1": "78279b6df52e606c2024fbbf1f71df24b82f913b",
+    "size": 405669580
+  },
+  "intfloat/e5-base": {
+    "application": "nlp/text_embedding",
+    "downloads": 9269,
+    "result": "success",
+    "sha1": "b533fe4636f4a2507c08ddab40644d20b0006d6a",
+    "size": 256662210
+  },
+  "intfloat/e5-base-unsupervised": {
+    "application": "nlp/text_embedding",
+    "downloads": 1411,
+    "result": "success",
+    "sha1": "6003a5b7ce770b0549203e41115b9fc683f16dad",
+    "size": 256663523
+  },
+  "intfloat/e5-base-v2": {
+    "application": "nlp/text_embedding",
+    "downloads": 48015,
+    "result": "success",
+    "sha1": "1c644c92ad3ba1efdad3f1451a637716616a20e8",
+    "size": 256704356
+  },
+  "intfloat/e5-large": {
+    "application": "nlp/text_embedding",
+    "downloads": 7986,
+    "result": "success",
+    "sha1": "4dc6d853a804b9c8886ede6dda8a073b7dc08a81",
+    "size": 788196174
+  },
+  "intfloat/e5-large-unsupervised": {
+    "application": "nlp/text_embedding",
+    "downloads": 69314,
+    "result": "success",
+    "sha1": "15af9288f69a6291f37bfb89b47e71abc747b206",
+    "size": 788195065
+  },
+  "intfloat/e5-large-v2": {
+    "application": "nlp/text_embedding",
+    "downloads": 190015,
+    "result": "success",
+    "sha1": "b322e09026e4ea05f42beadf4d661fb4e101d311",
+    "size": 788263100
+  },
+  "intfloat/e5-small": {
+    "application": "nlp/text_embedding",
+    "downloads": 7099,
+    "result": "success",
+    "sha1": "e272f3049e853b47cb5ca3952268c6662abda68f",
+    "size": 79260728
+  },
+  "intfloat/e5-small-unsupervised": {
+    "application": "nlp/text_embedding",
+    "downloads": 14145,
+    "result": "success",
+    "sha1": "b1dcdb2d95955c553aa81e4fd759c2cd77d5c0d4",
+    "size": 79301891
+  },
+  "intfloat/e5-small-v2": {
+    "application": "nlp/text_embedding",
+    "downloads": 389743,
+    "result": "success",
+    "sha1": "dca8b1a9dae0d4575df2bf423a5edb485a431236",
+    "size": 79253308
+  },
+  "intfloat/multilingual-e5-base": {
+    "application": "nlp/text_embedding",
+    "downloads": 53460,
+    "result": "success",
+    "sha1": "167cf6a8d7246224899c414143008918db3fe2c8",
+    "size": 658886688
+  },
+  "intfloat/multilingual-e5-large": {
+    "application": "nlp/text_embedding",
+    "downloads": 66047,
+    "result": "success",
+    "sha1": "9f78368af0062735ba99812349c562316e29f719",
+    "size": 1313569816
+  },
+  "intfloat/multilingual-e5-large-instruct": {
+    "application": "nlp/text_embedding",
+    "downloads": 225892,
+    "result": "success",
+    "sha1": null,
+    "size": 2257489818
+  },
+  "intfloat/multilingual-e5-small": {
+    "application": "nlp/text_embedding",
+    "downloads": 21948,
+    "result": "success",
+    "sha1": "ada7b62be30f82b0bc5da131b0477721c8fc14e9",
+    "size": 281477084
+  },
+  "ipipan/silver-retriever-base-v1": {
+    "application": "nlp/text_embedding",
+    "downloads": 188,
+    "result": "success",
+    "sha1": "c008de6d173cc95e62312b398e190b669d616aa0",
+    "size": 461145784
+  },
+  "jaimevera1107/all-MiniLM-L6-v2-similarity-es": {
+    "application": "nlp/text_embedding",
+    "downloads": 81,
+    "result": "success",
+    "sha1": "a0ab40e71eefd9d00a4dd67752ccb0c38cf98220",
+    "size": 83615645
+  },
+  "jegormeister/bert-base-dutch-cased-snli": {
+    "application": "nlp/text_embedding",
+    "downloads": 311,
+    "result": "success",
+    "sha1": "d507d8dc67f5c40103aeebfd8552595ad806484d",
+    "size": 405586436
+  },
+  "jegormeister/robbert-v2-dutch-base-mqa-finetuned": {
+    "application": "nlp/text_embedding",
+    "downloads": 134,
+    "result": "success",
+    "sha1": "f5427c2264b9d82255217fa4c7a851cba7a8171b",
+    "size": 433934949
+  },
+  "jhgan/ko-sbert-multitask": {
+    "application": "nlp/text_embedding",
+    "downloads": 577,
+    "result": "success",
+    "sha1": "0087471b677c6388c12a152822ca60441be4072b",
+    "size": 411207119
+  },
+  "jhgan/ko-sbert-nli": {
+    "application": "nlp/text_embedding",
+    "downloads": 134,
+    "result": "success",
+    "sha1": "b78c95e43b7ef3f8a7cca8b287367ba57516a5bf",
+    "size": 411208629
+  },
+  "jhgan/ko-sbert-sts": {
+    "application": "nlp/text_embedding",
+    "downloads": 362,
+    "result": "success",
+    "sha1": "04194e93414fb3ce4cc5d29b81b86b2bc2fd27b2",
+    "size": 411207385
+  },
+  "jhgan/ko-sroberta-multitask": {
+    "application": "nlp/text_embedding",
+    "downloads": 67801,
+    "result": "success",
+    "sha1": "ab957ae6a91e99c4cad36d52063a2a9cf1bf4419",
+    "size": 406776128
+  },
+  "jhgan/ko-sroberta-sts": {
+    "application": "nlp/text_embedding",
+    "downloads": 120,
+    "result": "success",
+    "sha1": "3efa8e54a06798b00bd1abb9c22b2dd530e22b24",
+    "size": 396230774
+  },
+  "jhlee3421/faq-semantic-klue-roberta-large": {
+    "application": "nlp/text_embedding",
+    "downloads": 164,
+    "result": "success",
+    "sha1": "e0a1c940886723a97d2abc9bb48a5397c7d642af",
+    "size": 1243008536
+  },
+  "jinaai/jina-embedding-b-en-v1": {
+    "application": "nlp/text_embedding",
+    "downloads": 4205,
+    "reason": "Failed to trace model",
+    "result": "failed",
+    "sha1": "aa0645035294a8c0607ce5bb700aba982cdff32c",
+    "size": -1
+  },
+  "jinaai/jina-embedding-l-en-v1": {
+    "application": "nlp/text_embedding",
+    "downloads": 6827,
+    "reason": "Failed to trace model",
+    "result": "failed",
+    "sha1": "672f44526b4a7caa23c1e8582a8f06a0b80b4fa8",
+    "size": -1
+  },
+  "jinaai/jina-embedding-s-en-v1": {
+    "application": "nlp/text_embedding",
+    "downloads": 2993,
+    "reason": "Failed to trace model",
+    "result": "failed",
+    "sha1": "c1fed70aa4823a640f1a7150a276e4d3b08dce08",
+    "size": -1
+  },
+  "jinaai/jina-embedding-t-en-v1": {
+    "application": "nlp/text_embedding",
+    "downloads": 943,
+    "result": "success",
+    "sha1": "3a396c9f89cf17924f1ad9cce7b21a1988438ded",
+    "size": 52106190
+  },
+  "jinaai/jina-embeddings-v2-base-en": {
+    "application": "nlp/text_embedding",
+    "downloads": 319609,
+    "reason": "Unexpected inference result",
+    "result": "failed",
+    "sha1": "7302ac470bed880590f9344bfeee32ff8722d0e5",
+    "size": -1
+  },
+  "jinaai/jina-embeddings-v2-small-en": {
+    "application": "nlp/text_embedding",
+    "downloads": 60581,
+    "result": "success",
+    "sha1": "b811f03af3d4d7ea72a7c25c802b21fc675a5d99",
+    "size": 93852512
+  },
+  "jmbrito/ptbr-similarity-e5-small": {
+    "application": "nlp/text_embedding",
+    "downloads": 112,
+    "result": "success",
+    "sha1": "26fa3496dbe1532ce0f567b8adc4bce51a23e3eb",
+    "size": 333063460
+  },
+  "johngiorgi/declutr-base": {
+    "application": "nlp/text_embedding",
+    "downloads": 371,
+    "reason": "Failed to save tokenizer",
+    "result": "failed",
+    "sha1": "480fc7dd59422a6568c465184f0ff035065775c4",
+    "size": -1
+  },
+  "johngiorgi/declutr-sci-base": {
+    "application": "nlp/text_embedding",
+    "downloads": 172,
+    "reason": "Failed to save tokenizer",
+    "result": "failed",
+    "sha1": "90280e49f68991fa3f8166490455f4aa8151eba5",
+    "size": -1
+  },
+  "johngiorgi/declutr-small": {
+    "application": "nlp/text_embedding",
+    "downloads": 631,
+    "reason": "Failed to trace model",
+    "result": "failed",
+    "sha1": "578017c76391ddc8be96556cb961133ffc7ab5b3",
+    "size": -1
+  },
+  "joseluhf11/symptom_encoder_v10": {
+    "application": "nlp/text_embedding",
+    "downloads": 56,
+    "result": "success",
+    "sha1": "1c9f3095287d68731dc81166c8e51d1a5b51cdd8",
+    "size": 405978580
+  },
+  "kaiserrr/pmc-vit-l-14-multilingual": {
+    "application": "nlp/text_embedding",
+    "downloads": 112,
+    "result": "success",
+    "sha1": "f574c86ccb88abe199619f2be16f87e10dc1aa34",
+    "size": 1014256283
+  },
+  "kamalkraj/BioSimCSE-BioLinkBERT-BASE": {
+    "application": "nlp/text_embedding",
+    "downloads": 94,
+    "result": "success",
+    "sha1": "e13c779231f4f75ba00d1554a5c348b7d3fa8112",
+    "size": 402246650
+  },
+  "keepitreal/vietnamese-sbert": {
+    "application": "nlp/text_embedding",
+    "downloads": 11001,
+    "result": "success",
+    "sha1": "a9467ef2ef47caa6448edeabfd8e5e5ce0fa2a23",
+    "size": 461066320
+  },
+  "kmariunas/uncased-bert-triplet-40": {
+    "application": "nlp/text_embedding",
+    "downloads": 1562,
+    "result": "success",
+    "sha1": "13a4cc65b7a8116701d2e308915b40bd955b4ae7",
+    "size": 405965976
+  },
+  "kornwtp/ConGen-WangchanBERT-Small": {
+    "application": "nlp/text_embedding",
+    "downloads": 205,
+    "result": "success",
+    "sha1": "b3453a7ea9ac44a9880b7499bee5b4bda935e931",
+    "size": 107137144
+  },
+  "kornwtp/ConGen-paraphrase-multilingual-mpnet-base-v2": {
+    "application": "nlp/text_embedding",
+    "downloads": 818,
+    "result": "success",
+    "sha1": "da70962869142b773b9bbba7005baa4b45fa2625",
+    "size": 391228844
+  },
+  "krlvi/sentence-t5-base-nlpl-code_search_net": {
+    "application": "nlp/text_embedding",
+    "downloads": 94,
+    "reason": "Failed to trace model",
+    "result": "failed",
+    "sha1": "1f6454480ef8a5c8f197c15b13593727281687e7",
+    "size": -1
+  },
+  "kuelumbus/polyBERT": {
+    "application": "nlp/text_embedding",
+    "downloads": 21448,
+    "reason": "Failed to trace model",
+    "result": "failed",
+    "sha1": "deaa98fb65a7bdfb537457d42f43bd468963f695",
+    "size": -1
+  },
+  "l3cube-pune/hindi-sentence-similarity-sbert": {
+    "application": "nlp/text_embedding",
+    "downloads": 90,
+    "result": "success",
+    "sha1": "1ac1c75727339338dfd67de7346eb2fda0798267",
+    "size": 884546480
+  },
+  "l3cube-pune/indic-sentence-bert-nli": {
+    "application": "nlp/text_embedding",
+    "downloads": 196,
+    "result": "success",
+    "sha1": "aab1d6a0ace569c670f54173e1b0f0bb607f13c8",
+    "size": 884240333
+  },
+  "l3cube-pune/malayalam-sentence-similarity-sbert": {
+    "application": "nlp/text_embedding",
+    "downloads": 45,
+    "result": "success",
+    "sha1": "c9697959cc78d0da917f5a01aa724b80d9b68e35",
+    "size": 884394512
+  },
+  "l3cube-pune/marathi-sentence-similarity-sbert": {
+    "application": "nlp/text_embedding",
+    "downloads": 120,
+    "result": "success",
+    "sha1": "05a218bd0fc8621011c44682af950f118550a828",
+    "size": 884494936
+  },
+  "l3cube-pune/tamil-sentence-bert-nli": {
+    "application": "nlp/text_embedding",
+    "downloads": 48,
+    "result": "success",
+    "sha1": "c06f03bee1d071bacdd5892bb3e9cb29639ab0a1",
+    "size": 884536890
+  },
+  "lewtun/my-awesome-setfit-model": {
+    "application": "nlp/text_embedding",
+    "downloads": 1562,
+    "reason": "Failed to run inference on jit model",
+    "result": "failed",
+    "sha1": "a3c0fe9302019e63581ad34ab25e6b6c5b4aab5d",
+    "size": -1
+  },
+  "lewtun/setfit-ethos-multilabel-example": {
+    "application": "nlp/text_embedding",
+    "downloads": 879,
+    "reason": "Failed to run inference on jit model",
+    "result": "failed",
+    "sha1": "ad597f449ba095f1c36b0bc35b466c581e235904",
+    "size": -1
+  },
+  "lighteternal/stsb-xlm-r-greek-transfer": {
+    "application": "nlp/text_embedding",
+    "downloads": 114,
+    "result": "success",
+    "sha1": "28e381a9365abcf8ad2c0808532a8b8cf0d48260",
+    "size": 888477482
+  },
+  "llmrails/ember-v1": {
+    "application": "nlp/text_embedding",
+    "downloads": 17269,
+    "result": "success",
+    "sha1": "9e76885bed0dcfa38cbf01e1e27b3a0e8d36d4e4",
+    "size": 1207141364
+  },
+  "m3hrdadfi/bert-zwnj-wnli-mean-tokens": {
+    "application": "nlp/text_embedding",
+    "downloads": 151,
+    "result": "success",
+    "sha1": "b9506ddc579ac8c398ae6dae680401ae0a1a5b23",
+    "size": 440031666
+  },
+  "m3hrdadfi/roberta-zwnj-wnli-mean-tokens": {
+    "application": "nlp/text_embedding",
+    "downloads": 61,
+    "result": "success",
+    "sha1": "36f912ac44e22250aee16ea533a4ff8cd848c1a1",
+    "size": 440202875
+  },
+  "mchochlov/codebert-base-cd-ft": {
+    "application": "nlp/text_embedding",
+    "downloads": 56,
+    "result": "success",
+    "sha1": "abd40387848a0f5b55febbe6a1839e62f46c5c8a",
+    "size": 463911677
+  },
+  "medmediani/Arabic-KW-Mdel": {
+    "application": "nlp/text_embedding",
+    "downloads": 518,
+    "result": "success",
+    "sha1": "0e31e21b6ea7e1eebaed073523d4766b410f13cd",
+    "size": 502830931
+  },
+  "meedan/paraphrase-filipino-mpnet-base-v2": {
+    "application": "nlp/text_embedding",
+    "downloads": 59,
+    "result": "success",
+    "sha1": "20d8b8d26840bc2f9d47e06ad9f576fa9ef86af3",
+    "size": 1014916499
+  },
+  "menadsa/S-Bio_ClinicalBERT": {
+    "application": "nlp/text_embedding",
+    "downloads": 49,
+    "reason": "Failed to load model",
+    "result": "failed",
+    "sha1": "72c9d4ff97f80ba836ee6feea33a8b00f6bb02bf",
+    "size": -1
+  },
+  "menadsa/S-PubMedBERT": {
+    "application": "nlp/text_embedding",
+    "downloads": 75,
+    "result": "success",
+    "sha1": "027fc439fbfb588968ac65b93d334b59ed8562db",
+    "size": 406882577
+  },
+  "metarank/ce-esci-MiniLM-L12-v2": {
+    "application": "nlp/text_embedding",
+    "downloads": 174,
+    "result": "success",
+    "sha1": "c4a5571460a79f7cc141d672556c82eac9879c0f",
+    "size": 123519292
+  },
+  "mrm8488/distiluse-base-multilingual-cased-v2-finetuned-stsb_multi_mt-es": {
+    "application": "nlp/text_embedding",
+    "downloads": 450,
+    "reason": "Failed to trace model",
+    "result": "failed",
+    "sha1": "7fb3d9295e544766de61b16aabddad5c7f5fcaf4",
+    "size": -1
+  },
+  "mrp/SCT_Distillation_BERT_Small": {
+    "application": "nlp/text_embedding",
+    "downloads": 153,
+    "result": "success",
+    "sha1": "9aa1bcc679d924b3e42208ae4ec388c7ab227961",
+    "size": 106960202
+  },
+  "mrp/simcse-model-m-bert-thai-cased": {
+    "application": "nlp/text_embedding",
+    "downloads": 1866,
+    "result": "success",
+    "sha1": "1a309049e15ee54a2e63ee82f556e7db846c5546",
+    "size": 661325671
+  },
+  "nategro/contradiction-psb-lds": {
+    "application": "nlp/text_embedding",
+    "downloads": 393,
+    "reason": "Failed to run inference on jit model",
+    "result": "failed",
+    "sha1": "19ea40f4cd3244f4b874694bbacc8420fd7d50fb",
+    "size": -1
+  },
+  "nategro/nps-psb-lds": {
+    "application": "nlp/text_embedding",
+    "downloads": 410,
+    "reason": "Failed to run inference on jit model",
+    "result": "failed",
+    "sha1": "e1d89ea52718f05b5aa32f1bcf93f26d37049bfe",
+    "size": -1
+  },
+  "nategro/parameter-mini-lds": {
+    "application": "nlp/text_embedding",
+    "downloads": 376,
+    "result": "success",
+    "sha1": "c34ab735c2f20d5383d8386d51f35dab48ab29bd",
+    "size": 83587364
+  },
+  "nathansutton/explicit-recommendation": {
+    "application": "nlp/text_embedding",
+    "downloads": 1312,
+    "result": "success",
+    "sha1": "7b784b9fd1aeb537ff4646b944cce24ff57868b1",
+    "size": 463798082
+  },
+  "naufalihsan/indonesian-sbert-large": {
+    "application": "nlp/text_embedding",
+    "downloads": 85,
+    "result": "success",
+    "sha1": "a5cbfbd8f6fa9ecac98896a8e14ea7b879a41e2d",
+    "size": 1245292141
+  },
+  "navteca/multi-qa-mpnet-base-cos-v1": {
+    "application": "nlp/text_embedding",
+    "downloads": 232,
+    "reason": "Failed to run inference on jit model",
+    "result": "failed",
+    "sha1": "abae445a601aa8fb2a3f8dc0a7c7fcddc70d9617",
+    "size": -1
+  },
+  "nickprock/sentence-bert-base-italian-uncased": {
+    "application": "nlp/text_embedding",
+    "downloads": 1144,
+    "result": "success",
+    "sha1": "1485fbc365f5ab1b4741130a71827c5b837f18d9",
+    "size": 408523457
+  },
+  "nickprock/sentence-bert-base-italian-xxl-uncased": {
+    "application": "nlp/text_embedding",
+    "downloads": 158,
+    "result": "success",
+    "sha1": "0ca686e9a35f845df5e53bafc5e933cc52984238",
+    "size": 411341731
+  },
+  "nikcheerla/nooks-amd-detection-full": {
+    "application": "nlp/text_embedding",
+    "downloads": 5827,
+    "reason": "Failed to run inference on jit model",
+    "result": "failed",
+    "sha1": "a09a3bca9938737cb93d1ac037de46dd4a4ff67b",
+    "size": -1
+  },
+  "nikcheerla/nooks-amd-detection-realtime": {
+    "application": "nlp/text_embedding",
+    "downloads": 12,
+    "reason": "Failed to run inference on jit model",
+    "result": "failed",
+    "sha1": "0b142b116d170bdc1d50b777844d0e1d4e9db167",
+    "size": -1
+  },
+  "nikcheerla/nooks-amd-detection-v2-full": {
+    "application": "nlp/text_embedding",
+    "downloads": 4,
+    "reason": "Failed to run inference on jit model",
+    "result": "failed",
+    "sha1": "235b43bbec6e43f178a57450e76341ce1c9dd7df",
+    "size": -1
+  },
+  "nlplabtdtu/sbert-70M-cased": {
+    "application": "nlp/text_embedding",
+    "downloads": 50,
+    "reason": "Failed to trace model",
+    "result": "failed",
+    "sha1": "49bd923ba2b502a780d2c7b8203cdbad5d77a032",
+    "size": -1
+  },
+  "nomic-ai/modernbert-embed-base": {
+    "application": "nlp/text_embedding",
+    "downloads": 92350,
+    "result": "success",
+    "sha1": null,
+    "size": 600219254
+  },
+  "obrizum/all-MiniLM-L6-v2": {
+    "application": "nlp/text_embedding",
+    "downloads": 1685,
+    "result": "success",
+    "sha1": "3825f80b81a4edec9da5f16a020659f4f827ae18",
+    "size": 83495037
+  },
+  "omarelsayeed/Search_Model_PRECHATS_AUGMENTED": {
+    "application": "nlp/text_embedding",
+    "downloads": 77,
+    "result": "success",
+    "sha1": "a967b33c063031864980133294e613794feafb1f",
+    "size": 43130406
+  },
+  "oshizo/sbert-jsnli-luke-japanese-base-lite": {
+    "application": "nlp/text_embedding",
+    "downloads": 1355,
+    "reason": "Failed to run inference on jit model",
+    "result": "failed",
+    "sha1": "8b5628784fb6ea5f7d2f80e1881dba36cd14f656",
+    "size": -1
+  },
+  "pierluigic/xl-lexeme": {
+    "application": "nlp/text_embedding",
+    "downloads": 352,
+    "result": "success",
+    "sha1": "c9f85c6f05b85bc7c5014b5c23846f4467476263",
+    "size": 1922668181
+  },
+  "pkshatech/GLuCoSE-base-ja": {
+    "application": "nlp/text_embedding",
+    "downloads": 1345,
+    "reason": "Failed to run inference on jit model",
+    "result": "failed",
+    "sha1": "c284c7c1b6d30d97cc8e400fbce4e77215e3b462",
+    "size": -1
+  },
+  "pkshatech/simcse-ja-bert-base-clcmlp": {
+    "application": "nlp/text_embedding",
+    "downloads": 6363,
+    "result": "success",
+    "sha1": "7bca179df94b5b408373065de4178695fa0aff91",
+    "size": 413128706
+  },
+  "pritamdeka/BioBERT-mnli-snli-scinli-scitail-mednli-stsb": {
+    "application": "nlp/text_embedding",
+    "downloads": 3297,
+    "result": "success",
+    "sha1": "db5eae4c138d427f7c95deeae2c7857b999ac940",
+    "size": 401934476
+  },
+  "pritamdeka/PubMedBERT-mnli-snli-scinli-scitail-mednli-stsb": {
+    "application": "nlp/text_embedding",
+    "downloads": 84,
+    "result": "success",
+    "sha1": "5569d97eb3ac913760a8db31d8055dab2f616de4",
+    "size": 406884965
+  },
+  "pritamdeka/S-BioBert-snli-multinli-stsb": {
+    "application": "nlp/text_embedding",
+    "downloads": 371,
+    "result": "success",
+    "sha1": "21e0a553d5ef08802bacbd8331dfb93b5299c151",
+    "size": 401930851
+  },
+  "pritamdeka/S-Biomed-Roberta-snli-multinli-stsb": {
+    "application": "nlp/text_embedding",
+    "downloads": 56,
+    "result": "success",
+    "sha1": "7f11bdbb00218ba84e3f0e004a0c854600e06852",
+    "size": 464024065
+  },
+  "pritamdeka/S-Bluebert-snli-multinli-stsb": {
+    "application": "nlp/text_embedding",
+    "downloads": 268,
+    "result": "success",
+    "sha1": "8d4b33f320e308f7c86ac061a4880f1a9422ba7c",
+    "size": 405861040
+  },
+  "pritamdeka/S-PubMedBert-MS-MARCO": {
+    "application": "nlp/text_embedding",
+    "downloads": 3518,
+    "result": "success",
+    "sha1": "07302ceb7e7a19cdbbb500aef658fe40b65dcc8f",
+    "size": 406877695
+  },
+  "pritamdeka/S-PubMedBert-MS-MARCO-SCIFACT": {
+    "application": "nlp/text_embedding",
+    "downloads": 685,
+    "result": "success",
+    "sha1": "01cee073c3ae85ac7cbcec01d64a214f9c8c4b41",
+    "size": 406881611
+  },
+  "recobo/chemical-bert-uncased-simcse": {
+    "application": "nlp/text_embedding",
+    "downloads": 96,
+    "result": "success",
+    "sha1": "501ebc46786e9cef5c13d8290ed50530ff708161",
+    "size": 407862720
+  },
+  "recobo/chemical-bert-uncased-tsdae": {
+    "application": "nlp/text_embedding",
+    "downloads": 62,
+    "result": "success",
+    "sha1": "e6702c55ba838e9e4e25666e643ccba4e2b3c6db",
+    "size": 407688272
+  },
+  "ricardo-filho/bert-base-portuguese-cased-nli-assin-2": {
+    "application": "nlp/text_embedding",
+    "downloads": 89,
+    "result": "success",
+    "sha1": "1946af0f5090676d2aaf4774efb123bdb7735bcd",
+    "size": 404732541
+  },
+  "rufimelo/bert-large-portuguese-cased-sts": {
+    "application": "nlp/text_embedding",
+    "downloads": 183,
+    "result": "success",
+    "sha1": "58f57ebf64183173a155ddbdceedb09326fc020a",
+    "size": 1242154660
+  },
+  "ryanlai/shibing624_text2vec-base-chinese-fine-tune-insurance_data": {
+    "application": "nlp/text_embedding",
+    "downloads": 317,
+    "result": "success",
+    "sha1": "af61310593311dfecc9f9888ec1465cea2239c11",
+    "size": 380096591
+  },
+  "s-nlp/rubert-base-cased-conversational-paraphrase-v1": {
+    "application": "nlp/text_embedding",
+    "downloads": 1846,
+    "result": "success",
+    "sha1": "f91c204900caf796b74a976c5a8ba5e436c9ec4b",
+    "size": 658542356
+  },
+  "sadakmed/distiluse-base-multilingual-cased-v1": {
+    "application": "nlp/text_embedding",
+    "downloads": 149,
+    "result": "success",
+    "sha1": "2c2289a5bd6c89505c77d6b2ca7d1a7a56b2b106",
+    "size": 503755210
+  },
+  "sadakmed/distiluse-base-multilingual-cased-v2": {
+    "application": "nlp/text_embedding",
+    "downloads": 2579,
+    "result": "success",
+    "sha1": "d4e9bba5ac7e7bb5a86e3b97e8150e8fc1fbd931",
+    "size": 503753180
+  },
+  "sangmini/msmarco-cotmae-MiniLM-L12_en-ko-ja": {
+    "application": "nlp/text_embedding",
+    "downloads": 199,
+    "result": "success",
+    "sha1": "6e10496428fd525c95172e8630fc3d32435590e6",
+    "size": 435765055
+  },
+  "sap-ai-research/miCSE": {
+    "application": "nlp/text_embedding",
+    "downloads": 4307,
+    "result": "success",
+    "sha1": "3e0831fb6a7df7684cf95eacc8dbd885902bf7db",
+    "size": 405944114
+  },
+  "sdadas/mmlw-retrieval-e5-large": {
+    "application": "nlp/text_embedding",
+    "downloads": 469,
+    "result": "success",
+    "sha1": "8b1eee9071aa84173c3b1d0ca5c6b591641e6f27",
+    "size": 1312663872
+  },
+  "sdadas/st-polish-paraphrase-from-distilroberta": {
+    "application": "nlp/text_embedding",
+    "downloads": 1420,
+    "result": "success",
+    "sha1": "aa8a2b5e21a6de2eefd25d8be96d349ad2595779",
+    "size": 462528881
+  },
+  "sdadas/st-polish-paraphrase-from-mpnet": {
+    "application": "nlp/text_embedding",
+    "downloads": 519,
+    "result": "success",
+    "sha1": "9d75c14be43be9da313f88211f6157b30289d1ed",
+    "size": 462381280
+  },
+  "sentence-transformers/LaBSE": {
+    "application": "nlp/text_embedding",
+    "downloads": 138846,
+    "result": "success",
+    "sha1": "931b5f9a111859fa72549cd1a7cb32168ebbe010",
+    "size": 1755432215
+  },
+  "sentence-transformers/all-MiniLM-L12-v1": {
+    "application": "nlp/text_embedding",
+    "downloads": 2267,
+    "result": "success",
+    "sha1": "c8f1d5b49a00a0b0025e540ceca2c38101fc926f",
+    "size": 123110625
+  },
+  "sentence-transformers/all-MiniLM-L12-v2": {
+    "application": "nlp/text_embedding",
+    "downloads": 734070,
+    "result": "success",
+    "sha1": "9e16800aed25dbd1a96dfa6949c68c4d81d5dded",
+    "size": 123106031
+  },
+  "sentence-transformers/all-MiniLM-L6-v1": {
+    "application": "nlp/text_embedding",
+    "downloads": 7703,
+    "result": "success",
+    "sha1": "a65f6476ba7ba5a7b3595f37a5331a2a08797fa5",
+    "size": 83482005
+  },
+  "sentence-transformers/all-MiniLM-L6-v2": {
+    "application": "nlp/text_embedding",
+    "downloads": 5207284,
+    "result": "success",
+    "sha1": "717413c64de70e37b55cf53c9cdff0e2d331fac3",
+    "size": 83478502
+  },
+  "sentence-transformers/all-distilroberta-v1": {
+    "application": "nlp/text_embedding",
+    "downloads": 454947,
+    "result": "success",
+    "sha1": "57dd5d5be528ba968ef928103d92f95afc487e68",
+    "size": 305448281
+  },
+  "sentence-transformers/all-mpnet-base-v1": {
+    "application": "nlp/text_embedding",
+    "cpu_only": true,
+    "downloads": 3650,
+    "result": "success",
+    "sha1": "5db7848555eaffcf26ac367f5dc9e0711acb2106",
+    "size": 405265955
+  },
+  "sentence-transformers/all-mpnet-base-v2": {
+    "application": "nlp/text_embedding",
+    "cpu_only": true,
+    "downloads": 9921210,
+    "result": "success",
+    "sha1": "bd44305fd6a1b43c16baf96765e2ecb20bca8e1d",
+    "size": 405283582
+  },
+  "sentence-transformers/all-roberta-large-v1": {
+    "application": "nlp/text_embedding",
+    "downloads": 11632,
+    "result": "success",
+    "sha1": "42d37b9d8c9929c64dce4a2b25f6eaa0f59eaf99",
+    "size": 1319760379
+  },
+  "sentence-transformers/allenai-specter": {
+    "application": "nlp/text_embedding",
+    "downloads": 6365,
+    "result": "success",
+    "sha1": "29f9f45ff2a85fe9dfe8ce2cef3d8ec4e65c5f37",
+    "size": 408719629
+  },
+  "sentence-transformers/bert-base-nli-cls-token": {
+    "application": "nlp/text_embedding",
+    "downloads": 129,
+    "result": "success",
+    "sha1": "e843bdcd4b124d765c5a2d100118212610719537",
+    "size": 405977355
+  },
+  "sentence-transformers/bert-base-nli-max-tokens": {
+    "application": "nlp/text_embedding",
+    "downloads": 221,
+    "result": "success",
+    "sha1": "c89b0d9813cc872c23740b2e08ea6210b3c059c5",
+    "size": 405950761
+  },
+  "sentence-transformers/bert-base-nli-mean-tokens": {
+    "application": "nlp/text_embedding",
+    "downloads": 109363,
+    "result": "success",
+    "sha1": "18fc720063106176044380e71bad038d01e821d1",
+    "size": 405943318
+  },
+  "sentence-transformers/bert-base-nli-stsb-mean-tokens": {
+    "application": "nlp/text_embedding",
+    "downloads": 7948,
+    "result": "success",
+    "sha1": "1bd90bb33d5c6601f5fbd26d91e955a65059ee55",
+    "size": 405948919
+  },
+  "sentence-transformers/bert-base-wikipedia-sections-mean-tokens": {
+    "application": "nlp/text_embedding",
+    "downloads": 734,
+    "result": "success",
+    "sha1": "bfe50e68735b7f483150fd1548ddb77e04b43fa8",
+    "size": 405983096
+  },
+  "sentence-transformers/bert-large-nli-cls-token": {
+    "application": "nlp/text_embedding",
+    "downloads": 98,
+    "result": "success",
+    "sha1": "50322e8fd4324f6c43ac0834fff7b7d89603282e",
+    "size": 1245258449
+  },
+  "sentence-transformers/bert-large-nli-max-tokens": {
+    "application": "nlp/text_embedding",
+    "downloads": 806,
+    "result": "success",
+    "sha1": "1738a181e9e77a09752f92e6dbde15f4a5527d5c",
+    "size": 1245261415
+  },
+  "sentence-transformers/bert-large-nli-mean-tokens": {
+    "application": "nlp/text_embedding",
+    "downloads": 513,
+    "result": "success",
+    "sha1": "321b149057b64563bfc7bd2b2fb7d685ea9e4014",
+    "size": 1245213417
+  },
+  "sentence-transformers/bert-large-nli-stsb-mean-tokens": {
+    "application": "nlp/text_embedding",
+    "downloads": 3291,
+    "result": "success",
+    "sha1": "ab23972c686d191c5a1915b71cf453e20647cff1",
+    "size": 1245221345
+  },
+  "sentence-transformers/clip-ViT-B-32-multilingual-v1": {
+    "application": "nlp/text_embedding",
+    "downloads": 365784,
+    "result": "success",
+    "sha1": "200b64f20b3cef15ade0d31b1392519a46024087",
+    "size": 501377569
+  },
+  "sentence-transformers/distilbert-base-nli-mean-tokens": {
+    "application": "nlp/text_embedding",
+    "downloads": 53671,
+    "result": "success",
+    "sha1": "683b927b0b0f77e70b9a7d15f7f7601a515925a9",
+    "size": 245080599
+  },
+  "sentence-transformers/distilbert-base-nli-stsb-mean-tokens": {
+    "application": "nlp/text_embedding",
+    "downloads": 19292,
+    "result": "success",
+    "sha1": "888433dbfd0f07dc22d9e038d9acb20e5ca7e0d5",
+    "size": 245083561
+  },
+  "sentence-transformers/distilbert-base-nli-stsb-quora-ranking": {
+    "application": "nlp/text_embedding",
+    "downloads": 2017,
+    "result": "success",
+    "sha1": "f39736041df2a9460ef1525cc9052c3fa39bebc2",
+    "size": 245084243
+  },
+  "sentence-transformers/distilbert-multilingual-nli-stsb-quora-ranking": {
+    "application": "nlp/text_embedding",
+    "downloads": 11975,
+    "result": "success",
+    "sha1": "8ae74eb0fbe7c8d82bb3d1a91fca56f352074e7f",
+    "size": 501401481
+  },
+  "sentence-transformers/distilroberta-base-paraphrase-v1": {
+    "application": "nlp/text_embedding",
+    "downloads": 45,
+    "reason": "Failed to save tokenizer",
+    "result": "failed",
+    "sha1": "0191e446424b49506ba016264788b49bb7b11eb9",
+    "size": -1
+  },
+  "sentence-transformers/distiluse-base-multilingual-cased": {
+    "application": "nlp/text_embedding",
+    "downloads": 5555,
+    "reason": "Failed to trace model",
+    "result": "failed",
+    "sha1": "47709c6fb2c53d30c871b05b8fb2693a5428d96a",
+    "size": -1
+  },
+  "sentence-transformers/distiluse-base-multilingual-cased-v1": {
+    "application": "nlp/text_embedding",
+    "downloads": 162466,
+    "result": "success",
+    "sha1": "756c7aa7d57c27bd1c71a483367c53966465f450",
+    "size": 503742857
+  },
+  "sentence-transformers/distiluse-base-multilingual-cased-v2": {
+    "application": "nlp/text_embedding",
+    "downloads": 439591,
+    "reason": "Failed to trace model",
+    "result": "failed",
+    "sha1": "896fbacdabde59de4cb8d75dea7b9bff6066015c",
+    "size": -1
+  },
+  "sentence-transformers/facebook-dpr-ctx_encoder-multiset-base": {
+    "application": "nlp/text_embedding",
+    "downloads": 139,
+    "result": "success",
+    "sha1": "ae43c02d3267d1f11db4e7bfcfefc684c83b0c69",
+    "size": 405967612
+  },
+  "sentence-transformers/facebook-dpr-ctx_encoder-single-nq-base": {
+    "application": "nlp/text_embedding",
+    "downloads": 441,
+    "result": "success",
+    "sha1": "3320b11eacb143b6e6e6d71b727224dbd8f8b65a",
+    "size": 405962839
+  },
+  "sentence-transformers/facebook-dpr-question_encoder-multiset-base": {
+    "application": "nlp/text_embedding",
+    "downloads": 111,
+    "result": "success",
+    "sha1": "b9b2a32fb410b3b231951784863b9acd50c74e57",
+    "size": 405967682
+  },
+  "sentence-transformers/facebook-dpr-question_encoder-single-nq-base": {
+    "application": "nlp/text_embedding",
+    "downloads": 262,
+    "result": "success",
+    "sha1": "4af249243a8a724a781ebeb159d82a78ee32a33c",
+    "size": 405972138
+  },
+  "sentence-transformers/gtr-t5-base": {
+    "application": "nlp/text_embedding",
+    "downloads": 4857,
+    "reason": "Failed to trace model",
+    "result": "failed",
+    "sha1": "967b0854e46f8d3a0d42429301397715821a682f",
+    "size": -1
+  },
+  "sentence-transformers/gtr-t5-large": {
+    "application": "nlp/text_embedding",
+    "downloads": 4262,
+    "reason": "Failed to trace model",
+    "result": "failed",
+    "sha1": "fd31cff184d356b3a9a5794706551fc5306071a2",
+    "size": -1
+  },
+  "sentence-transformers/gtr-t5-xl": {
+    "application": "nlp/text_embedding",
+    "downloads": 1740,
+    "reason": "Failed to trace model",
+    "result": "failed",
+    "sha1": "0b2448c8b50fa688f209d70b083cf3ad934e0e37",
+    "size": -1
+  },
+  "sentence-transformers/gtr-t5-xxl": {
+    "application": "nlp/text_embedding",
+    "downloads": 661,
+    "reason": "Failed to trace model",
+    "result": "failed",
+    "sha1": "1431e7c1a9f4bf061070434127e055edce49313b",
+    "size": -1
+  },
+  "sentence-transformers/msmarco-MiniLM-L-12-v3": {
+    "application": "nlp/text_embedding",
+    "downloads": 10671,
+    "result": "success",
+    "sha1": "0ff694ede6574bbed1625216e5bd1a2f517abaf1",
+    "size": 122828759
+  },
+  "sentence-transformers/msmarco-MiniLM-L-6-v3": {
+    "application": "nlp/text_embedding",
+    "downloads": 2984,
+    "result": "success",
+    "sha1": "195276c0c8647b99dfe128bd8bc4ecd1a66d41f8",
+    "size": 83198886
+  },
+  "sentence-transformers/msmarco-MiniLM-L12-cos-v5": {
+    "application": "nlp/text_embedding",
+    "downloads": 3057,
+    "result": "success",
+    "sha1": "4131f6c65be8ecfe53b30a35744421715ac8e524",
+    "size": 122845774
+  },
+  "sentence-transformers/msmarco-MiniLM-L6-cos-v5": {
+    "application": "nlp/text_embedding",
+    "downloads": 20069,
+    "result": "success",
+    "sha1": "0c19e15276f393761bed6cfe5a1a366d1239ebd7",
+    "size": 83213761
+  },
+  "sentence-transformers/msmarco-bert-base-dot-v5": {
+    "application": "nlp/text_embedding",
+    "downloads": 35438,
+    "result": "success",
+    "sha1": "668e63a378bc93d76c430af68338e550dc78df09",
+    "size": 406215386
+  },
+  "sentence-transformers/msmarco-bert-co-condensor": {
+    "application": "nlp/text_embedding",
+    "downloads": 62,
+    "result": "success",
+    "sha1": "153347cd1e647921de84615b73c2d50788dd72df",
+    "size": 406153610
+  },
+  "sentence-transformers/msmarco-distilbert-base-dot-prod-v3": {
+    "application": "nlp/text_embedding",
+    "downloads": 2196,
+    "result": "success",
+    "sha1": "0bafe057815532ca7ee37f002d9d1413d78b6d67",
+    "size": 245079904
+  },
+  "sentence-transformers/msmarco-distilbert-base-tas-b": {
+    "application": "nlp/text_embedding",
+    "downloads": 15110,
+    "result": "success",
+    "sha1": "1d7e2b52a31c5c6fbee7293787fc7a5bdce0cfdf",
+    "size": 245090502
+  },
+  "sentence-transformers/msmarco-distilbert-base-v2": {
+    "application": "nlp/text_embedding",
+    "downloads": 359,
+    "result": "success",
+    "sha1": "f948558941b586773dcbc8f8df8576cd00a7547e",
+    "size": 245087472
+  },
+  "sentence-transformers/msmarco-distilbert-base-v3": {
+    "application": "nlp/text_embedding",
+    "downloads": 5379,
+    "result": "success",
+    "sha1": "cabff1a69c4aecef223c78fdb32c9f3fc4bda7dc",
+    "size": 245079686
+  },
+  "sentence-transformers/msmarco-distilbert-base-v4": {
+    "application": "nlp/text_embedding",
+    "downloads": 14940,
+    "result": "success",
+    "sha1": "62b749054617919f8d1e8462a987edea4b998e3c",
+    "size": 245075029
+  },
+  "sentence-transformers/msmarco-distilbert-cos-v5": {
+    "application": "nlp/text_embedding",
+    "downloads": 4623,
+    "result": "success",
+    "sha1": "97bf29337ec20da8a1fb1ff2bd5555de5b566baf",
+    "size": 245076715
+  },
+  "sentence-transformers/msmarco-distilbert-dot-v5": {
+    "application": "nlp/text_embedding",
+    "downloads": 430959,
+    "result": "success",
+    "sha1": "52b2679c1e6789ee4b2d3b81a27a4590a1bc5348",
+    "size": 245101603
+  },
+  "sentence-transformers/msmarco-distilbert-multilingual-en-de-v2-tmp-lng-aligned": {
+    "application": "nlp/text_embedding",
+    "downloads": 1620,
+    "result": "success",
+    "sha1": "63cf16f26e9be7a0ef793e10fe54900c75111046",
+    "size": 500690082
+  },
+  "sentence-transformers/msmarco-distilbert-multilingual-en-de-v2-tmp-trained-scratch": {
+    "application": "nlp/text_embedding",
+    "downloads": 45,
+    "result": "success",
+    "sha1": "b66b75ad2c01f1cf4ae47abb72464cb2342a5fba",
+    "size": 500708567
+  },
+  "sentence-transformers/msmarco-distilroberta-base-v2": {
+    "application": "nlp/text_embedding",
+    "downloads": 891,
+    "result": "success",
+    "sha1": "77b284287cf59954131cae3ea58ae8a2850f96d2",
+    "size": 305752051
+  },
+  "sentence-transformers/msmarco-roberta-base-ance-firstp": {
+    "application": "nlp/text_embedding",
+    "downloads": 146,
+    "result": "success",
+    "sha1": "236d631f5a757abdb6ce28471648d964d9acb8f3",
+    "size": 463000723
+  },
+  "sentence-transformers/msmarco-roberta-base-v2": {
+    "application": "nlp/text_embedding",
+    "downloads": 1005,
+    "result": "success",
+    "sha1": "b23dfbc095c7726ffb381522e4132a46fdee7783",
+    "size": 463447023
+  },
+  "sentence-transformers/msmarco-roberta-base-v3": {
+    "application": "nlp/text_embedding",
+    "downloads": 442,
+    "result": "success",
+    "sha1": "80e7e11abacef57acc1225f6b3517b74c42b27f2",
+    "size": 463551252
+  },
+  "sentence-transformers/multi-qa-MiniLM-L6-cos-v1": {
+    "application": "nlp/text_embedding",
+    "downloads": 524628,
+    "result": "success",
+    "sha1": "2ad254dbef118e9d73b90b0797a1632cb455fedf",
+    "size": 83553191
+  },
+  "sentence-transformers/multi-qa-MiniLM-L6-dot-v1": {
+    "application": "nlp/text_embedding",
+    "downloads": 1172,
+    "result": "success",
+    "sha1": "cffdcf0082a1156dce96de91b456a8859adc67b2",
+    "size": 83553027
+  },
+  "sentence-transformers/multi-qa-distilbert-cos-v1": {
+    "application": "nlp/text_embedding",
+    "downloads": 28353,
+    "result": "success",
+    "sha1": "4ee499ef6882f9c48c82085c3ead10ed8ac6be28",
+    "size": 245071314
+  },
+  "sentence-transformers/multi-qa-distilbert-dot-v1": {
+    "application": "nlp/text_embedding",
+    "downloads": 83,
+    "result": "success",
+    "sha1": "9c9137c3510bfe5ba9006a700e30af33b02d2684",
+    "size": 245085666
+  },
+  "sentence-transformers/multi-qa-mpnet-base-cos-v1": {
+    "application": "nlp/text_embedding",
+    "downloads": 125375,
+    "reason": "Failed to run inference on jit model",
+    "result": "failed",
+    "sha1": "bd0b4f6d767d5cb937b4c1a9611df492a80e891a",
+    "size": -1
+  },
+  "sentence-transformers/multi-qa-mpnet-base-dot-v1": {
+    "application": "nlp/text_embedding",
+    "downloads": 190327,
+    "reason": "Failed to run inference on jit model",
+    "result": "failed",
+    "sha1": "69cf9082c6abd4f70bdf8fca0ca826b6b5d16ebc",
+    "size": -1
+  },
+  "sentence-transformers/nli-bert-base": {
+    "application": "nlp/text_embedding",
+    "downloads": 3748,
+    "result": "success",
+    "sha1": "d5604f34c50678d07bd65a2cad9b996dae053a76",
+    "size": 405973140
+  },
+  "sentence-transformers/nli-bert-large-max-pooling": {
+    "application": "nlp/text_embedding",
+    "downloads": 126,
+    "result": "success",
+    "sha1": "0d18f120af805907d3bb96df53da45297d1a9bfc",
+    "size": 1245250657
+  },
+  "sentence-transformers/nli-distilbert-base": {
+    "application": "nlp/text_embedding",
+    "downloads": 50,
+    "result": "success",
+    "sha1": "e6725b7fc96c36e01905f517049ce2f6c0473de9",
+    "size": 245096875
+  },
+  "sentence-transformers/nli-distilroberta-base-v2": {
+    "application": "nlp/text_embedding",
+    "downloads": 414,
+    "result": "success",
+    "sha1": "ee9754ad61d9164d693c8e4c458238433037023f",
+    "size": 305564769
+  },
+  "sentence-transformers/nli-mpnet-base-v2": {
+    "application": "nlp/text_embedding",
+    "downloads": 184920,
+    "reason": "Failed to run inference on jit model",
+    "result": "failed",
+    "sha1": "c388b46d029476cd6611aa9ed44d05272bbbacfb",
+    "size": -1
+  },
+  "sentence-transformers/nli-roberta-base-v2": {
+    "application": "nlp/text_embedding",
+    "downloads": 959,
+    "result": "success",
+    "sha1": "64c0737f24398dce1ec9ae04f363dc6b220dceaf",
+    "size": 459790033
+  },
+  "sentence-transformers/nli-roberta-large": {
+    "application": "nlp/text_embedding",
+    "downloads": 171,
+    "result": "success",
+    "sha1": "b10cddcd7069bcd76ad00ac3142005892d4e83bd",
+    "size": 1315045145
+  },
+  "sentence-transformers/nq-distilbert-base-v1": {
+    "application": "nlp/text_embedding",
+    "downloads": 2230,
+    "result": "success",
+    "sha1": "a3dd10344d84c37c1d4a8be5d5021317900a2d19",
+    "size": 245079913
+  },
+  "sentence-transformers/paraphrase-MiniLM-L12-v2": {
+    "application": "nlp/text_embedding",
+    "downloads": 7858,
+    "result": "success",
+    "sha1": "8f010f24d5c0e1ee9735f056d024fcda6557f70f",
+    "size": 123285883
+  },
+  "sentence-transformers/paraphrase-MiniLM-L3-v2": {
+    "application": "nlp/text_embedding",
+    "downloads": 98029,
+    "result": "success",
+    "sha1": "74e7eed84a0b0ccca7e8769c9b0e5990f41d7125",
+    "size": 63856786
+  },
+  "sentence-transformers/paraphrase-MiniLM-L6-v2": {
+    "application": "nlp/text_embedding",
+    "downloads": 327702,
+    "result": "success",
+    "sha1": "68b97aaedb0c72be3c88c1af64296b3bbb8001fa",
+    "size": 83658161
+  },
+  "sentence-transformers/paraphrase-TinyBERT-L6-v2": {
+    "application": "nlp/text_embedding",
+    "downloads": 6222,
+    "result": "success",
+    "sha1": "8fe7263a517189c4a11a98f87db8ac964b235b5f",
+    "size": 248965657
+  },
+  "sentence-transformers/paraphrase-albert-base-v2": {
+    "application": "nlp/text_embedding",
+    "downloads": 2755,
+    "result": "success",
+    "sha1": "ba7fa0a9a209d687c911afb21ced12769ac05c7e",
+    "size": 44027121
+  },
+  "sentence-transformers/paraphrase-albert-small-v2": {
+    "application": "nlp/text_embedding",
+    "downloads": 82601,
+    "result": "success",
+    "sha1": "b8a76dca618575852d8874313e2ad84d423f333f",
+    "size": 44016110
+  },
+  "sentence-transformers/paraphrase-distilroberta-base-v1": {
+    "application": "nlp/text_embedding",
+    "downloads": 19367,
+    "reason": "Failed to trace model",
+    "result": "failed",
+    "sha1": "de91d53e03a544451c0e18312391a3f279f7f4ef",
+    "size": -1
+  },
+  "sentence-transformers/paraphrase-distilroberta-base-v2": {
+    "application": "nlp/text_embedding",
+    "downloads": 3669,
+    "result": "success",
+    "sha1": "d9461390caf1e64923d00bc55fa02d3c1ed2b9e5",
+    "size": 305578268
+  },
+  "sentence-transformers/paraphrase-mpnet-base-v2": {
+    "application": "nlp/text_embedding",
+    "downloads": 109981,
+    "reason": "Failed to run inference on jit model",
+    "result": "failed",
+    "sha1": "18df4b22cd35517843308534d066190182ff39ef",
+    "size": -1
+  },
+  "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2": {
+    "application": "nlp/text_embedding",
+    "downloads": 354087,
+    "result": "success",
+    "sha1": "b8ef00830037f9868450f778081ea683e900fe39",
+    "size": 435734278
+  },
+  "sentence-transformers/paraphrase-multilingual-mpnet-base-v2": {
+    "application": "nlp/text_embedding",
+    "downloads": 389755,
+    "result": "success",
+    "sha1": "ef15aed8b328d308d7237b9bf15269f2cd19e268",
+    "size": 1013788581
+  },
+  "sentence-transformers/paraphrase-xlm-r-multilingual-v1": {
+    "application": "nlp/text_embedding",
+    "downloads": 39886,
+    "result": "success",
+    "sha1": "50f7fa9e273db3db51beceacc1b111e4a1a31d34",
+    "size": 1015720760
+  },
+  "sentence-transformers/quora-distilbert-base": {
+    "application": "nlp/text_embedding",
+    "downloads": 61,
+    "result": "success",
+    "sha1": "2708fe60f344ffbedf990cf4f8be7866f605bf60",
+    "size": 245095560
+  },
+  "sentence-transformers/quora-distilbert-multilingual": {
+    "application": "nlp/text_embedding",
+    "downloads": 1815,
+    "result": "success",
+    "sha1": "43c541d8cdd793eed04a9c2d66c6f971198681da",
+    "size": 501405080
+  },
+  "sentence-transformers/roberta-base-nli-mean-tokens": {
+    "application": "nlp/text_embedding",
+    "downloads": 252,
+    "result": "success",
+    "sha1": "993765530351e8b2a4da74bed694d80de826cbb3",
+    "size": 460855474
+  },
+  "sentence-transformers/roberta-base-nli-stsb-mean-tokens": {
+    "application": "nlp/text_embedding",
+    "downloads": 774,
+    "result": "success",
+    "sha1": "903ef0c8897802c3209d82aa46b1c897ac56cf28",
+    "size": 460973070
+  },
+  "sentence-transformers/roberta-large-nli-mean-tokens": {
+    "application": "nlp/text_embedding",
+    "downloads": 154,
+    "result": "success",
+    "sha1": "122c0aac5edb08467a65bd04bce837ea1208efd1",
+    "size": 1315009595
+  },
+  "sentence-transformers/roberta-large-nli-stsb-mean-tokens": {
+    "application": "nlp/text_embedding",
+    "downloads": 1458,
+    "result": "success",
+    "sha1": "768fca01ac32ae924414f7128af28ea1d9dfcada",
+    "size": 1315231210
+  },
+  "sentence-transformers/sentence-t5-base": {
+    "application": "nlp/text_embedding",
+    "downloads": 279565,
+    "reason": "Failed to trace model",
+    "result": "failed",
+    "sha1": "0bf6e3f10674a653aad7c5e0be5b6721dd52bb58",
+    "size": -1
+  },
+  "sentence-transformers/sentence-t5-large": {
+    "application": "nlp/text_embedding",
+    "downloads": 10660,
+    "reason": "Failed to trace model",
+    "result": "failed",
+    "sha1": "266640df151776ad39f66a2595b81c97ae678195",
+    "size": -1
+  },
+  "sentence-transformers/sentence-t5-xl": {
+    "application": "nlp/text_embedding",
+    "downloads": 3295,
+    "reason": "Failed to trace model",
+    "result": "failed",
+    "sha1": "e0976ba9afd18be963c22c680367a3928c44fd22",
+    "size": -1
+  },
+  "sentence-transformers/sentence-t5-xxl": {
+    "application": "nlp/text_embedding",
+    "downloads": 634,
+    "reason": "Failed to trace model",
+    "result": "failed",
+    "sha1": "0a2f720e57c36306fbfca6025baba48828555764",
+    "size": -1
+  },
+  "sentence-transformers/stsb-bert-base": {
+    "application": "nlp/text_embedding",
+    "downloads": 178,
+    "result": "success",
+    "sha1": "20bffd8f7de134ab71371b5fac67e95b83b24a0a",
+    "size": 405948712
+  },
+  "sentence-transformers/stsb-bert-large": {
+    "application": "nlp/text_embedding",
+    "downloads": 54,
+    "result": "success",
+    "sha1": "5e8a2c75ee8ccaa42c89aa0e26ec75e4bc9e1ba8",
+    "size": 1245226605
+  },
+  "sentence-transformers/stsb-distilbert-base": {
+    "application": "nlp/text_embedding",
+    "downloads": 1027,
+    "result": "success",
+    "sha1": "815bb3e4dbcba340b5f8c0c0489800230880e06e",
+    "size": 245083367
+  },
+  "sentence-transformers/stsb-distilroberta-base-v2": {
+    "application": "nlp/text_embedding",
+    "downloads": 1071,
+    "result": "success",
+    "sha1": "0078748de585303ee3757abf215b748aa7be581e",
+    "size": 305568071
+  },
+  "sentence-transformers/stsb-mpnet-base-v2": {
+    "application": "nlp/text_embedding",
+    "downloads": 15540,
+    "reason": "Failed to run inference on jit model",
+    "result": "failed",
+    "sha1": "9f9d3d9da582d245066b519ab1e99c3f54a0594e",
+    "size": -1
+  },
+  "sentence-transformers/stsb-roberta-base": {
+    "application": "nlp/text_embedding",
+    "downloads": 23558,
+    "result": "success",
+    "sha1": "20afd582a7bbc12014f37486dbef9b0c990f91bd",
+    "size": 460975789
+  },
+  "sentence-transformers/stsb-roberta-base-v2": {
+    "application": "nlp/text_embedding",
+    "downloads": 341,
+    "result": "success",
+    "sha1": "b5e9e8dbc4a7d931c766a9113d1a04963a480c06",
+    "size": 460147190
+  },
+  "sentence-transformers/stsb-roberta-large": {
+    "application": "nlp/text_embedding",
+    "downloads": 37928,
+    "result": "success",
+    "sha1": "b6cd86898ba049a6d160dab42e298f677c5e63b6",
+    "size": 1315231270
+  },
+  "sentence-transformers/stsb-xlm-r-multilingual": {
+    "application": "nlp/text_embedding",
+    "downloads": 71083,
+    "result": "success",
+    "sha1": "bc1a68705f2e397259207e96349a36ccbc7e6493",
+    "size": 1015485666
+  },
+  "sentence-transformers/use-cmlm-multilingual": {
+    "application": "nlp/text_embedding",
+    "downloads": 592,
+    "result": "success",
+    "sha1": "2528c966cf3b3d2e504d4209c8c688a63d77729f",
+    "size": 1756122094
+  },
+  "sentence-transformers/xlm-r-100langs-bert-base-nli-stsb-mean-tokens": {
+    "application": "nlp/text_embedding",
+    "downloads": 45297,
+    "result": "success",
+    "sha1": "e614409446a9b8cc7eb7ac1087e11af9e99ab895",
+    "size": 1015492246
+  },
+  "sentence-transformers/xlm-r-bert-base-nli-stsb-mean-tokens": {
+    "application": "nlp/text_embedding",
+    "downloads": 156,
+    "result": "success",
+    "sha1": "9c71022cc69f395526255204c7af8bea1cc252d8",
+    "size": 1015513161
+  },
+  "sentence-transformers/xlm-r-distilroberta-base-paraphrase-v1": {
+    "application": "nlp/text_embedding",
+    "downloads": 1224,
+    "result": "success",
+    "sha1": "bf5baa9f012675785f0ffb2b509d99ca1b49fcde",
+    "size": 1015727165
+  },
+  "setu4993/LEALLA-base": {
+    "application": "nlp/text_embedding",
+    "downloads": 296,
+    "result": "success",
+    "sha1": "4372d1b5995482b7237381ea0c833c5c404856f2",
+    "size": 403061171
+  },
+  "setu4993/LEALLA-large": {
+    "application": "nlp/text_embedding",
+    "downloads": 2640,
+    "result": "success",
+    "sha1": "84f26abc31038fe88ef1927f798019e68a80feb0",
+    "size": 553465756
+  },
+  "setu4993/LEALLA-small": {
+    "application": "nlp/text_embedding",
+    "downloads": 225919,
+    "result": "success",
+    "sha1": "8fadf81fe3979f373ba9922ab616468a4184b266",
+    "size": 261845521
+  },
+  "setu4993/LaBSE": {
+    "application": "nlp/text_embedding",
+    "downloads": 19396,
+    "result": "success",
+    "sha1": "63d271c0f5867a09260399c649c18544b220888f",
+    "size": 1755443353
+  },
+  "setu4993/smaller-LaBSE": {
+    "application": "nlp/text_embedding",
+    "downloads": 4696,
+    "result": "success",
+    "sha1": "47a6065e7d3c2c2d36e4146c9c0201cbf6f74711",
+    "size": 816200434
+  },
+  "shibing624/text2vec-base-chinese": {
+    "application": "nlp/text_embedding",
+    "downloads": 1406860,
+    "result": "success",
+    "sha1": "b455bb011898ad5d8b16cea238d070cd34db4b05",
+    "size": 380065713
+  },
+  "shibing624/text2vec-base-chinese-paraphrase": {
+    "application": "nlp/text_embedding",
+    "downloads": 1398,
+    "reason": "Failed to run inference on jit model",
+    "result": "failed",
+    "sha1": "beaf10481a5d9ca3b0daa9f0df6831ec956bf739",
+    "size": -1
+  },
+  "shibing624/text2vec-base-chinese-sentence": {
+    "application": "nlp/text_embedding",
+    "downloads": 723,
+    "reason": "Failed to run inference on jit model",
+    "result": "failed",
+    "sha1": "e73a94e821f22c6163166bfab9408d03933a5525",
+    "size": -1
+  },
+  "shibing624/text2vec-base-multilingual": {
+    "application": "nlp/text_embedding",
+    "downloads": 18220,
+    "result": "success",
+    "sha1": "f241877385fa56ebcc75f04d1850e1579cfa661d",
+    "size": 435843792
+  },
+  "shibing624/text2vec-bge-large-chinese": {
+    "application": "nlp/text_embedding",
+    "downloads": 1292,
+    "result": "success",
+    "sha1": "f5027ca48ea8316d63ee26d2b9bd27a061de33a3",
+    "size": 1197480343
+  },
+  "smart-tribune/sentence-transformers-multilingual-e5-large": {
+    "application": "nlp/text_embedding",
+    "downloads": 94,
+    "result": "success",
+    "sha1": "f58c8dd460d5c8a4188e59de98519a3a4af94fb5",
+    "size": 1313587280
+  },
+  "snunlp/KR-SBERT-V40K-klueNLI-augSTS": {
+    "application": "nlp/text_embedding",
+    "downloads": 1772,
+    "result": "success",
+    "sha1": "92c6c2c7032f680bff0f9f0c63fadd3f97e635b2",
+    "size": 434262583
+  },
+  "sonoisa/clip-vit-b-32-japanese-v1": {
+    "application": "nlp/text_embedding",
+    "downloads": 511,
+    "result": "success",
+    "sha1": "3a955d5fef102d4fd8e317df0c003f2a3c083514",
+    "size": 410577323
+  },
+  "sonoisa/sentence-bert-base-ja-en-mean-tokens": {
+    "application": "nlp/text_embedding",
+    "downloads": 1964,
+    "result": "success",
+    "sha1": "51931e799ed487cedf94e7d6e382e06a9e196dbf",
+    "size": 410963365
+  },
+  "sonoisa/sentence-bert-base-ja-mean-tokens": {
+    "application": "nlp/text_embedding",
+    "downloads": 18378,
+    "result": "success",
+    "sha1": "c5db458007569cea1374d4b5766193832c3fc285",
+    "size": 411195943
+  },
+  "sonoisa/sentence-bert-base-ja-mean-tokens-v2": {
+    "application": "nlp/text_embedding",
+    "downloads": 376980,
+    "result": "success",
+    "sha1": "026b764a2542ec8d5070878426e51b6a2f4ac25c",
+    "size": 410961844
+  },
+  "sonoisa/sentence-luke-japanese-base-lite": {
+    "application": "nlp/text_embedding",
+    "downloads": 62012,
+    "reason": "Failed to run inference on jit model",
+    "result": "failed",
+    "sha1": "d8a41013724c16b2287bf36942f7a26983c5c8f4",
+    "size": -1
+  },
+  "sonoisa/sentence-t5-base-ja-mean-tokens": {
+    "application": "nlp/text_embedding",
+    "downloads": 1759,
+    "reason": "Failed to trace model",
+    "result": "failed",
+    "sha1": "57293873c79e8531f873bc3897bde283149aeab9",
+    "size": -1
+  },
+  "stjiris/bert-large-portuguese-cased-legal-tsdae-gpl-nli-sts-MetaKD-v1": {
+    "application": "nlp/text_embedding",
+    "downloads": 329,
+    "result": "success",
+    "sha1": "d2d659ca0b9313de66035e14a181603344526d06",
+    "size": 1242148462
+  },
+  "stjiris/bert-large-portuguese-cased-legal-tsdae-gpl-nli-sts-v1": {
+    "application": "nlp/text_embedding",
+    "downloads": 82,
+    "result": "success",
+    "sha1": "1c0856fc746ef74c569cacbdc03e8b07d69f2e4b",
+    "size": 1242148297
+  },
+  "symanto/sn-xlm-roberta-base-snli-mnli-anli-xnli": {
+    "application": "nlp/text_embedding",
+    "downloads": 11350,
+    "result": "success",
+    "sha1": "50351e64d90edeebf1c3bb245ebe8aa3c5ecf9c5",
+    "size": 932758706
+  },
+  "tavakolih/all-MiniLM-L6-v2-pubmed-full": {
+    "application": "nlp/text_embedding",
+    "downloads": 145,
+    "result": "success",
+    "sha1": "1ac4d2f464794d1a269f5dd28e7809bd3b67a4c5",
+    "size": 83562831
+  },
+  "tekraj/avodamed-synonym-generator1": {
+    "application": "nlp/text_embedding",
+    "downloads": 45,
+    "result": "success",
+    "sha1": "77f567b773915389da1ffee4b00a06012b59df26",
+    "size": 83495757
+  },
+  "textgain/allnli-GroNLP-bert-base-dutch-cased": {
+    "application": "nlp/text_embedding",
+    "downloads": 88,
+    "result": "success",
+    "sha1": "d29f6e232f61f8b3e6605bd5100793cc1636e29c",
+    "size": 405579658
+  },
+  "thenlper/gte-base": {
+    "application": "nlp/text_embedding",
+    "downloads": 89671,
+    "reason": "Unexpected inference result",
+    "result": "failed",
+    "sha1": "7cb59c7765dcf58720e0e63bdbbf8c10cbba8668",
+    "size": -1
+  },
+  "thenlper/gte-base-zh": {
+    "application": "nlp/text_embedding",
+    "downloads": 935,
+    "result": "success",
+    "sha1": "7c27bfe97c28c7b50fdde509a4b7553e311bb2cd",
+    "size": 241288219
+  },
+  "thenlper/gte-large": {
+    "application": "nlp/text_embedding",
+    "downloads": 96191,
+    "result": "success",
+    "sha1": "8cb729e8b44d9ec9d85c1cec4167ed28b43b04c2",
+    "size": 787172252
+  },
+  "thenlper/gte-large-zh": {
+    "application": "nlp/text_embedding",
+    "downloads": 831,
+    "result": "success",
+    "sha1": "6becf556906acb169f47d5fa1ae9422fb63855ab",
+    "size": 766720984
+  },
+  "thenlper/gte-small": {
+    "application": "nlp/text_embedding",
+    "downloads": 118377,
+    "result": "success",
+    "sha1": "c20abe89ac0cdf484944ebdc26ecaaa1bfc9cf89",
+    "size": 79201143
+  },
+  "thenlper/gte-small-zh": {
+    "application": "nlp/text_embedding",
+    "downloads": 322,
+    "result": "success",
+    "sha1": "03cd24b4cdd01dd4e0b0bcee66d239212a12294c",
+    "size": 71555401
+  },
+  "uaritm/multilingual_en_ru_uk": {
+    "application": "nlp/text_embedding",
+    "downloads": 174,
+    "result": "success",
+    "sha1": "4ba37935914d4033bca422c1548cc78cddc14483",
+    "size": 851291961
+  },
+  "uaritm/multilingual_en_uk_pl_ru": {
+    "application": "nlp/text_embedding",
+    "downloads": 114,
+    "result": "success",
+    "sha1": "b8e9b2c4261790afc5efec66b6f13fc742a2d8f1",
+    "size": 849325803
+  },
+  "uclanlp/keyphrase-mpnet-v1": {
+    "application": "nlp/text_embedding",
+    "downloads": 1026,
+    "reason": "Failed to run inference on jit model",
+    "result": "failed",
+    "sha1": "d1ce89ac359c77a35fb83ad72fac1f355c82939f",
+    "size": -1
+  },
+  "uer/sbert-base-chinese-nli": {
+    "application": "nlp/text_embedding",
+    "downloads": 4018,
+    "result": "success",
+    "sha1": "2081897a182fdc33ea6e840f0eb38959b63ec0d3",
+    "size": 379809750
+  },
+  "valurank/MiniLM-L6-Keyword-Extraction": {
+    "application": "nlp/text_embedding",
+    "downloads": 202,
+    "result": "success",
+    "sha1": "268a06523de516f25e7a089cff7921ad764f072d",
+    "size": 83495900
+  },
+  "whaleloops/phrase-bert": {
+    "application": "nlp/text_embedding",
+    "downloads": 200,
+    "result": "success",
+    "sha1": "6f68f4dc2d28aadefa038c79023dc7dfd51f6495",
+    "size": 405975883
+  },
+  "with-madrid/with-e5-small-v2": {
+    "application": "nlp/text_embedding",
+    "downloads": 516,
+    "result": "success",
+    "sha1": "e3678c8257d2b2c7502d5b0870d82a2c15607ed5",
+    "size": 112966967
+  },
+  "woody72/multilingual-e5-base": {
+    "application": "nlp/text_embedding",
+    "downloads": 1531,
+    "result": "success",
+    "sha1": "7751418c34b964e4b5e7b372f6a4e59b9a5d6eb6",
+    "size": 658884867
+  },
+  "ys7yoo/sentence-roberta-large-kor-sts": {
+    "application": "nlp/text_embedding",
+    "downloads": 160,
+    "result": "success",
+    "sha1": "fe88fc6fbcb203bc1d70754ef7d3783be68a67ac",
+    "size": 1225565250
+  },
+  "yunyu/sentence-transformers-e5-small-v2": {
+    "application": "nlp/text_embedding",
+    "downloads": 981,
+    "result": "success",
+    "sha1": "1fc870d7812373856057c09b10eb0600897a6a24",
+    "size": 79253274
+  },
+  "zerohell/tinydpr-acc_0.315-bs_307": {
+    "application": "nlp/text_embedding",
+    "downloads": 267,
+    "result": "success",
+    "sha1": "848ce048ee45bd34004de0c43214259707f0b8c5",
+    "size": 42631403
+  }
+}

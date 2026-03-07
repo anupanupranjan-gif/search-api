@@ -1,0 +1,173 @@
+{
+  "BAAI/bge-reranker-v2-m3": {
+    "application": "nlp/text_classification",
+    "downloads": 828141,
+    "result": "success",
+    "sha1": null,
+    "size": 1333399678
+  },
+  "Hate-speech-CNERG/indic-abusive-allInOne-MuRIL": {
+    "application": "nlp/text_classification",
+    "downloads": 1043511,
+    "result": "success",
+    "sha1": "159b3636af636844106d203e3d8a07f522aaa6e0",
+    "size": 884248798
+  },
+  "MoritzLaurer/ModernBERT-base-zeroshot-v2.0": {
+    "application": "nlp/text_classification",
+    "downloads": 1532,
+    "result": "success",
+    "sha1": null,
+    "size": 602611748
+  },
+  "MoritzLaurer/ModernBERT-large-zeroshot-v2.0": {
+    "application": "nlp/text_classification",
+    "downloads": 7263,
+    "result": "success",
+    "sha1": null,
+    "size": 1587674755
+  },
+  "MoritzLaurer/mDeBERTa-v3-base-mnli-xnli": {
+    "application": "nlp/text_classification",
+    "downloads": 260991,
+    "reason": "Failed to trace model",
+    "result": "failed",
+    "sha1": "297ea39590b1e92e79b1e1a4fead55d751483b68",
+    "size": -1
+  },
+  "ProsusAI/finbert": {
+    "application": "nlp/text_classification",
+    "downloads": 796562,
+    "result": "success",
+    "sha1": "5ea63b3d0c737ad6f06e061d9af36b1f7bbd1a4b",
+    "size": 405923662
+  },
+  "bhadresh-savani/distilbert-base-uncased-emotion": {
+    "application": "nlp/text_classification",
+    "downloads": 582304,
+    "result": "success",
+    "sha1": "322caf2a56793969b8221b87bed988f8e7798b8e",
+    "size": 247284311
+  },
+  "cardiffnlp/twitter-roberta-base-emotion": {
+    "application": "nlp/text_classification",
+    "downloads": 828327,
+    "result": "success",
+    "sha1": "dff452c4f42c15a25bd51aff1f1ca5d15ec08c23",
+    "size": 463659737
+  },
+  "cardiffnlp/twitter-roberta-base-irony": {
+    "application": "nlp/text_classification",
+    "downloads": 252671,
+    "result": "success",
+    "sha1": "72213835791c86ac7cade4acef91820bc9f1dc57",
+    "size": 463655872
+  },
+  "cardiffnlp/twitter-roberta-base-sentiment": {
+    "application": "nlp/text_classification",
+    "downloads": 4704648,
+    "result": "success",
+    "sha1": "b636d90b2ed53d7ba6006cefd76f29cd354dd9da",
+    "size": 463658722
+  },
+  "cardiffnlp/twitter-roberta-base-sentiment-latest": {
+    "application": "nlp/text_classification",
+    "downloads": 560670,
+    "result": "success",
+    "sha1": "5916057ce88cf0a408a195082b6c06d3dce12552",
+    "size": 463832459
+  },
+  "cardiffnlp/twitter-xlm-roberta-base-sentiment": {
+    "application": "nlp/text_classification",
+    "downloads": 286109,
+    "result": "success",
+    "sha1": "f3e34b6c30bf27b6649f72eca85d0bbe79df1e55",
+    "size": 1034422106
+  },
+  "cirimus/modernbert-base-go-emotions": {
+    "application": "nlp/text_classification",
+    "downloads": 6500,
+    "result": "success",
+    "sha1": null,
+    "size": 602690254
+  },
+  "cross-encoder/mmarco-mMiniLMv2-L12-H384-v1": {
+    "application": "nlp/text_classification",
+    "downloads": 28676,
+    "result": "success",
+    "sha1": "d5246c2d77849f8a3886b463b949c52b5cb7d075",
+    "size": 397345849
+  },
+  "cross-encoder/nli-distilroberta-base": {
+    "application": "nlp/text_classification",
+    "downloads": 521736,
+    "result": "success",
+    "sha1": "99f096e70ef1fb038b8f0aecabc5a0f491684084",
+    "size": 305859510
+  },
+  "distilbert-base-uncased-finetuned-sst-2-english": {
+    "application": "nlp/text_classification",
+    "downloads": 4008294,
+    "result": "success",
+    "sha1": "324d3097568e82724d53d7ac1d312aa719d48037",
+    "size": 247266631
+  },
+  "facebook/bart-large-mnli": {
+    "application": "nlp/text_classification",
+    "downloads": 1647676,
+    "reason": "Failed to trace model",
+    "result": "failed",
+    "sha1": "c626438eeca63a93bd6024b0a0fbf8b3c0c30d7b",
+    "size": -1
+  },
+  "j-hartmann/emotion-english-distilroberta-base": {
+    "application": "nlp/text_classification",
+    "downloads": 357250,
+    "result": "success",
+    "sha1": "d23807173703d44b48d60ca252664f60d0d46563",
+    "size": 305704713
+  },
+  "joeddav/xlm-roberta-large-xnli": {
+    "application": "nlp/text_classification",
+    "downloads": 401910,
+    "result": "success",
+    "sha1": "9c1619b90a142cd2913190d80d5f488d6612f57e",
+    "size": 1939264297
+  },
+  "nlptown/bert-base-multilingual-uncased-sentiment": {
+    "application": "nlp/text_classification",
+    "downloads": 889042,
+    "result": "success",
+    "sha1": "e06857fdb0325a7798a8fc361b417dfeec3a3b98",
+    "size": 622158009
+  },
+  "tals/albert-xlarge-vitaminc-mnli": {
+    "application": "nlp/text_classification",
+    "downloads": 2749017,
+    "result": "success",
+    "sha1": "32af51085da23174a9060395b134d209a83fbcc1",
+    "size": 218787050
+  },
+  "unitary/toxic-bert": {
+    "application": "nlp/text_classification",
+    "downloads": 2122029,
+    "result": "success",
+    "sha1": "5cc53435803a6e6f1ac8e4b243910d3bf26803ff",
+    "size": 408743461
+  },
+  "valhalla/distilbart-mnli-12-1": {
+    "application": "nlp/text_classification",
+    "downloads": 291234,
+    "reason": "Failed to trace model",
+    "result": "failed",
+    "sha1": "506336d4214470e3b3b36021358daae28e25ceac",
+    "size": -1
+  },
+  "yiyanghkust/finbert-tone": {
+    "application": "nlp/text_classification",
+    "downloads": 266619,
+    "result": "success",
+    "sha1": "69507fb7dad65fd5ee96679690e6336211edc7a5",
+    "size": 408220515
+  }
+}

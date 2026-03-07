@@ -1,0 +1,190 @@
+{
+  "Rakib/roberta-base-on-cuad": {
+    "application": "nlp/question_answer",
+    "downloads": 26396,
+    "reason": "Unexpected inference result: BBC Japan was a general entertainment Channel. Which operated between December 2004 and April 2006. It ceased operations after its Japanese distributor folded.",
+    "result": "failed",
+    "sha1": "bc6033499692e08cef629b94b5dad636df956b24",
+    "size": -1
+  },
+  "ahotrod/electra_large_discriminator_squad2_512": {
+    "application": "nlp/question_answer",
+    "downloads": 420808,
+    "result": "success",
+    "sha1": "fe230d41e74248eceb366a91e4f8572f358f201c",
+    "size": 1240879193
+  },
+  "allenai/longformer-large-4096-finetuned-triviaqa": {
+    "application": "nlp/question_answer",
+    "downloads": 19664,
+    "reason": "Failed to trace model",
+    "result": "failed",
+    "sha1": "4a10c0999bd77b29f6fd122663787c770afa197e",
+    "size": -1
+  },
+  "bert-large-cased-whole-word-masking-finetuned-squad": {
+    "application": "nlp/question_answer",
+    "downloads": 44763,
+    "result": "success",
+    "sha1": "ba9ccd18e456b6c6a63a3ea5b21776f05452d923",
+    "size": 1236114292
+  },
+  "bert-large-uncased-whole-word-masking-finetuned-squad": {
+    "application": "nlp/question_answer",
+    "downloads": 415681,
+    "result": "success",
+    "sha1": "242d9dbb66bb5033025196d5678907307f8fb098",
+    "size": 1241902186
+  },
+  "csarron/bert-base-uncased-squad-v1": {
+    "application": "nlp/question_answer",
+    "downloads": 631722,
+    "result": "success",
+    "sha1": "31129bdd485e06a6bec8fd2e045256369db34b0b",
+    "size": 403745568
+  },
+  "deepset/bert-base-cased-squad2": {
+    "application": "nlp/question_answer",
+    "downloads": 92796,
+    "result": "success",
+    "sha1": "3eb2ba4d2ff1903c1b71e74a8f3640eef57da82d",
+    "size": 400299190
+  },
+  "deepset/bert-large-uncased-whole-word-masking-squad2": {
+    "application": "nlp/question_answer",
+    "downloads": 215638,
+    "result": "success",
+    "sha1": "fc342ddb2da7ae9be8275f3f9970f0b59571caa5",
+    "size": 1241905974
+  },
+  "deepset/minilm-uncased-squad2": {
+    "application": "nlp/question_answer",
+    "downloads": 457542,
+    "result": "success",
+    "sha1": "b836be0bbed370b340a9ad54e20675c555887bbe",
+    "size": 122207436
+  },
+  "deepset/roberta-base-squad2": {
+    "application": "nlp/question_answer",
+    "downloads": 3890998,
+    "result": "success",
+    "sha1": "1820469fc24c4ad98cb669cca2f4986f91ea84c2",
+    "size": 459085831
+  },
+  "deepset/roberta-base-squad2-covid": {
+    "application": "nlp/question_answer",
+    "downloads": 111483,
+    "result": "success",
+    "sha1": "06d3b5d05f14c5da10ce04c0ecc308aaa4a9905f",
+    "size": 459242191
+  },
+  "deepset/roberta-base-squad2-distilled": {
+    "application": "nlp/question_answer",
+    "downloads": 21902,
+    "result": "success",
+    "sha1": "13d15d60b8fb45dc19c73a13bbd9a523811bca59",
+    "size": 458137690
+  },
+  "deepset/roberta-large-squad2": {
+    "application": "nlp/question_answer",
+    "downloads": 44224,
+    "result": "success",
+    "sha1": "faa13e991d03fba7f6eb6a75356c4c0806e2588a",
+    "size": 1310808932
+  },
+  "deepset/tinyroberta-squad2": {
+    "application": "nlp/question_answer",
+    "downloads": 22305,
+    "result": "success",
+    "sha1": "2875df57689ebabdb58f178a08c09131bb88d086",
+    "size": 303871380
+  },
+  "deepset/xlm-roberta-base-squad2": {
+    "application": "nlp/question_answer",
+    "downloads": 7185562,
+    "result": "success",
+    "sha1": "22373eb065d58931d3811328f36e69c5079609b5",
+    "size": 866982820
+  },
+  "deepset/xlm-roberta-large-squad2": {
+    "application": "nlp/question_answer",
+    "downloads": 435345,
+    "result": "success",
+    "sha1": "089becf104e1928b27123065f4724e93fcbfd879",
+    "size": 1849063307
+  },
+  "distilbert-base-cased-distilled-squad": {
+    "application": "nlp/question_answer",
+    "downloads": 1355257,
+    "result": "success",
+    "sha1": "ab869c350bf337ba638b12da62f29e4e7d67f15c",
+    "size": 241687798
+  },
+  "distilbert-base-uncased-distilled-squad": {
+    "application": "nlp/question_answer",
+    "downloads": 104820,
+    "result": "success",
+    "sha1": "3ab4b58da34f3a23bbdd2626fc58ee6c91f9890b",
+    "size": 245027691
+  },
+  "monologg/koelectra-small-v2-distilled-korquad-384": {
+    "application": "nlp/question_answer",
+    "downloads": 83155,
+    "reason": "Unexpected inference result: ",
+    "result": "failed",
+    "sha1": "70c28f5b9e6b2bd05bb609f6be1f9f8ff918cd6f",
+    "size": -1
+  },
+  "mrm8488/bert-medium-finetuned-squadv2": {
+    "application": "nlp/question_answer",
+    "downloads": 30868,
+    "result": "success",
+    "sha1": "881ce1995ab82387a14f63cf50c845afb8f6f724",
+    "size": 152871822
+  },
+  "mrm8488/bert-small-finetuned-squadv2": {
+    "application": "nlp/question_answer",
+    "downloads": 31085,
+    "reason": "Unexpected inference result: december 2004 and april 2006",
+    "result": "failed",
+    "sha1": "3ffb743e93b64bc944f778292a71ebac650834ae",
+    "size": -1
+  },
+  "nyust-eb210/braslab-bert-drcd-384": {
+    "application": "nlp/question_answer",
+    "downloads": 23034,
+    "reason": "Unexpected inference result: [UNK] did [UNK] [UNK] start broadcasting",
+    "result": "failed",
+    "sha1": "abb9294fe9c0605d2f498a3228bfc6a30e8d2fbb",
+    "size": -1
+  },
+  "rsvp-ai/bertserini-bert-base-squad": {
+    "application": "nlp/question_answer",
+    "downloads": 295505,
+    "result": "success",
+    "sha1": "1c93f9f29544f8ce8d6ee99133f91e5bd4dfed36",
+    "size": 403740116
+  },
+  "sshleifer/tiny-distilbert-base-cased-distilled-squad": {
+    "application": "nlp/question_answer",
+    "downloads": 48889,
+    "reason": "Unexpected inference result: Japan",
+    "result": "failed",
+    "sha1": "33a976c7ab7d41310ea4063d311dbf66c8aaa001",
+    "size": -1
+  },
+  "thatdramebaazguy/roberta-base-squad": {
+    "application": "nlp/question_answer",
+    "downloads": 36559,
+    "result": "success",
+    "sha1": "a7a26fd500148b760ca89a87edcd5b5605daab09",
+    "size": 456526200
+  },
+  "twmkn9/bert-base-uncased-squad2": {
+    "application": "nlp/question_answer",
+    "downloads": 32777,
+    "result": "success",
+    "sha1": "d6f9bc70be3777da3bb065e6ce289e0261ece205",
+    "size": 403737919
+  }
+}

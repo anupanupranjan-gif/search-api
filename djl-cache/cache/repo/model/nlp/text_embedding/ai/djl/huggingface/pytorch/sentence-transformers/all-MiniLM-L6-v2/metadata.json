@@ -1,0 +1,43 @@
+{
+  "metadataVersion": "0.2",
+  "resourceType": "model",
+  "application": "nlp/text_embedding",
+  "groupId": "ai.djl.huggingface.pytorch",
+  "artifactId": "sentence-transformers/all-MiniLM-L6-v2",
+  "name": "all-MiniLM-L6-v2",
+  "description": "Huggingface transformers model: all-MiniLM-L6-v2",
+  "website": "http://www.djl.ai/extensions/tokenizers",
+  "licenses": {
+    "license": {
+      "name": "The Apache License, Version 2.0",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0"
+    }
+  },
+  "artifacts": [
+    {
+      "version": "0.0.1",
+      "snapshot": false,
+      "name": "all-MiniLM-L6-v2",
+      "properties": {
+        "en": "true"
+      },
+      "arguments": {
+        "engine": "PyTorch",
+        "translatorFactory": "ai.djl.huggingface.translator.TextEmbeddingTranslatorFactory",
+        "maxLength": "256"
+      },
+      "options": {
+        "mapLocation": "true"
+      },
+      "files": {
+        "model": {
+          "uri": "0.0.1/all-MiniLM-L6-v2.zip",
+          "sha1Hash": "88dc26034ccd19cdce2f359d6a6a6dee28fd0f75",
+          "name": "",
+          "size": 83480402
+        }
+      }
+    }
+  ],
+  "lastUpdated": "2026-03-05T19:36:54.647Z"
+}

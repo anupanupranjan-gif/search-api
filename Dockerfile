@@ -1,8 +1,9 @@
 FROM eclipse-temurin:25-jre-noble
 WORKDIR /app
 COPY target/search-api-*.jar app.jar
+COPY djl-cache/cache /root/.djl.ai/cache
+COPY djl-pytorch/pytorch /root/.djl.ai/pytorch
 EXPOSE 8080
 ENTRYPOINT ["java", \
-  "--add-opens", "java.base/javax.security.auth=ALL-UNNAMED", \
-  "--add-opens", "java.base/java.lang=ALL-UNNAMED", \
+  "-Djava.security.egd=file:/dev/./urandom", \
   "-jar", "app.jar"]

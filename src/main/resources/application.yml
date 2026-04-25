@@ -39,3 +39,8 @@ logging:
         enabled: true
     tags:
       application: search-api
+
+ollama:
+  base-url: ${OLLAMA_BASE_URL:http://host.docker.internal:11434}
+  model: ${OLLAMA_MODEL:gemma3:1b}
+  timeout-seconds: ${OLLAMA_TIMEOUT:5}

@@ -2,6 +2,7 @@ package com.search.api.controller;
 
 import com.search.api.model.SearchRequest;
 import com.search.api.model.SearchResponse;
+import com.search.api.service.QueryRewriteService;
 import com.search.api.service.SearchService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,14 +17,13 @@ public class SearchController {
 
     private static final Logger log = LoggerFactory.getLogger(SearchController.class);
     private final SearchService searchService;
+    private final QueryRewriteService queryRewriteService;
 
-    public SearchController(SearchService searchService) {
+    public SearchController(SearchService searchService, QueryRewriteService queryRewriteService) {
         this.searchService = searchService;
+        this.queryRewriteService = queryRewriteService;
     }
 
-    /**
-     * GET /api/v1/search?q=wireless+headphones&mode=hybrid&category=Electronics&minPrice=20&maxPrice=200&page=0&size=20
-     */
     @GetMapping("/search")
     public ResponseEntity<?> search(
             @RequestParam String q,
@@ -33,7 +33,8 @@ public class SearchController {
             @RequestParam(required = false) Double minPrice,
             @RequestParam(required = false) Double maxPrice,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(defaultValue = "false") boolean rewrite
     ) {
         if (q == null || q.isBlank()) {
             return ResponseEntity.badRequest().body(Map.of("error", "Query parameter 'q' is required"));
@@ -43,11 +44,21 @@ public class SearchController {
             return ResponseEntity.badRequest().body(Map.of("error", "mode must be one of: hybrid, vector, keyword"));
         }
 
-        size = Math.min(size, 100); // hard cap
+        size = Math.min(size, 100);
+
+        // Apply LLM query rewriting if requested
+        String effectiveQuery = q;
+        String rewrittenQuery = null;
+        if (rewrite && !q.trim().equals("*")) {
+            rewrittenQuery = queryRewriteService.rewrite(q);
+            if (!rewrittenQuery.equals(q)) {
+                effectiveQuery = rewrittenQuery;
+            }
+        }
 
         try {
             SearchRequest req = new SearchRequest();
-            req.setQuery(q);
+            req.setQuery(effectiveQuery);
             req.setMode(mode);
             req.setCategory(category);
             req.setBrand(brand);
@@ -57,18 +68,22 @@ public class SearchController {
             req.setSize(size);
 
             SearchResponse response = searchService.search(req);
+
+            // Add rewrite metadata to response
+            if (rewrittenQuery != null && !rewrittenQuery.equals(q)) {
+                response.setOriginalQuery(q);
+                response.setRewrittenQuery(rewrittenQuery);
+            }
+
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
-            log.error("Search failed for query='{}': {}", q, e.getMessage(), e);
+            log.error("Search failed for query='{}': {}", effectiveQuery, e.getMessage(), e);
             return ResponseEntity.internalServerError()
                     .body(Map.of("error", "Search failed", "detail", e.getMessage()));
         }
     }
 
-    /**
-     * GET /api/v1/products/{id}
-     */
     @GetMapping("/products/{id}")
     public ResponseEntity<?> getProduct(@PathVariable String id) {
         try {

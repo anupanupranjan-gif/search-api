@@ -84,6 +84,45 @@ public class QueryRewriteService {
         }
     }
 
+    public String extractKeywords(String question) {
+        try {
+            String requestBody = objectMapper.writeValueAsString(Map.of(
+                    "model", ollamaModel,
+                    "prompt", String.format("""
+                            Extract the key product search terms from this question.
+                            Return ONLY 2-4 keywords suitable for a product search engine.
+                            No explanation. No punctuation. Just the keywords.
+                            
+                            Question: %s
+                            Keywords:""", question),
+                    "stream", false,
+                    "options", Map.of("temperature", 0.1, "num_predict", 20)
+            ));
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(ollamaBaseUrl + "/api/generate"))
+                    .header("Content-Type", "application/json")
+                    .timeout(Duration.ofSeconds(timeoutSeconds))
+                    .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(request,
+                    HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200) {
+                JsonNode json = objectMapper.readTree(response.body());
+                String keywords = json.path("response").asText("").trim();
+                if (!keywords.isBlank()) {
+                    log.info("Extracted keywords: [{}] from question: [{}]", keywords, question);
+                    return keywords;
+                }
+            }
+        } catch (Exception e) {
+            log.warn("Keyword extraction failed, using original question: {}", e.getMessage());
+        }
+        return question;
+    }
+
     private String buildPrompt(String query) {
         return String.format("""
                 You are a search query expander for an eCommerce product search engine.

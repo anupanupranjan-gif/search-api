@@ -26,6 +26,7 @@ public class SearchService {
 
     private final ElasticsearchClient esClient;
     private final Predictor<String[], float[][]> embeddingPredictor;
+    private final CacheService cacheService;
 
     @Value("${search.vector.candidates:150}")
     private int vectorCandidates;
@@ -40,9 +41,11 @@ public class SearchService {
     private float keywordWeight;
 
     public SearchService(ElasticsearchClient esClient,
-                         Predictor<String[], float[][]> embeddingPredictor) {
+                         Predictor<String[], float[][]> embeddingPredictor,
+                         CacheService cacheService) {
         this.esClient = esClient;
         this.embeddingPredictor = embeddingPredictor;
+        this.cacheService = cacheService;
     }
 
     public com.search.api.model.SearchResponse search(com.search.api.model.SearchRequest req) throws Exception {
@@ -50,6 +53,17 @@ public class SearchService {
 
         boolean isMatchAll = req.getQuery() == null || req.getQuery().isBlank()
                 || req.getQuery().trim().equals("*");
+
+        // Check cache
+        String cacheKey = cacheService.searchKey(req.getQuery(), req.getMode(),
+                req.getCategory(), req.getBrand(), req.getMinPrice(), req.getMaxPrice(), req.getPage());
+        List<SearchHit> cachedHits = cacheService.getSearchResults(cacheKey);
+        if (cachedHits != null) {
+            long took = System.currentTimeMillis() - start;
+            log.info("Cache HIT [{}] query='{}' took={}ms", req.getMode(), req.getQuery(), took);
+            return new com.search.api.model.SearchResponse(cachedHits.size(), req.getPage(), req.getSize(),
+                    req.getMode() + ":cached", took, cachedHits);
+        }
 
         List<SearchHit> hits = isMatchAll
                 ? matchAllSearch(req)
@@ -61,6 +75,8 @@ public class SearchService {
 
         long took = System.currentTimeMillis() - start;
         log.info("Search [{}] query='{}' results={} took={}ms", req.getMode(), req.getQuery(), hits.size(), took);
+
+        cacheService.putSearchResults(cacheKey, hits);
 
         return new com.search.api.model.SearchResponse(hits.size(), req.getPage(), req.getSize(), req.getMode(), took, hits);
     }
@@ -279,8 +295,12 @@ public class SearchService {
     }
 
     private float[] embed(String text) throws Exception {
+        float[] cached = cacheService.getEmbedding(text);
+        if (cached != null) return cached;
         float[][] vectors = embeddingPredictor.predict(new String[]{text});
-        return vectors[0];
+        float[] result = vectors[0];
+        cacheService.putEmbedding(text, result);
+        return result;
     }
 
     private List<Float> toList(float[] arr) {

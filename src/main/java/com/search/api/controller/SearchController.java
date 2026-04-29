@@ -2,6 +2,7 @@ package com.search.api.controller;
 
 import com.search.api.model.SearchRequest;
 import com.search.api.model.SearchResponse;
+import com.search.api.service.CacheService;
 import com.search.api.service.QueryRewriteService;
 import com.search.api.service.RagService;
 import com.search.api.service.SearchService;
@@ -22,12 +23,16 @@ public class SearchController {
     private final QueryRewriteService queryRewriteService;
     private final RagService ragService;
 
+    private final CacheService cacheService;
+
     public SearchController(SearchService searchService,
                             QueryRewriteService queryRewriteService,
-                            RagService ragService) {
+                            RagService ragService,
+                            CacheService cacheService) {
         this.searchService = searchService;
         this.queryRewriteService = queryRewriteService;
         this.ragService = ragService;
+        this.cacheService = cacheService;
     }
 
     @GetMapping("/search")
@@ -111,12 +116,18 @@ public class SearchController {
 
             SearchResponse searchResponse = searchService.search(req);
 
-            // Step 2: Generate answer or comparison via Ollama
-            String answer;
-            if (compare && searchResponse.getHits().size() > 1) {
-                answer = ragService.compare(searchResponse.getHits());
-            } else {
-                answer = ragService.answer(q, searchResponse.getHits());
+            // Step 2: Check RAG cache first
+            String ragCacheKey = q + ":" + compare;
+            String answer = cacheService.getRagAnswer(ragCacheKey);
+            boolean fromCache = answer != null;
+
+            if (!fromCache) {
+                if (compare && searchResponse.getHits().size() > 1) {
+                    answer = ragService.compare(searchResponse.getHits());
+                } else {
+                    answer = ragService.answer(q, searchResponse.getHits());
+                }
+                cacheService.putRagAnswer(ragCacheKey, answer);
             }
 
             // Step 3: Return answer + products
@@ -124,6 +135,7 @@ public class SearchController {
             result.put("question", q);
             result.put("answer", answer);
             result.put("mode", compare ? "comparison" : "answer");
+            result.put("cached", fromCache);
             result.put("products", searchResponse.getHits());
             result.put("total", searchResponse.getTotal());
             result.put("tookMs", searchResponse.getTookMs());

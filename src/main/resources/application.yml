@@ -1,6 +1,10 @@
 spring:
   application:
     name: search-api
+  data:
+    redis:
+      host: ${REDIS_HOST:redis-master.default.svc.cluster.local}
+      port: ${REDIS_PORT:6379}
 
 server:
   port: ${PORT:8080}
@@ -28,11 +32,6 @@ management:
   endpoint:
     health:
       show-details: always
-
-logging:
-  level:
-    com.search.api: INFO
-    co.elastic: WARN
   metrics:
     export:
       prometheus:
@@ -40,7 +39,20 @@ logging:
     tags:
       application: search-api
 
+logging:
+  level:
+    com.search.api: INFO
+    co.elastic: WARN
+
 ollama:
   base-url: ${OLLAMA_BASE_URL:http://host.docker.internal:11434}
   model: ${OLLAMA_MODEL:gemma3:1b}
   timeout-seconds: ${OLLAMA_TIMEOUT:5}
+
+cache:
+  search:
+    ttl-seconds: 300
+  embedding:
+    ttl-seconds: 3600
+  rag:
+    ttl-seconds: 600

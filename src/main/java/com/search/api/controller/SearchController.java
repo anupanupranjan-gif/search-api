@@ -1,11 +1,15 @@
 package com.search.api.controller;
 
+
 import com.search.api.model.SearchRequest;
 import com.search.api.model.SearchResponse;
 import com.search.api.service.CacheService;
 import com.search.api.service.QueryRewriteService;
 import com.search.api.service.RagService;
+import com.search.api.config.MetricsConfig;
 import com.search.api.service.SearchService;
+
+import io.micrometer.core.instrument.Timer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -22,17 +26,19 @@ public class SearchController {
     private final SearchService searchService;
     private final QueryRewriteService queryRewriteService;
     private final RagService ragService;
-
     private final CacheService cacheService;
+    private final Timer searchLatencyTimer;
 
     public SearchController(SearchService searchService,
                             QueryRewriteService queryRewriteService,
                             RagService ragService,
-                            CacheService cacheService) {
+                            CacheService cacheService,
+                            MetricsConfig metricsConfig) {
         this.searchService = searchService;
         this.queryRewriteService = queryRewriteService;
         this.ragService = ragService;
         this.cacheService = cacheService;
+        this.searchLatencyTimer = metricsConfig.getSearchLatencyTimer();
     }
 
     @GetMapping("/search")
@@ -53,37 +59,35 @@ public class SearchController {
         if (!mode.equals("hybrid") && !mode.equals("vector") && !mode.equals("keyword")) {
             return ResponseEntity.badRequest().body(Map.of("error", "mode must be one of: hybrid, vector, keyword"));
         }
-        size = Math.min(size, 100);
+        final int effectiveSize = Math.min(size, 100);
+        final String finalQuery = rewrite && !q.trim().equals("*")
+                ? queryRewriteService.rewrite(q) : q;
+        final String rewrittenQuery = !finalQuery.equals(q) ? finalQuery : null;
 
-        String effectiveQuery = q;
-        String rewrittenQuery = null;
-        if (rewrite && !q.trim().equals("*")) {
-            rewrittenQuery = queryRewriteService.rewrite(q);
-            if (!rewrittenQuery.equals(q)) effectiveQuery = rewrittenQuery;
-        }
+        return searchLatencyTimer.record(() -> {
+            try {
+                SearchRequest req = new SearchRequest();
+                req.setQuery(finalQuery);
+                req.setMode(mode);
+                req.setCategory(category);
+                req.setBrand(brand);
+                req.setMinPrice(minPrice);
+                req.setMaxPrice(maxPrice);
+                req.setPage(page);
+                req.setSize(effectiveSize);
 
-        try {
-            SearchRequest req = new SearchRequest();
-            req.setQuery(effectiveQuery);
-            req.setMode(mode);
-            req.setCategory(category);
-            req.setBrand(brand);
-            req.setMinPrice(minPrice);
-            req.setMaxPrice(maxPrice);
-            req.setPage(page);
-            req.setSize(size);
-
-            SearchResponse response = searchService.search(req);
-            if (rewrittenQuery != null && !rewrittenQuery.equals(q)) {
-                response.setOriginalQuery(q);
-                response.setRewrittenQuery(rewrittenQuery);
+                SearchResponse response = searchService.search(req);
+                if (rewrittenQuery != null) {
+                    response.setOriginalQuery(q);
+                    response.setRewrittenQuery(rewrittenQuery);
+                }
+                return ResponseEntity.ok(response);
+            } catch (Exception e) {
+                log.error("Search failed for query='{}': {}", finalQuery, e.getMessage(), e);
+                return ResponseEntity.internalServerError()
+                        .body(Map.of("error", "Search failed", "detail", e.getMessage()));
             }
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            log.error("Search failed for query='{}': {}", effectiveQuery, e.getMessage(), e);
-            return ResponseEntity.internalServerError()
-                    .body(Map.of("error", "Search failed", "detail", e.getMessage()));
-        }
+        });
     }
 
     @GetMapping("/ask")
@@ -100,11 +104,9 @@ public class SearchController {
         }
 
         try {
-            // Step 1: Rewrite question into search keywords
             String searchQuery = queryRewriteService.rewrite(q);
             log.info("Ask: question='{}' -> searchQuery='{}'", q, searchQuery);
 
-            // Step 2: Search for relevant products
             SearchRequest req = new SearchRequest();
             req.setQuery(searchQuery);
             req.setMode(mode);
@@ -116,7 +118,6 @@ public class SearchController {
 
             SearchResponse searchResponse = searchService.search(req);
 
-            // Step 2: Check RAG cache first
             String ragCacheKey = q + ":" + compare;
             String answer = cacheService.getRagAnswer(ragCacheKey);
             boolean fromCache = answer != null;
@@ -130,7 +131,6 @@ public class SearchController {
                 cacheService.putRagAnswer(ragCacheKey, answer);
             }
 
-            // Step 3: Return answer + products
             Map<String, Object> result = new HashMap<>();
             result.put("question", q);
             result.put("answer", answer);

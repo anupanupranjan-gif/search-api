@@ -38,6 +38,13 @@ management:
         enabled: true
     tags:
       application: search-api
+    distribution:
+      percentiles-histogram:
+        "[http.server.requests]": true
+      slo:
+        "[http.server.requests]": 50ms, 100ms, 200ms, 300ms, 500ms, 1s, 2s
+      percentiles:
+        "[http.server.requests]": 0.5, 0.90, 0.95, 0.99
 
 logging:
   level:

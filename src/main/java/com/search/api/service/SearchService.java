@@ -8,6 +8,7 @@ import co.elastic.clients.elasticsearch.core.SearchRequest;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
 import co.elastic.clients.elasticsearch.core.search.Hit;
 import co.elastic.clients.json.JsonData;
+import com.search.api.model.nexarank.NexaRankRule;
 import com.search.api.model.SearchResponse.SearchHit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +29,8 @@ public class SearchService {
     private final ElasticsearchClient esClient;
     private final Predictor<String[], float[][]> embeddingPredictor;
     private final CacheService cacheService;
+    private final NexaRankClient nexaRankClient;
+    private final NexaRankQueryEnricher nexaRankEnricher;
 
     @Value("${search.vector.candidates:150}")
     private int vectorCandidates;
@@ -42,10 +46,14 @@ public class SearchService {
 
     public SearchService(ElasticsearchClient esClient,
                          Predictor<String[], float[][]> embeddingPredictor,
-                         CacheService cacheService) {
+                         CacheService cacheService,
+                         NexaRankClient nexaRankClient,
+                         NexaRankQueryEnricher nexaRankEnricher) {
         this.esClient = esClient;
         this.embeddingPredictor = embeddingPredictor;
         this.cacheService = cacheService;
+        this.nexaRankClient = nexaRankClient;
+        this.nexaRankEnricher = nexaRankEnricher;
     }
 
     public com.search.api.model.SearchResponse search(com.search.api.model.SearchRequest req) throws Exception {
@@ -65,22 +73,38 @@ public class SearchService {
                     req.getMode() + ":cached", took, cachedHits);
         }
 
+        // Fetch NexaRank rules for this query
+        List<NexaRankRule> rules = Collections.emptyList();
+        if (!isMatchAll) {
+            rules = nexaRankClient.getRulesForQuery(req.getQuery());
+            if (!rules.isEmpty()) {
+                log.info("NexaRank: {} rules found for query='{}'", rules.size(), req.getQuery());
+                // Apply synonym expansion to query before search
+                String expandedQuery = nexaRankEnricher.applyQueryExpansion(req.getQuery(), rules);
+                if (!expandedQuery.equals(req.getQuery())) {
+                    req.setQuery(expandedQuery);
+                }
+            }
+        }
+
+        final List<NexaRankRule> finalRules = rules;
+
         List<SearchHit> hits = isMatchAll
                 ? matchAllSearch(req)
                 : switch (req.getMode()) {
-                    case "vector"  -> vectorSearch(req);
-                    case "keyword" -> keywordSearch(req);
-                    default        -> hybridSearch(req);
+                    case "vector"  -> vectorSearch(req, finalRules);
+                    case "keyword" -> keywordSearch(req, finalRules);
+                    default        -> hybridSearch(req, finalRules);
                 };
 
         long took = System.currentTimeMillis() - start;
-        log.info("Search [{}] query='{}' results={} took={}ms", req.getMode(), req.getQuery(), hits.size(), took);
+        log.info("Search [{}] query='{}' results={} took={}ms nexarank_rules={}",
+                req.getMode(), req.getQuery(), hits.size(), took, finalRules.size());
 
         cacheService.putSearchResults(cacheKey, hits);
 
         return new com.search.api.model.SearchResponse(hits.size(), req.getPage(), req.getSize(), req.getMode(), took, hits);
     }
-
 
     // ── Match-all: for category browsing with no query ────────────────────────
 
@@ -103,11 +127,10 @@ public class SearchService {
 
     // ── Hybrid: weighted combination of vector + BM25 scores ─────────────────
 
-    private List<SearchHit> hybridSearch(com.search.api.model.SearchRequest req) throws Exception {
+    private List<SearchHit> hybridSearch(com.search.api.model.SearchRequest req,
+                                          List<NexaRankRule> rules) throws Exception {
         float[] queryVector = embed(req.getQuery());
 
-        // Script score query: combine kNN cosine similarity with BM25
-        // cosineSimilarity returns [-1, 1], we shift to [0, 2] then weight it
         String scriptSource = """
             double vectorScore = cosineSimilarity(params.query_vector, 'product_vector') + 1.0;
             double bm25Score   = _score;
@@ -130,9 +153,12 @@ public class SearchService {
                         ))))
         )._toQuery();
 
+        // Apply NexaRank rules
+        Query finalQuery = nexaRankEnricher.applyRules(scriptScoreQuery, rules);
+
         SearchRequest esReq = SearchRequest.of(r -> r
                 .index(INDEX)
-                .query(scriptScoreQuery)
+                .query(finalQuery)
                 .from(req.getPage() * req.getSize())
                 .size(req.getSize())
         );
@@ -142,7 +168,8 @@ public class SearchService {
 
     // ── Vector-only: kNN search ───────────────────────────────────────────────
 
-    private List<SearchHit> vectorSearch(com.search.api.model.SearchRequest req) throws Exception {
+    private List<SearchHit> vectorSearch(com.search.api.model.SearchRequest req,
+                                          List<NexaRankRule> rules) throws Exception {
         float[] queryVector = embed(req.getQuery());
         Query filterQuery   = buildFilterQuery(req);
 
@@ -167,18 +194,24 @@ public class SearchService {
             return builder;
         });
 
+        // Note: PIN rules not applied to kNN — kNN doesn't support pinned query wrapper
+        // BOOST/BURY applied via rescore if needed in future
         return executeSearch(esReq);
     }
 
     // ── Keyword-only: BM25 multi-match ───────────────────────────────────────
 
-    private List<SearchHit> keywordSearch(com.search.api.model.SearchRequest req) throws Exception {
+    private List<SearchHit> keywordSearch(com.search.api.model.SearchRequest req,
+                                           List<NexaRankRule> rules) throws Exception {
         Query bm25Query   = buildBm25Query(req.getQuery());
         Query filterQuery = buildFilterQuery(req);
 
-        Query finalQuery = filterQuery != null
+        Query baseQuery = filterQuery != null
                 ? BoolQuery.of(b -> b.must(bm25Query).filter(filterQuery))._toQuery()
                 : bm25Query;
+
+        // Apply NexaRank rules
+        Query finalQuery = nexaRankEnricher.applyRules(baseQuery, rules);
 
         SearchRequest esReq = SearchRequest.of(r -> r
                 .index(INDEX)
@@ -252,7 +285,6 @@ public class SearchService {
             sh.setRating(num(src, "rating"));
             sh.setRatingCount(src.get("rating_count") instanceof Number n ? n.intValue() : null);
 
-            // Include vector if present
             Object vec = src.get("product_vector");
             if (vec instanceof List<?> list) {
                 sh.setProductVector(list.stream()

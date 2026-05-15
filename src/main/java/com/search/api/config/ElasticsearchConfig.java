@@ -9,7 +9,6 @@ import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.impl.client.BasicCredentialsProvider;
-import org.apache.http.nio.conn.ssl.SSLIOSessionStrategy;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.elasticsearch.client.RestClient;
 import org.slf4j.Logger;
@@ -22,16 +21,21 @@ import javax.net.ssl.SSLContext;
 
 @Configuration
 public class ElasticsearchConfig {
+
     private static final Logger log = LoggerFactory.getLogger(ElasticsearchConfig.class);
 
     @Value("${elasticsearch.host:localhost}")
     private String host;
+
     @Value("${elasticsearch.port:9200}")
     private int port;
+
     @Value("${elasticsearch.username:elastic}")
     private String username;
+
     @Value("${elasticsearch.password:changeme}")
     private String password;
+
     @Value("${elasticsearch.scheme:https}")
     private String scheme;
 
@@ -45,28 +49,21 @@ public class ElasticsearchConfig {
                 new UsernamePasswordCredentials(username, password)
         );
 
-        var restClientBuilder = RestClient.builder(new HttpHost(host, port, scheme))
+        SSLContext sslContext = SSLContextBuilder.create()
+                .loadTrustMaterial(null, (chains, authType) -> true)
+                .build();
+
+        var restClient = RestClient.builder(new HttpHost(host, port, scheme))
                 .setRequestConfigCallback(requestConfigBuilder ->
                         requestConfigBuilder
                                 .setConnectTimeout(5000)
-                                .setSocketTimeout(60000));
-
-        if ("https".equalsIgnoreCase(scheme)) {
-            SSLContext sslContext = SSLContextBuilder.create()
-                    .loadTrustMaterial(null, (chains, authType) -> true)
-                    .build();
-            SSLIOSessionStrategy sslStrategy = new SSLIOSessionStrategy(
-                    sslContext, NoopHostnameVerifier.INSTANCE);
-            restClientBuilder.setHttpClientConfigCallback(httpClientBuilder ->
-                    httpClientBuilder
-                            .setDefaultCredentialsProvider(credentialsProvider)
-                            .setSSLStrategy(sslStrategy));
-        } else {
-            restClientBuilder.setHttpClientConfigCallback(httpClientBuilder ->
-                    httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider));
-        }
-
-        var restClient = restClientBuilder.build();
+                                .setSocketTimeout(60000))
+                .setHttpClientConfigCallback(httpClientBuilder ->
+                        httpClientBuilder
+                                .setDefaultCredentialsProvider(credentialsProvider)
+                                .setSSLContext(sslContext)
+                                .setSSLHostnameVerifier(NoopHostnameVerifier.INSTANCE))
+                .build();
 
         ElasticsearchTransport transport = new RestClientTransport(
                 restClient, new JacksonJsonpMapper());

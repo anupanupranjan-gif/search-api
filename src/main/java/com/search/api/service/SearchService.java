@@ -3,6 +3,8 @@ package com.search.api.service;
 import ai.djl.inference.Predictor;
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch._types.FieldValue;
+import co.elastic.clients.elasticsearch._types.aggregations.Aggregation;
+import java.util.Map;
 import co.elastic.clients.elasticsearch._types.query_dsl.*;
 import co.elastic.clients.elasticsearch.core.SearchRequest;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
@@ -31,6 +33,8 @@ public class SearchService {
     private final CacheService cacheService;
     private final NexaRankClient nexaRankClient;
     private final NexaRankQueryEnricher nexaRankEnricher;
+    private final FacetClient facetClient;
+    private final FacetAggregationBuilder facetAggregationBuilder;
 
     @Value("${search.vector.candidates:150}")
     private int vectorCandidates;
@@ -48,12 +52,16 @@ public class SearchService {
                          Predictor<String[], float[][]> embeddingPredictor,
                          CacheService cacheService,
                          NexaRankClient nexaRankClient,
-                         NexaRankQueryEnricher nexaRankEnricher) {
+                         NexaRankQueryEnricher nexaRankEnricher,
+                         FacetClient facetClient,
+                         FacetAggregationBuilder facetAggregationBuilder) {
         this.esClient = esClient;
         this.embeddingPredictor = embeddingPredictor;
         this.cacheService = cacheService;
         this.nexaRankClient = nexaRankClient;
         this.nexaRankEnricher = nexaRankEnricher;
+        this.facetClient = facetClient;
+        this.facetAggregationBuilder = facetAggregationBuilder;
     }
 
     public com.search.api.model.SearchResponse search(com.search.api.model.SearchRequest req) throws Exception {
@@ -62,6 +70,9 @@ public class SearchService {
         boolean isMatchAll = req.getQuery() == null || req.getQuery().isBlank()
                 || req.getQuery().trim().equals("*");
 
+        // Fetch enabled facets from NexaRank (always, even on cache hit)
+        List<Map<String, Object>> facetConfigs = facetClient.getEnabledFacets();
+
         // Check cache
         String cacheKey = cacheService.searchKey(req.getQuery(), req.getMode(),
                 req.getCategory(), req.getBrand(), req.getMinPrice(), req.getMaxPrice(), req.getPage());
@@ -69,8 +80,10 @@ public class SearchService {
         if (cachedHits != null) {
             long took = System.currentTimeMillis() - start;
             log.info("Cache HIT [{}] query='{}' took={}ms", req.getMode(), req.getQuery(), took);
-            return new com.search.api.model.SearchResponse(cachedHits.size(), req.getPage(), req.getSize(),
-                    req.getMode() + ":cached", took, cachedHits);
+            com.search.api.model.SearchResponse cachedResponse = new com.search.api.model.SearchResponse(
+                    cachedHits.size(), req.getPage(), req.getSize(), req.getMode() + ":cached", took, cachedHits);
+            // facets not available on cache hit
+            return cachedResponse;
         }
 
         // Fetch NexaRank rules for this query
@@ -88,14 +101,16 @@ public class SearchService {
         }
 
         final List<NexaRankRule> finalRules = rules;
+        final List<Map<String, Object>> finalFacetConfigs = facetConfigs;
 
-        List<SearchHit> hits = isMatchAll
-                ? matchAllSearch(req)
+        SearchResult result = isMatchAll
+                ? matchAllSearch(req, finalFacetConfigs)
                 : switch (req.getMode()) {
-                    case "vector"  -> vectorSearch(req, finalRules);
-                    case "keyword" -> keywordSearch(req, finalRules);
-                    default        -> hybridSearch(req, finalRules);
+                    case "vector"  -> vectorSearch(req, finalRules, finalFacetConfigs);
+                    case "keyword" -> keywordSearch(req, finalRules, finalFacetConfigs);
+                    default        -> hybridSearch(req, finalRules, finalFacetConfigs);
                 };
+        List<SearchHit> hits = result.hits();
 
         long took = System.currentTimeMillis() - start;
         log.info("Search [{}] query='{}' results={} took={}ms nexarank_rules={}",
@@ -103,32 +118,39 @@ public class SearchService {
 
         cacheService.putSearchResults(cacheKey, hits);
 
-        return new com.search.api.model.SearchResponse(hits.size(), req.getPage(), req.getSize(), req.getMode(), took, hits);
+        com.search.api.model.SearchResponse searchResponse = new com.search.api.model.SearchResponse(
+                hits.size(), req.getPage(), req.getSize(), req.getMode(), took, hits);
+        searchResponse.setFacets(result.facets());
+        return searchResponse;
     }
 
     // ── Match-all: for category browsing with no query ────────────────────────
 
-    private List<SearchHit> matchAllSearch(com.search.api.model.SearchRequest req) throws Exception {
+    private SearchResult matchAllSearch(com.search.api.model.SearchRequest req,
+                                      List<Map<String, Object>> facetConfigs) throws Exception {
         Query filterQuery = buildFilterQuery(req);
 
         Query finalQuery = filterQuery != null
                 ? BoolQuery.of(b -> b.filter(filterQuery))._toQuery()
                 : new MatchAllQuery.Builder().build()._toQuery();
 
+        Map<String, Aggregation> aggs = facetAggregationBuilder.buildAggregations(facetConfigs);
         SearchRequest esReq = SearchRequest.of(r -> r
                 .index(INDEX)
                 .query(finalQuery)
                 .from(req.getPage() * req.getSize())
                 .size(req.getSize())
+                .aggregations(aggs)
         );
 
-        return executeSearch(esReq);
+        return executeSearch(esReq, facetConfigs);
     }
 
     // ── Hybrid: weighted combination of vector + BM25 scores ─────────────────
 
-    private List<SearchHit> hybridSearch(com.search.api.model.SearchRequest req,
-                                          List<NexaRankRule> rules) throws Exception {
+    private SearchResult hybridSearch(com.search.api.model.SearchRequest req,
+                                   List<NexaRankRule> rules,
+                                   List<Map<String, Object>> facetConfigs) throws Exception {
         float[] queryVector = embed(req.getQuery());
 
         String scriptSource = """
@@ -156,20 +178,23 @@ public class SearchService {
         // Apply NexaRank rules
         Query finalQuery = nexaRankEnricher.applyRules(scriptScoreQuery, rules);
 
+        Map<String, Aggregation> aggs = facetAggregationBuilder.buildAggregations(facetConfigs);
         SearchRequest esReq = SearchRequest.of(r -> r
                 .index(INDEX)
                 .query(finalQuery)
                 .from(req.getPage() * req.getSize())
                 .size(req.getSize())
+                .aggregations(aggs)
         );
 
-        return executeSearch(esReq);
+        return executeSearch(esReq, facetConfigs);
     }
 
     // ── Vector-only: kNN search ───────────────────────────────────────────────
 
-    private List<SearchHit> vectorSearch(com.search.api.model.SearchRequest req,
-                                          List<NexaRankRule> rules) throws Exception {
+    private SearchResult vectorSearch(com.search.api.model.SearchRequest req,
+                                   List<NexaRankRule> rules,
+                                   List<Map<String, Object>> facetConfigs) throws Exception {
         float[] queryVector = embed(req.getQuery());
         Query filterQuery   = buildFilterQuery(req);
 
@@ -196,13 +221,14 @@ public class SearchService {
 
         // Note: PIN rules not applied to kNN — kNN doesn't support pinned query wrapper
         // BOOST/BURY applied via rescore if needed in future
-        return executeSearch(esReq);
+        return executeSearch(esReq, facetConfigs);
     }
 
     // ── Keyword-only: BM25 multi-match ───────────────────────────────────────
 
-    private List<SearchHit> keywordSearch(com.search.api.model.SearchRequest req,
-                                           List<NexaRankRule> rules) throws Exception {
+    private SearchResult keywordSearch(com.search.api.model.SearchRequest req,
+                                    List<NexaRankRule> rules,
+                                    List<Map<String, Object>> facetConfigs) throws Exception {
         Query bm25Query   = buildBm25Query(req.getQuery());
         Query filterQuery = buildFilterQuery(req);
 
@@ -213,14 +239,16 @@ public class SearchService {
         // Apply NexaRank rules
         Query finalQuery = nexaRankEnricher.applyRules(baseQuery, rules);
 
+        Map<String, Aggregation> aggs = facetAggregationBuilder.buildAggregations(facetConfigs);
         SearchRequest esReq = SearchRequest.of(r -> r
                 .index(INDEX)
                 .query(finalQuery)
                 .from(req.getPage() * req.getSize())
                 .size(req.getSize())
+                .aggregations(aggs)
         );
 
-        return executeSearch(esReq);
+        return executeSearch(esReq, facetConfigs);
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────────
@@ -266,8 +294,12 @@ public class SearchService {
         return BoolQuery.of(b -> b.filter(filters))._toQuery();
     }
 
-    private List<SearchHit> executeSearch(SearchRequest esReq) throws Exception {
+    record SearchResult(List<SearchHit> hits, Map<String, Object> facets) {}
+
+    private SearchResult executeSearch(SearchRequest esReq,
+                                        List<Map<String, Object>> facetConfigs) throws Exception {
         SearchResponse<Map> response = esClient.search(esReq, Map.class);
+        Map<String, Object> facets = facetAggregationBuilder.extractFacets(response, facetConfigs);
 
         List<SearchHit> hits = new ArrayList<>();
         for (Hit<Map> hit : response.hits().hits()) {
@@ -295,7 +327,7 @@ public class SearchService {
 
             hits.add(sh);
         }
-        return hits;
+        return new SearchResult(hits, facets);
     }
 
     public SearchHit getById(String id) throws Exception {

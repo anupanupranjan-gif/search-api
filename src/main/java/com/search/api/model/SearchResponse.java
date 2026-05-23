@@ -1,6 +1,7 @@
 package com.search.api.model;
 
 import java.util.List;
+import java.util.Map;
 
 public class SearchResponse {
     private long total;
@@ -11,6 +12,7 @@ public class SearchResponse {
     private List<SearchHit> hits;
     private String originalQuery;
     private String rewrittenQuery;
+    private Map<String, Object> facets;
 
     public SearchResponse(long total, int page, int size, String mode, long tookMs, List<SearchHit> hits) {
         this.total = total;
@@ -27,6 +29,9 @@ public class SearchResponse {
     public String getMode() { return mode; }
     public long getTookMs() { return tookMs; }
     public List<SearchHit> getHits() { return hits; }
+    public Map<String, Object> getFacets() { return facets; }
+    public void setFacets(Map<String, Object> facets) { this.facets = facets; }
+
     public String getOriginalQuery() { return originalQuery; }
     public void setOriginalQuery(String originalQuery) { this.originalQuery = originalQuery; }
     public String getRewrittenQuery() { return rewrittenQuery; }

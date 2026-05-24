@@ -5,17 +5,21 @@ spring:
     redis:
       host: ${REDIS_HOST:redis-master.default.svc.cluster.local}
       port: ${REDIS_PORT:6379}
-
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:searchx-kafka-dual-role-0.searchx-kafka-kafka-brokers.kafka.svc.cluster.local:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.add.type.headers: false
 server:
   port: ${PORT:8080}
-
 elasticsearch:
   host: ${ES_HOST:localhost}
   port: ${ES_PORT:9200}
   username: ${ES_USERNAME:elastic}
   password: ${ES_PASSWORD:changeme}
   scheme: ${ES_SCHEME:http}
-
 search:
   vector:
     k: ${SEARCH_VECTOR_K:50}
@@ -23,7 +27,6 @@ search:
   hybrid:
     vector-weight: ${SEARCH_HYBRID_VECTOR_WEIGHT:0.7}
     keyword-weight: ${SEARCH_HYBRID_KEYWORD_WEIGHT:0.3}
-
 management:
   endpoints:
     web:
@@ -45,17 +48,14 @@ management:
         "[http.server.requests]": 50ms, 100ms, 200ms, 300ms, 500ms, 1s, 2s
       percentiles:
         "[http.server.requests]": 0.5, 0.90, 0.95, 0.99
-
 logging:
   level:
     com.search.api: INFO
     co.elastic: WARN
-
 ollama:
   base-url: ${OLLAMA_BASE_URL:http://host.docker.internal:11434}
   model: ${OLLAMA_MODEL:gemma3:1b}
   timeout-seconds: ${OLLAMA_TIMEOUT:5}
-
 cache:
   search:
     ttl-seconds: 300
@@ -63,19 +63,9 @@ cache:
     ttl-seconds: 3600
   rag:
     ttl-seconds: 600
-
 nexarank:
   base-url: ${NEXARANK_BASE_URL:http://nexarank-api.default.svc.cluster.local}
   service-username: ${NEXARANK_USERNAME:admin}
   service-password: ${NEXARANK_PASSWORD:admin123}
   cache-ttl-seconds: ${NEXARANK_CACHE_TTL:30}
   enabled: ${NEXARANK_ENABLED:true}
-
-spring:
-  kafka:
-    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:searchx-kafka-dual-role-0.searchx-kafka-kafka-brokers.kafka.svc.cluster.local:9092}
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-      properties:
-        spring.json.add.type.headers: false

@@ -70,3 +70,12 @@ nexarank:
   service-password: ${NEXARANK_PASSWORD:admin123}
   cache-ttl-seconds: ${NEXARANK_CACHE_TTL:30}
   enabled: ${NEXARANK_ENABLED:true}
+
+spring:
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:searchx-kafka-dual-role-0.searchx-kafka-kafka-brokers.kafka.svc.cluster.local:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.add.type.headers: false

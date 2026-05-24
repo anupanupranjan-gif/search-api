@@ -1,9 +1,12 @@
+// Copyright (c) 2026 Anup Ranjan. Licensed under Apache 2.0 (https://www.apache.org/licenses/LICENSE-2.0)
 package com.search.api.controller;
 
-
+import com.search.api.model.ClickEvent;
+import com.search.api.model.ErrorResponse;
 import com.search.api.model.SearchRequest;
 import com.search.api.model.SearchResponse;
 import com.search.api.service.CacheService;
+import com.search.api.service.ClickEventProducer;
 import com.search.api.service.QueryRewriteService;
 import com.search.api.service.RagService;
 import com.search.api.config.MetricsConfig;
@@ -27,17 +30,20 @@ public class SearchController {
     private final QueryRewriteService queryRewriteService;
     private final RagService ragService;
     private final CacheService cacheService;
+    private final ClickEventProducer clickEventProducer;
     private final Timer searchLatencyTimer;
 
     public SearchController(SearchService searchService,
                             QueryRewriteService queryRewriteService,
                             RagService ragService,
                             CacheService cacheService,
+                            ClickEventProducer clickEventProducer,
                             MetricsConfig metricsConfig) {
         this.searchService = searchService;
         this.queryRewriteService = queryRewriteService;
         this.ragService = ragService;
         this.cacheService = cacheService;
+        this.clickEventProducer = clickEventProducer;
         this.searchLatencyTimer = metricsConfig.getSearchLatencyTimer();
     }
 
@@ -54,10 +60,12 @@ public class SearchController {
             @RequestParam(defaultValue = "false") boolean rewrite
     ) {
         if (q == null || q.isBlank()) {
-            return ResponseEntity.badRequest().body(Map.of("error", "Query parameter 'q' is required"));
+            return ResponseEntity.badRequest()
+                    .body(ErrorResponse.of("BAD_REQUEST", "Query parameter 'q' is required"));
         }
         if (!mode.equals("hybrid") && !mode.equals("vector") && !mode.equals("keyword")) {
-            return ResponseEntity.badRequest().body(Map.of("error", "mode must be one of: hybrid, vector, keyword"));
+            return ResponseEntity.badRequest()
+                    .body(ErrorResponse.of("BAD_REQUEST", "mode must be one of: hybrid, vector, keyword"));
         }
         final int effectiveSize = Math.min(size, 100);
         final String finalQuery = rewrite && !q.trim().equals("*")
@@ -85,9 +93,35 @@ public class SearchController {
             } catch (Exception e) {
                 log.error("Search failed for query='{}': {}", finalQuery, e.getMessage(), e);
                 return ResponseEntity.internalServerError()
-                        .body(Map.of("error", "Search failed", "detail", e.getMessage()));
+                        .body(ErrorResponse.of("SEARCH_FAILED", "Search failed"));
             }
         });
+    }
+
+    @PostMapping("/click")
+    public ResponseEntity<?> recordClick(@RequestBody Map<String, Object> body) {
+        try {
+            String sessionId = (String) body.getOrDefault("sessionId", "anonymous");
+            String query     = (String) body.get("query");
+            String productId = (String) body.get("productId");
+            String productTitle = (String) body.getOrDefault("productTitle", "");
+            int position     = body.containsKey("position")
+                    ? ((Number) body.get("position")).intValue() : 0;
+
+            if (query == null || productId == null) {
+                return ResponseEntity.badRequest()
+                        .body(ErrorResponse.of("BAD_REQUEST", "query and productId are required"));
+            }
+
+            clickEventProducer.publish(
+                    ClickEvent.of(sessionId, query, productId, productTitle, position));
+
+            return ResponseEntity.accepted().build();
+        } catch (Exception e) {
+            log.error("Failed to record click event", e);
+            return ResponseEntity.internalServerError()
+                    .body(ErrorResponse.of("CLICK_RECORD_FAILED", "Failed to record click"));
+        }
     }
 
     @GetMapping("/ask")
@@ -100,7 +134,8 @@ public class SearchController {
             @RequestParam(defaultValue = "false") boolean compare
     ) {
         if (q == null || q.isBlank()) {
-            return ResponseEntity.badRequest().body(Map.of("error", "Query parameter 'q' is required"));
+            return ResponseEntity.badRequest()
+                    .body(ErrorResponse.of("BAD_REQUEST", "Query parameter 'q' is required"));
         }
 
         try {
@@ -145,7 +180,7 @@ public class SearchController {
         } catch (Exception e) {
             log.error("Ask failed for question='{}': {}", q, e.getMessage(), e);
             return ResponseEntity.internalServerError()
-                    .body(Map.of("error", "Ask failed", "detail", e.getMessage()));
+                    .body(ErrorResponse.of("ASK_FAILED", "Ask failed"));
         }
     }
 
@@ -153,12 +188,13 @@ public class SearchController {
     public ResponseEntity<?> getProduct(@PathVariable String id) {
         try {
             var hit = searchService.getById(id);
-            if (hit == null) return ResponseEntity.notFound().build();
+            if (hit == null) return ResponseEntity.status(404)
+                    .body(ErrorResponse.of("PRODUCT_NOT_FOUND", "Product not found: " + id));
             return ResponseEntity.ok(hit);
         } catch (Exception e) {
             log.error("Product lookup failed for id='{}': {}", id, e.getMessage(), e);
             return ResponseEntity.internalServerError()
-                    .body(Map.of("error", "Lookup failed", "detail", e.getMessage()));
+                    .body(ErrorResponse.of("LOOKUP_FAILED", "Product lookup failed"));
         }
     }
 }

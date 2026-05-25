@@ -2,7 +2,6 @@
 package com.search.api.service;
 
 import com.search.api.model.ClickEvent;
-import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -18,13 +17,7 @@ public class ClickEventProducer {
 
     public ClickEventProducer(KafkaTemplate<String, ClickEvent> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
-    }
-
-    @PostConstruct
-    public void init() {
-        // Eagerly initialize the producer so the first search request isn't blocked
-        kafkaTemplate.getProducerFactory().createProducer().close();
-        log.info("Kafka producer initialized for topic: {}", TOPIC);
+        log.info("ClickEventProducer initialized for topic: {}", TOPIC);
     }
 
     public void publish(ClickEvent event) {

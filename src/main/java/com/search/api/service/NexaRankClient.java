@@ -1,8 +1,9 @@
+// Copyright (c) 2026 Anup Ranjan. Licensed under Apache 2.0 (https://www.apache.org/licenses/LICENSE-2.0)
 package com.search.api.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.search.api.model.nexarank.NexaRankRule;
+import com.search.api.model.nexarank.NexaRankEnrichedQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,10 +15,16 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Phase 17: Updated to call /api/v1/rules/enrich
+ * instead of /api/v1/rules/query/{query}
+ *
+ * The enrich endpoint returns engine-agnostic rule instructions
+ * plus pre-translated ES DSL. No login required — enrich is public.
+ */
 @Service
 public class NexaRankClient {
 
@@ -26,12 +33,6 @@ public class NexaRankClient {
     @Value("${nexarank.base-url}")
     private String baseUrl;
 
-    @Value("${nexarank.service-username}")
-    private String username;
-
-    @Value("${nexarank.service-password}")
-    private String password;
-
     @Value("${nexarank.cache-ttl-seconds:30}")
     private long cacheTtlSeconds;
 
@@ -39,101 +40,73 @@ public class NexaRankClient {
     private boolean enabled;
 
     private final HttpClient httpClient;
-    private final ObjectMapper objectMapper;  // initialized in constructor
+    private final ObjectMapper objectMapper;
 
-    // Simple in-memory cache: query -> (rules, timestamp)
-    private final ConcurrentHashMap<String, CachedRules> rulesCache = new ConcurrentHashMap<>();
-    private volatile String cachedToken = null;
-    private volatile long tokenExpiry = 0;
+    // Cache: query -> (enrichedQuery, timestamp)
+    private final ConcurrentHashMap<String, CachedEnrichment> cache = new ConcurrentHashMap<>();
 
     public NexaRankClient() {
         this.objectMapper = new ObjectMapper();
         this.httpClient = HttpClient.newBuilder()
-                .connectTimeout(Duration.ofSeconds(2))
-                .build();
+            .connectTimeout(Duration.ofSeconds(2))
+            .build();
     }
 
-    public List<NexaRankRule> getRulesForQuery(String query) {
+    public NexaRankEnrichedQuery getEnrichedQuery(String query) {
         if (!enabled || query == null || query.isBlank()) {
-            return Collections.emptyList();
+            return NexaRankEnrichedQuery.passthrough(query);
         }
 
         String normalizedQuery = query.toLowerCase().trim();
 
         // Check cache
-        CachedRules cached = rulesCache.get(normalizedQuery);
+        CachedEnrichment cached = cache.get(normalizedQuery);
         if (cached != null && !cached.isExpired(cacheTtlSeconds)) {
-            return cached.rules;
+            log.debug("NexaRank cache hit for query='{}'", normalizedQuery);
+            return cached.enriched;
         }
 
         try {
-            String token = getToken();
-            if (token == null) return Collections.emptyList();
+            String body = objectMapper.writeValueAsString(Map.of(
+                "query", normalizedQuery,
+                "engineType", "ELASTICSEARCH",
+                "zone", "search-results"
+            ));
 
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(baseUrl + "/api/v1/rules/query/" + normalizedQuery))
-                    .header("Authorization", "Bearer " + token)
-                    .header("Content-Type", "application/json")
-                    .timeout(Duration.ofSeconds(2))
-                    .GET()
-                    .build();
+                .uri(URI.create(baseUrl + "/api/v1/rules/enrich"))
+                .header("Content-Type", "application/json")
+                .timeout(Duration.ofSeconds(2))
+                .POST(HttpRequest.BodyPublishers.ofString(body))
+                .build();
 
             HttpResponse<String> response = httpClient.send(request,
-                    HttpResponse.BodyHandlers.ofString());
+                HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200) {
-                List<NexaRankRule> rules = objectMapper.readValue(
-                        response.body(), new TypeReference<List<NexaRankRule>>() {});
-                rulesCache.put(normalizedQuery, new CachedRules(rules));
-                log.debug("NexaRank rules for query='{}': {} rules", normalizedQuery, rules.size());
-                return rules;
+                NexaRankEnrichedQuery enriched = objectMapper.readValue(
+                    response.body(), NexaRankEnrichedQuery.class);
+                cache.put(normalizedQuery, new CachedEnrichment(enriched));
+                log.debug("NexaRank enriched query='{}': {} rules applied",
+                    normalizedQuery, enriched.getAppliedRulesCount());
+                return enriched;
             } else {
-                log.warn("NexaRank returned {} for query='{}'", response.statusCode(), normalizedQuery);
-                return Collections.emptyList();
+                log.warn("NexaRank enrich returned {} for query='{}'",
+                    response.statusCode(), normalizedQuery);
+                return NexaRankEnrichedQuery.passthrough(query);
             }
         } catch (Exception e) {
-            log.warn("NexaRank lookup failed for query='{}': {}", normalizedQuery, e.getMessage());
-            return Collections.emptyList();
+            log.warn("NexaRank enrich failed for query='{}': {}", normalizedQuery, e.getMessage());
+            return NexaRankEnrichedQuery.passthrough(query);
         }
     }
 
-    private String getToken() {
-        if (cachedToken != null && System.currentTimeMillis() < tokenExpiry) {
-            return cachedToken;
-        }
-        try {
-            String body = objectMapper.writeValueAsString(
-                    Map.of("username", username, "password", password));
-
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(baseUrl + "/api/v1/auth/login"))
-                    .header("Content-Type", "application/json")
-                    .timeout(Duration.ofSeconds(2))
-                    .POST(HttpRequest.BodyPublishers.ofString(body))
-                    .build();
-
-            HttpResponse<String> response = httpClient.send(request,
-                    HttpResponse.BodyHandlers.ofString());
-
-            if (response.statusCode() == 200) {
-                Map<String, String> map = objectMapper.readValue(
-                        response.body(), new TypeReference<Map<String, String>>() {});
-                cachedToken = map.get("token");
-                tokenExpiry = System.currentTimeMillis() + (23 * 60 * 60 * 1000); // 23 hours
-                return cachedToken;
-            }
-        } catch (Exception e) {
-            log.warn("NexaRank login failed: {}", e.getMessage());
-        }
-        return null;
-    }
-
-    private static class CachedRules {
-        final List<NexaRankRule> rules;
+    private static class CachedEnrichment {
+        final NexaRankEnrichedQuery enriched;
         final long timestamp;
 
-        CachedRules(List<NexaRankRule> rules) {
-            this.rules = rules;
+        CachedEnrichment(NexaRankEnrichedQuery enriched) {
+            this.enriched = enriched;
             this.timestamp = System.currentTimeMillis();
         }
 

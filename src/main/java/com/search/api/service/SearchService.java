@@ -10,7 +10,7 @@ import co.elastic.clients.elasticsearch.core.SearchRequest;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
 import co.elastic.clients.elasticsearch.core.search.Hit;
 import co.elastic.clients.json.JsonData;
-import com.search.api.model.nexarank.NexaRankRule;
+import com.search.api.model.nexarank.NexaRankEnrichedQuery;
 import com.search.api.model.SearchResponse.SearchHit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,35 +86,34 @@ public class SearchService {
             return cachedResponse;
         }
 
-        // Fetch NexaRank rules for this query
-        List<NexaRankRule> rules = Collections.emptyList();
+        // Fetch NexaRank enrichment for this query
+        NexaRankEnrichedQuery enriched = NexaRankEnrichedQuery.passthrough(req.getQuery());
         if (!isMatchAll) {
-            rules = nexaRankClient.getRulesForQuery(req.getQuery());
-            if (!rules.isEmpty()) {
-                log.info("NexaRank: {} rules found for query='{}'", rules.size(), req.getQuery());
+            enriched = nexaRankClient.getEnrichedQuery(req.getQuery());
+            if (enriched.hasRules()) {
+                log.info("NexaRank: {} rules applied for query='{}'", enriched.getAppliedRulesCount(), req.getQuery());
                 // Apply synonym expansion to query before search
-                String expandedQuery = nexaRankEnricher.applyQueryExpansion(req.getQuery(), rules);
+                String expandedQuery = nexaRankEnricher.getExpandedQuery(req.getQuery(), enriched);
                 if (!expandedQuery.equals(req.getQuery())) {
                     req.setQuery(expandedQuery);
                 }
             }
         }
-
-        final List<NexaRankRule> finalRules = rules;
+        final NexaRankEnrichedQuery finalEnriched = enriched;
         final List<Map<String, Object>> finalFacetConfigs = facetConfigs;
 
         SearchResult result = isMatchAll
                 ? matchAllSearch(req, finalFacetConfigs)
                 : switch (req.getMode()) {
-                    case "vector"  -> vectorSearch(req, finalRules, finalFacetConfigs);
-                    case "keyword" -> keywordSearch(req, finalRules, finalFacetConfigs);
-                    default        -> hybridSearch(req, finalRules, finalFacetConfigs);
+                    case "vector"  -> vectorSearch(req, finalEnriched, finalFacetConfigs);
+                    case "keyword" -> keywordSearch(req, finalEnriched, finalFacetConfigs);
+                    default        -> hybridSearch(req, finalEnriched, finalFacetConfigs);
                 };
         List<SearchHit> hits = result.hits();
 
         long took = System.currentTimeMillis() - start;
         log.info("Search [{}] query='{}' results={} took={}ms nexarank_rules={}",
-                req.getMode(), req.getQuery(), hits.size(), took, finalRules.size());
+                req.getMode(), req.getQuery(), hits.size(), took, finalEnriched.getAppliedRulesCount());
 
         cacheService.putSearchResults(cacheKey, hits);
 
@@ -149,7 +148,7 @@ public class SearchService {
     // ── Hybrid: weighted combination of vector + BM25 scores ─────────────────
 
     private SearchResult hybridSearch(com.search.api.model.SearchRequest req,
-                                   List<NexaRankRule> rules,
+                                   NexaRankEnrichedQuery enriched,
                                    List<Map<String, Object>> facetConfigs) throws Exception {
         float[] queryVector = embed(req.getQuery());
 
@@ -176,7 +175,7 @@ public class SearchService {
         )._toQuery();
 
         // Apply NexaRank rules
-        Query finalQuery = nexaRankEnricher.applyRules(scriptScoreQuery, rules);
+        Query finalQuery = nexaRankEnricher.applyEnrichment(scriptScoreQuery, enriched);
 
         Map<String, Aggregation> aggs = facetAggregationBuilder.buildAggregations(facetConfigs);
         SearchRequest esReq = SearchRequest.of(r -> r
@@ -193,7 +192,7 @@ public class SearchService {
     // ── Vector-only: kNN search ───────────────────────────────────────────────
 
     private SearchResult vectorSearch(com.search.api.model.SearchRequest req,
-                                   List<NexaRankRule> rules,
+                                   NexaRankEnrichedQuery enriched,
                                    List<Map<String, Object>> facetConfigs) throws Exception {
         float[] queryVector = embed(req.getQuery());
         Query filterQuery   = buildFilterQuery(req);
@@ -227,7 +226,7 @@ public class SearchService {
     // ── Keyword-only: BM25 multi-match ───────────────────────────────────────
 
     private SearchResult keywordSearch(com.search.api.model.SearchRequest req,
-                                    List<NexaRankRule> rules,
+                                    NexaRankEnrichedQuery enriched,
                                     List<Map<String, Object>> facetConfigs) throws Exception {
         Query bm25Query   = buildBm25Query(req.getQuery());
         Query filterQuery = buildFilterQuery(req);
@@ -237,7 +236,7 @@ public class SearchService {
                 : bm25Query;
 
         // Apply NexaRank rules
-        Query finalQuery = nexaRankEnricher.applyRules(baseQuery, rules);
+        Query finalQuery = nexaRankEnricher.applyEnrichment(baseQuery, enriched);
 
         Map<String, Aggregation> aggs = facetAggregationBuilder.buildAggregations(facetConfigs);
         SearchRequest esReq = SearchRequest.of(r -> r

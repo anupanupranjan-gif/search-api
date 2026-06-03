@@ -3,7 +3,7 @@ package com.search.api.service;
 
 import co.elastic.clients.elasticsearch._types.FieldValue;
 import co.elastic.clients.elasticsearch._types.query_dsl.*;
-import com.search.api.model.nexarank.NexaRankEnrichedQuery;
+import com.nexarank.client.NexaRankEnrichedQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

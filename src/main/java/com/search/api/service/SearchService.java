@@ -10,7 +10,8 @@ import co.elastic.clients.elasticsearch.core.SearchRequest;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
 import co.elastic.clients.elasticsearch.core.search.Hit;
 import co.elastic.clients.json.JsonData;
-import com.search.api.model.nexarank.NexaRankEnrichedQuery;
+import com.nexarank.client.NexaRankEnrichedQuery;
+import com.nexarank.client.NexaRankClient;
 import com.search.api.model.SearchResponse.SearchHit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,7 +90,7 @@ public class SearchService {
         // Fetch NexaRank enrichment for this query
         NexaRankEnrichedQuery enriched = NexaRankEnrichedQuery.passthrough(req.getQuery());
         if (!isMatchAll) {
-            enriched = nexaRankClient.getEnrichedQuery(req.getQuery());
+            enriched = nexaRankClient.enrich(req.getQuery());
             if (enriched.hasRules()) {
                 log.info("NexaRank: {} rules applied for query='{}'", enriched.getAppliedRulesCount(), req.getQuery());
                 // Apply synonym expansion to query before search

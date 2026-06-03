@@ -99,7 +99,7 @@
             <artifactId>spring-kafka</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.nexarank</groupId>
+            <groupId>io.github.anupanupranjan-gif</groupId>
             <artifactId>nexarank-spring-boot-starter</artifactId>
             <version>1.0.2</version>
         </dependency>

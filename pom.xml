@@ -113,11 +113,6 @@
             </plugin>
         </plugins>
     </build>
-    <repositories>
-        <repository>
-            <id>github-nexarank-sdk</id>
-            <url>https://maven.pkg.github.com/anupanupranjan-gif/nexarank-java-sdk</url>
-        </repository>
-    </repositories>
+
 
 </project>

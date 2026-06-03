@@ -85,7 +85,7 @@ jobs:
           git config --global user.name "GitHub Actions"
           git clone git@github.com:anupanupranjan-gif/search-infra.git /tmp/search-infra
           cd /tmp/search-infra
-          sed -i "s/tag: .*/tag: $SHORT_SHA/" helm-charts/search-api/values.yaml
+          sed -i "s/tag: .*/tag: \"$SHORT_SHA\"/" helm-charts/search-api/values.yaml
           git add helm-charts/search-api/values.yaml
           git commit -m "chore: update search-api image tag to $SHORT_SHA [skip ci]"
           git push

@@ -1,4 +1,4 @@
-FROM eclipse-temurin:25-jre-noble
+FROM registry.access.redhat.com/ubi9/openjdk-21-runtime:latest
 WORKDIR /app
 COPY target/search-api-*.jar app.jar
 EXPOSE 8080

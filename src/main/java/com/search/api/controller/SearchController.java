@@ -93,10 +93,22 @@ public class SearchController {
                     response.setOriginalQuery(q);
                     response.setRewrittenQuery(rewrittenQuery);
                 }
-                // Track zero-result queries
-                if (response.getTotal() == 0) {
-                    try {
-                        java.net.http.HttpClient httpClient = java.net.http.HttpClient.newHttpClient();
+                // Track all search events (async, non-blocking)
+                try {
+                    java.net.http.HttpClient httpClient = java.net.http.HttpClient.newHttpClient();
+                    String seJson = String.format(
+                        "{\"query\":\"%s\",\"resultCount\":%d,\"mode\":\"%s\",\"tookMs\":%d}",
+                        finalQuery.replace("\"", "'"), response.getTotal(), mode, response.getTookMs());
+                    java.net.http.HttpRequest seReq = java.net.http.HttpRequest.newBuilder()
+                        .uri(java.net.URI.create(nexarankBaseUrl + "/search-events"))
+                        .header("Content-Type", "application/json")
+                        .header("X-Tenant-Id", "default")
+                        .header("X-Project-Id", "main")
+                        .POST(java.net.http.HttpRequest.BodyPublishers.ofString(seJson))
+                        .build();
+                    httpClient.sendAsync(seReq, java.net.http.HttpResponse.BodyHandlers.ofString());
+                    // Also track zero results separately
+                    if (response.getTotal() == 0) {
                         String zrJson = String.format("{\"query\":\"%s\"}", finalQuery.replace("\"", "'"));
                         java.net.http.HttpRequest zrReq = java.net.http.HttpRequest.newBuilder()
                             .uri(java.net.URI.create(nexarankBaseUrl + "/zero-results"))
@@ -106,9 +118,9 @@ public class SearchController {
                             .POST(java.net.http.HttpRequest.BodyPublishers.ofString(zrJson))
                             .build();
                         httpClient.sendAsync(zrReq, java.net.http.HttpResponse.BodyHandlers.ofString());
-                    } catch (Exception ze) {
-                        log.debug("Failed to track zero result: {}", ze.getMessage());
                     }
+                } catch (Exception ze) {
+                    log.debug("Failed to track search event: {}", ze.getMessage());
                 }
                 return ResponseEntity.ok(response);
             } catch (Exception e) {

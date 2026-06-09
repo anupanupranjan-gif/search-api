@@ -15,6 +15,7 @@ import com.search.api.service.SearchService;
 import io.micrometer.core.instrument.Timer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,6 +32,9 @@ public class SearchController {
     private final RagService ragService;
     private final CacheService cacheService;
     private final ClickEventProducer clickEventProducer;
+
+    @Value("${nexarank.api.base-url:http://nexarank-api.default.svc.cluster.local/api/v1}")
+    private String nexarankBaseUrl;
     private final Timer searchLatencyTimer;
 
     public SearchController(SearchService searchService,
@@ -88,6 +92,23 @@ public class SearchController {
                 if (rewrittenQuery != null) {
                     response.setOriginalQuery(q);
                     response.setRewrittenQuery(rewrittenQuery);
+                }
+                // Track zero-result queries
+                if (response.getTotal() == 0) {
+                    try {
+                        java.net.http.HttpClient httpClient = java.net.http.HttpClient.newHttpClient();
+                        String zrJson = String.format("{\"query\":\"%s\"}", finalQuery.replace("\"", "'"));
+                        java.net.http.HttpRequest zrReq = java.net.http.HttpRequest.newBuilder()
+                            .uri(java.net.URI.create(nexarankBaseUrl + "/zero-results"))
+                            .header("Content-Type", "application/json")
+                            .header("X-Tenant-Id", "default")
+                            .header("X-Project-Id", "main")
+                            .POST(java.net.http.HttpRequest.BodyPublishers.ofString(zrJson))
+                            .build();
+                        httpClient.sendAsync(zrReq, java.net.http.HttpResponse.BodyHandlers.ofString());
+                    } catch (Exception ze) {
+                        log.debug("Failed to track zero result: {}", ze.getMessage());
+                    }
                 }
                 return ResponseEntity.ok(response);
             } catch (Exception e) {

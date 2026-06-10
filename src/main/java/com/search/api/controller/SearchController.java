@@ -138,6 +138,7 @@ public class SearchController {
             String query     = (String) body.get("query");
             String productId = (String) body.get("productId");
             String productTitle = (String) body.getOrDefault("productTitle", "");
+            String variantId    = (String) body.get("variantId");
             int position     = body.containsKey("position")
                     ? ((Number) body.get("position")).intValue() : 0;
 
@@ -147,7 +148,7 @@ public class SearchController {
             }
 
             clickEventProducer.publish(
-                    ClickEvent.of(sessionId, query, productId, productTitle, position));
+                    ClickEvent.of(sessionId, query, productId, productTitle, position, variantId));
 
             return ResponseEntity.accepted().build();
         } catch (Exception e) {

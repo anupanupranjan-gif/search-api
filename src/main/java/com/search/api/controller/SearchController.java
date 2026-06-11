@@ -61,7 +61,9 @@ public class SearchController {
             @RequestParam(required = false) Double maxPrice,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size,
-            @RequestParam(defaultValue = "false") boolean rewrite
+            @RequestParam(defaultValue = "false") boolean rewrite,
+            @RequestParam(required = false) String sessionId,
+            @RequestParam java.util.Map<String, String> allParams
     ) {
         if (q == null || q.isBlank()) {
             return ResponseEntity.badRequest()
@@ -78,6 +80,14 @@ public class SearchController {
 
         return searchLatencyTimer.record(() -> {
             try {
+                java.util.Map<String, String> selectedFacets = allParams != null
+                        ? allParams.entrySet().stream()
+                            .filter(e -> e.getKey().startsWith("facet_"))
+                            .collect(java.util.stream.Collectors.toMap(
+                                e -> e.getKey().substring(6),
+                                java.util.Map.Entry::getValue))
+                        : java.util.Map.of();
+
                 SearchRequest req = new SearchRequest();
                 req.setQuery(finalQuery);
                 req.setMode(mode);
@@ -87,6 +97,8 @@ public class SearchController {
                 req.setMaxPrice(maxPrice);
                 req.setPage(page);
                 req.setSize(effectiveSize);
+                req.setSelectedFacets(selectedFacets);
+                req.setSessionId(sessionId);
 
                 SearchResponse response = searchService.search(req);
                 if (rewrittenQuery != null) {

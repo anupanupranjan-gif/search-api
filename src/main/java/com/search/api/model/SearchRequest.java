@@ -34,4 +34,14 @@ public class SearchRequest {
 
     public int getSize() { return size; }
     public void setSize(int size) { this.size = size; }
+
+    private java.util.Map<String, String> selectedFacets;
+    private String sessionId;
+
+    public java.util.Map<String, String> getSelectedFacets() { return selectedFacets; }
+    public void setSelectedFacets(java.util.Map<String, String> selectedFacets) {
+        this.selectedFacets = selectedFacets;
+    }
+    public String getSessionId() { return sessionId; }
+    public void setSessionId(String sessionId) { this.sessionId = sessionId; }
 }

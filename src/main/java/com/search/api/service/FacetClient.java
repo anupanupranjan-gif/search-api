@@ -95,6 +95,50 @@ public class FacetClient {
         return Collections.emptyList();
     }
 
+
+    /**
+     * Fetch facets filtered by visibility rules for the given context.
+     * Bypasses cache since context changes per request.
+     * TODO NR-42: move to NexaRank Java SDK v1.0.3
+     */
+    public List<Map<String, Object>> getEnabledFacets(java.util.Map<String, String> selectedFacets) {
+        if (!enabled || selectedFacets == null || selectedFacets.isEmpty()) {
+            return getEnabledFacets();
+        }
+        try {
+            String token = getToken();
+            if (token == null) return getEnabledFacets();
+
+            StringBuilder url = new StringBuilder(baseUrl + "/api/v1/facets?enabledOnly=true");
+            for (java.util.Map.Entry<String, String> entry : selectedFacets.entrySet()) {
+                url.append("&facet_")
+                   .append(java.net.URLEncoder.encode(entry.getKey(), java.nio.charset.StandardCharsets.UTF_8))
+                   .append("=")
+                   .append(java.net.URLEncoder.encode(entry.getValue(), java.nio.charset.StandardCharsets.UTF_8));
+            }
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url.toString()))
+                    .header("Authorization", "Bearer " + token)
+                    .timeout(Duration.ofSeconds(2))
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(request,
+                    HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200) {
+                List<Map<String, Object>> facets = objectMapper.readValue(
+                        response.body(), new TypeReference<List<Map<String, Object>>>() {});
+                log.debug("FacetClient: fetched {} context-aware facets for context={}",
+                        facets.size(), selectedFacets);
+                return facets;
+            }
+        } catch (Exception e) {
+            log.warn("FacetClient: context-aware facet fetch failed: {}", e.getMessage());
+        }
+        return getEnabledFacets();
+    }
     private String getToken() {
         if (cachedToken != null && System.currentTimeMillis() < tokenExpiry) {
             return cachedToken;

@@ -75,7 +75,7 @@ public class SearchService {
                 || req.getQuery().trim().equals("*");
 
         // Fetch enabled facets from NexaRank (always, even on cache hit)
-        List<Map<String, Object>> facetConfigs = facetClient.getEnabledFacets();
+        List<Map<String, Object>> facetConfigs = facetClient.getEnabledFacets(req.getSelectedFacets());
 
         // Check cache
         String cacheKey = cacheService.searchKey(req.getQuery(), req.getMode(),

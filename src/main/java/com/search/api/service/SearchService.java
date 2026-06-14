@@ -37,9 +37,6 @@ public class SearchService {
     private final FacetClient facetClient;
     private final FacetAggregationBuilder facetAggregationBuilder;
 
-    @Value("${nexarank.api.base-url:http://nexarank-api.default.svc.cluster.local/nexarank/api/v1}")
-    private String nexarankApiBaseUrl;
-
     @Value("${search.vector.candidates:150}")
     private int vectorCandidates;
 
@@ -93,7 +90,7 @@ public class SearchService {
         // Fetch NexaRank enrichment for this query
         NexaRankEnrichedQuery enriched = NexaRankEnrichedQuery.passthrough(req.getQuery());
         if (!isMatchAll) {
-            enriched = enrichWithFacets(req.getQuery(), req.getSelectedFacets(), req.getSessionId());
+            enriched = nexaRankClient.enrich(req.getQuery(), req.getSessionId(), req.getSelectedFacets());
             if (enriched.hasRules()) {
                 log.info("NexaRank: {} rules applied for query='{}'", enriched.getAppliedRulesCount(), req.getQuery());
                 // Apply synonym expansion to query before search
@@ -384,45 +381,5 @@ public class SearchService {
     private Double num(Map<String, Object> src, String key) {
         Object v = src.get(key);
         return v instanceof Number n ? n.doubleValue() : null;
-    }
-    private NexaRankEnrichedQuery enrichWithFacets(String query,
-                                                    java.util.Map<String, String> selectedFacets,
-                                                    String sessionId) {
-        // If no facets and no sessionId, use the cached SDK path
-        if ((selectedFacets == null || selectedFacets.isEmpty()) && sessionId == null) {
-            return nexaRankClient.enrich(query);
-        }
-        // Direct POST — bypasses SDK until NR-42 ships
-        try {
-            java.util.Map<String, Object> body = new java.util.HashMap<>();
-            body.put("query", query);
-            if (sessionId != null) body.put("sessionId", sessionId);
-            if (selectedFacets != null && !selectedFacets.isEmpty())
-                body.put("selectedFacets", selectedFacets);
-
-            com.fasterxml.jackson.databind.ObjectMapper mapper =
-                    new com.fasterxml.jackson.databind.ObjectMapper();
-            String json = mapper.writeValueAsString(body);
-
-            java.net.HttpURLConnection conn = (java.net.HttpURLConnection)
-                    new java.net.URL(nexarankApiBaseUrl + "/rules/enrich").openConnection();
-            conn.setRequestMethod("POST");
-            conn.setDoOutput(true);
-            conn.setConnectTimeout(500);
-            conn.setReadTimeout(2000);
-            conn.setRequestProperty("Content-Type", "application/json");
-            conn.setRequestProperty("Accept", "application/json");
-            conn.getOutputStream().write(json.getBytes(java.nio.charset.StandardCharsets.UTF_8));
-
-            int status = conn.getResponseCode();
-            if (status == 200) {
-                byte[] resp = conn.getInputStream().readAllBytes();
-                return mapper.readValue(resp, NexaRankEnrichedQuery.class);
-            }
-            log.warn("NexaRank enrich returned {}, falling back", status);
-        } catch (Exception e) {
-            log.warn("NexaRank enrich failed: {}, falling back", e.getMessage());
-        }
-        return NexaRankEnrichedQuery.passthrough(query);
     }
 }

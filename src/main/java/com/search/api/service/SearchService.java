@@ -20,8 +20,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Service
 public class SearchService {
@@ -48,6 +51,16 @@ public class SearchService {
 
     @Value("${search.hybrid.keyword-weight:0.3}")
     private float keywordWeight;
+
+    // Diversity (maxPerBrand/maxPerCategory) is enforced by over-fetching a small
+    // multiple of the requested page size, then trimming client-side. Deliberately
+    // capped and per-page (not globally correct across page boundaries) — a cheap
+    // approximation was chosen over a fully-correct global re-ranking cache.
+    @Value("${search.diversity.overfetch-multiplier:2}")
+    private int diversityOverfetchMultiplier;
+
+    @Value("${search.diversity.max-extra-fetch:40}")
+    private int diversityMaxExtraFetch;
 
     public SearchService(ElasticsearchClient esClient,
                          Predictor<String[], float[][]> embeddingPredictor,
@@ -116,10 +129,18 @@ public class SearchService {
         log.info("Search [{}] query='{}' results={} took={}ms nexarank_rules={}",
                 req.getMode(), req.getQuery(), hits.size(), took, finalEnriched.getAppliedRulesCount());
 
+        // Cache the base (non-personalized) hits — personalization is per-session and
+        // must never be baked into a response shared across every other session
+        // searching the same thing. Applying it after the cache write, only on this
+        // response, keeps the cache exactly as effective as before regardless of how
+        // much traffic carries a sessionId (cache hits simply don't get personalized,
+        // same trade-off already accepted for BOOST/BURY/PIN/SYNONYM rules on a hit).
         cacheService.putSearchResults(cacheKey, hits, result.facets());
 
+        List<SearchHit> responseHits = applyPersonalization(hits, finalEnriched);
+
         com.search.api.model.SearchResponse searchResponse = new com.search.api.model.SearchResponse(
-                hits.size(), req.getPage(), req.getSize(), req.getMode(), took, hits);
+                responseHits.size(), req.getPage(), req.getSize(), req.getMode(), took, responseHits);
         searchResponse.setFacets(result.facets());
         return searchResponse;
     }
@@ -179,15 +200,17 @@ public class SearchService {
         Query finalQuery = nexaRankEnricher.applyEnrichment(scriptScoreQuery, enriched);
 
         Map<String, Aggregation> aggs = facetAggregationBuilder.buildAggregations(facetConfigs);
+        int fetchSize = effectiveFetchSize(req.getSize(), enriched);
         SearchRequest esReq = SearchRequest.of(r -> r
                 .index(INDEX)
                 .query(finalQuery)
                 .from(req.getPage() * req.getSize())
-                .size(req.getSize())
+                .size(fetchSize)
                 .aggregations(aggs)
         );
 
-        return executeSearch(esReq, facetConfigs);
+        SearchResult result = executeSearch(esReq, facetConfigs);
+        return applyDiversity(result, enriched, req.getSize());
     }
 
     // ── Vector-only: kNN search ───────────────────────────────────────────────
@@ -198,30 +221,34 @@ public class SearchService {
         float[] queryVector = embed(req.getQuery());
         Query filterQuery   = buildFilterQuery(req);
 
-        int k          = Math.min(req.getSize(), vectorK);
+        int fetchSize  = effectiveFetchSize(req.getSize(), enriched);
+        int k          = Math.min(fetchSize, vectorK);
         int candidates = Math.max(k * 3, vectorCandidates);
 
         final Query finalFilter = filterQuery;
+        final int finalK = k;
         SearchRequest esReq = SearchRequest.of(r -> {
             var builder = r.index(INDEX)
                     .knn(knn -> {
                         var knnBuilder = knn
                                 .field("product_vector")
                                 .queryVector(toList(queryVector))
-                                .k(k)
+                                .k(finalK)
                                 .numCandidates(candidates);
                         if (finalFilter != null) {
                             knnBuilder.filter(finalFilter);
                         }
                         return knnBuilder;
                     })
-                    .size(req.getSize());
+                    .size(fetchSize);
             return builder;
         });
 
-        // Note: PIN rules not applied to kNN — kNN doesn't support pinned query wrapper
-        // BOOST/BURY applied via rescore if needed in future
-        return executeSearch(esReq, facetConfigs);
+        // Note: PIN and personalization not applied to kNN — kNN doesn't support the
+        // FunctionScore/PinnedQuery wrappers used elsewhere. Diversity still applies —
+        // it's a post-hit-list trim, independent of how the candidates were retrieved.
+        SearchResult result = executeSearch(esReq, facetConfigs);
+        return applyDiversity(result, enriched, req.getSize());
     }
 
     // ── Keyword-only: BM25 multi-match ───────────────────────────────────────
@@ -240,15 +267,98 @@ public class SearchService {
         Query finalQuery = nexaRankEnricher.applyEnrichment(baseQuery, enriched);
 
         Map<String, Aggregation> aggs = facetAggregationBuilder.buildAggregations(facetConfigs);
+        int fetchSize = effectiveFetchSize(req.getSize(), enriched);
         SearchRequest esReq = SearchRequest.of(r -> r
                 .index(INDEX)
                 .query(finalQuery)
                 .from(req.getPage() * req.getSize())
-                .size(req.getSize())
+                .size(fetchSize)
                 .aggregations(aggs)
         );
 
-        return executeSearch(esReq, facetConfigs);
+        SearchResult result = executeSearch(esReq, facetConfigs);
+        return applyDiversity(result, enriched, req.getSize());
+    }
+
+    // ── Diversity: cheap per-page over-fetch + trim ───────────────────────────
+
+    private int effectiveFetchSize(int requestedSize, NexaRankEnrichedQuery enriched) {
+        if (enriched == null || !enriched.hasDiversity()) return requestedSize;
+        int extra = Math.min(requestedSize * (diversityOverfetchMultiplier - 1), diversityMaxExtraFetch);
+        return requestedSize + extra;
+    }
+
+    private SearchResult applyDiversity(SearchResult result, NexaRankEnrichedQuery enriched, int targetSize) {
+        if (enriched == null || !enriched.hasDiversity() || result.hits().size() <= targetSize) {
+            return result;
+        }
+
+        Integer maxPerBrand    = enriched.getMaxPerBrand();
+        Integer maxPerCategory = enriched.getMaxPerCategory();
+        List<SearchHit> hits   = result.hits();
+
+        List<SearchHit> diversified = new ArrayList<>();
+        Set<String> included = new HashSet<>();
+        Map<String, Integer> brandCounts    = new HashMap<>();
+        Map<String, Integer> categoryCounts = new HashMap<>();
+
+        for (SearchHit hit : hits) {
+            if (diversified.size() >= targetSize) break;
+            String brand    = hit.getBrand();
+            String category = hit.getCategory();
+            boolean brandOk = maxPerBrand == null || brand == null
+                    || brandCounts.getOrDefault(brand, 0) < maxPerBrand;
+            boolean categoryOk = maxPerCategory == null || category == null
+                    || categoryCounts.getOrDefault(category, 0) < maxPerCategory;
+            if (brandOk && categoryOk) {
+                diversified.add(hit);
+                included.add(hit.getProductId());
+                if (brand != null) brandCounts.merge(brand, 1, Integer::sum);
+                if (category != null) categoryCounts.merge(category, 1, Integer::sum);
+            }
+        }
+
+        // Over-fetch wasn't enough to fill a full page under the diversity limits —
+        // backfill with the next-highest-ranked excluded hits rather than short-paging.
+        if (diversified.size() < targetSize) {
+            for (SearchHit hit : hits) {
+                if (diversified.size() >= targetSize) break;
+                if (!included.contains(hit.getProductId())) diversified.add(hit);
+            }
+        }
+
+        log.debug("DIVERSITY trimmed {} candidates -> {} (maxPerBrand={}, maxPerCategory={})",
+                hits.size(), diversified.size(), maxPerBrand, maxPerCategory);
+
+        return new SearchResult(diversified, result.facets());
+    }
+
+    // ── Personalization: cheap in-memory re-score, applied after (never before)
+    //    the cache boundary — see the comment in search() for why. ───────────────
+
+    private List<SearchHit> applyPersonalization(List<SearchHit> hits, NexaRankEnrichedQuery enriched) {
+        if (enriched == null || !enriched.hasPersonalization() || hits.isEmpty()) return hits;
+
+        List<String> boostIds = enriched.getPersonalizedBoostIds();
+        List<SearchHit> reranked = new ArrayList<>(hits);
+        boolean anyMatched = false;
+
+        for (SearchHit hit : reranked) {
+            int rank = boostIds.indexOf(hit.getProductId());
+            if (rank >= 0) {
+                // Highest-clicked product gets the strongest (still modest) nudge —
+                // deliberately much gentler than an explicit merchandising BOOST rule.
+                double weight = Math.max(1.02, 1.20 - (0.02 * rank));
+                hit.setScore((float) (hit.getScore() * weight));
+                anyMatched = true;
+            }
+        }
+
+        if (!anyMatched) return hits;
+
+        reranked.sort((a, b) -> Float.compare(b.getScore(), a.getScore()));
+        log.debug("PERSONALIZATION re-ranked {} hits using {} boost ids", reranked.size(), boostIds.size());
+        return reranked;
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────────

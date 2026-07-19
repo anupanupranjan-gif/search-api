@@ -43,7 +43,10 @@ public class NexaRankQueryEnricher {
 
         Query result = baseQuery;
 
-        // Apply boosts and buries via FunctionScore
+        // Apply boosts and buries via FunctionScore. Personalization is deliberately
+        // NOT applied here — this query gets cached and shared across every session
+        // searching the same thing, so a per-session boost can't be baked into it.
+        // See SearchService.applyPersonalization(), applied post-cache instead.
         if (enriched.hasBoosts() || enriched.hasBuries()) {
             result = applyFunctionScore(result, enriched);
         }

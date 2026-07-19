@@ -77,13 +77,13 @@ public class SearchService {
         // Check cache
         String cacheKey = cacheService.searchKey(req.getQuery(), req.getMode(),
                 req.getCategory(), req.getBrand(), req.getMinPrice(), req.getMaxPrice(), req.getPage());
-        List<SearchHit> cachedHits = cacheService.getSearchResults(cacheKey);
-        if (cachedHits != null) {
+        CacheService.CachedSearch cached = cacheService.getSearchResults(cacheKey);
+        if (cached != null) {
             long took = System.currentTimeMillis() - start;
             log.info("Cache HIT [{}] query='{}' took={}ms", req.getMode(), req.getQuery(), took);
             com.search.api.model.SearchResponse cachedResponse = new com.search.api.model.SearchResponse(
-                    cachedHits.size(), req.getPage(), req.getSize(), req.getMode() + ":cached", took, cachedHits);
-            // facets not available on cache hit
+                    cached.hits().size(), req.getPage(), req.getSize(), req.getMode() + ":cached", took, cached.hits());
+            cachedResponse.setFacets(cached.facets());
             return cachedResponse;
         }
 
@@ -116,7 +116,7 @@ public class SearchService {
         log.info("Search [{}] query='{}' results={} took={}ms nexarank_rules={}",
                 req.getMode(), req.getQuery(), hits.size(), took, finalEnriched.getAppliedRulesCount());
 
-        cacheService.putSearchResults(cacheKey, hits);
+        cacheService.putSearchResults(cacheKey, hits, result.facets());
 
         com.search.api.model.SearchResponse searchResponse = new com.search.api.model.SearchResponse(
                 hits.size(), req.getPage(), req.getSize(), req.getMode(), took, hits);

@@ -10,6 +10,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -35,21 +36,23 @@ public class CacheService {
 
     // ── Search results cache ──────────────────────────────────────────────────
 
-    public List<SearchResponse.SearchHit> getSearchResults(String key) {
+    public record CachedSearch(List<SearchResponse.SearchHit> hits, Map<String, Object> facets) {}
+
+    public CachedSearch getSearchResults(String key) {
         try {
             String val = redis.opsForValue().get("search:" + key);
             if (val == null) return null;
             log.debug("Cache HIT search: {}", key);
-            return objectMapper.readValue(val, new TypeReference<List<SearchResponse.SearchHit>>() {});
+            return objectMapper.readValue(val, CachedSearch.class);
         } catch (Exception e) {
             log.warn("Cache read error for search key {}: {}", key, e.getMessage());
             return null;
         }
     }
 
-    public void putSearchResults(String key, List<SearchResponse.SearchHit> hits) {
+    public void putSearchResults(String key, List<SearchResponse.SearchHit> hits, Map<String, Object> facets) {
         try {
-            String val = objectMapper.writeValueAsString(hits);
+            String val = objectMapper.writeValueAsString(new CachedSearch(hits, facets));
             redis.opsForValue().set("search:" + key, val, searchTtl, TimeUnit.SECONDS);
             log.debug("Cache SET search: {} (TTL {}s)", key, searchTtl);
         } catch (Exception e) {

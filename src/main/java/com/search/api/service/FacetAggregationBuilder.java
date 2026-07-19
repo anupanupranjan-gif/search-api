@@ -2,6 +2,7 @@ package com.search.api.service;
 
 import co.elastic.clients.elasticsearch._types.aggregations.Aggregation;
 import co.elastic.clients.elasticsearch._types.aggregations.HistogramBucket;
+import co.elastic.clients.elasticsearch._types.aggregations.LongTermsBucket;
 import co.elastic.clients.elasticsearch._types.aggregations.StringTermsBucket;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
 import org.slf4j.Logger;
@@ -29,7 +30,7 @@ public class FacetAggregationBuilder {
 
             try {
                 switch (facetType) {
-                    case "TERMS" -> {
+                    case "TERMS", "BOOLEAN" -> {
                         int maxValues = facet.get("maxValues") instanceof Number n
                                 ? n.intValue() : 10;
                         aggs.put("facet_" + fieldName, Aggregation.of(a -> a
@@ -75,6 +76,18 @@ public class FacetAggregationBuilder {
                     for (StringTermsBucket bucket : termsAgg.buckets().array()) {
                         Map<String, Object> b = new LinkedHashMap<>();
                         b.put("value", bucket.key().stringValue());
+                        if (showCount) b.put("count", bucket.docCount());
+                        buckets.add(b);
+                    }
+                    facetResult.put("buckets", buckets);
+
+                } else if ("BOOLEAN".equals(facetType)) {
+                    // ES aggregates boolean fields as long terms (0/1) with a keyAsString "true"/"false"
+                    var termsAgg = response.aggregations().get(aggKey).lterms();
+                    List<Map<String, Object>> buckets = new ArrayList<>();
+                    for (LongTermsBucket bucket : termsAgg.buckets().array()) {
+                        Map<String, Object> b = new LinkedHashMap<>();
+                        b.put("value", bucket.keyAsString() != null ? bucket.keyAsString() : String.valueOf(bucket.key()));
                         if (showCount) b.put("count", bucket.docCount());
                         buckets.add(b);
                     }

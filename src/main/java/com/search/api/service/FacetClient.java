@@ -35,6 +35,9 @@ public class FacetClient {
     @Value("${nexarank.enabled:true}")
     private boolean enabled;
 
+    @Value("${nexarank.cache-ttl-seconds:30}")
+    private long cacheTtlSeconds;
+
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
 
@@ -84,7 +87,7 @@ public class FacetClient {
                 List<Map<String, Object>> facets = objectMapper.readValue(
                         response.body(), new TypeReference<List<Map<String, Object>>>() {});
                 cachedFacets = facets;
-                facetCacheExpiry = System.currentTimeMillis() + 60_000;
+                facetCacheExpiry = System.currentTimeMillis() + (cacheTtlSeconds * 1000);
                 log.info("FacetClient: fetched {} enabled facets from NexaRank", facets.size());
                 return facets;
             }
@@ -158,9 +161,11 @@ public class FacetClient {
                     HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200) {
-                Map<String, String> map = objectMapper.readValue(
-                        response.body(), new TypeReference<Map<String, String>>() {});
-                cachedToken = map.get("token");
+                // Login response carries extra fields (role, permissions[], etc.) beyond the
+                // token — read as a tree instead of Map<String,String> so those don't break
+                // deserialization (permissions is a JSON array, not a String).
+                com.fasterxml.jackson.databind.JsonNode node = objectMapper.readTree(response.body());
+                cachedToken = node.has("token") ? node.get("token").asText() : null;
                 tokenExpiry = System.currentTimeMillis() + (23 * 60 * 60 * 1000);
                 return cachedToken;
             }

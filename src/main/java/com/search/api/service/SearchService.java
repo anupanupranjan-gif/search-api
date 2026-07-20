@@ -254,7 +254,7 @@ public class SearchService {
                 ? bm25Result.hits().total().value()
                 : bm25Hits.size();
 
-        List<SearchHit> fused = fuseRrf(bm25Hits, knnHits, rrfRankConstant);
+        List<SearchHit> fused = fuseRrf(bm25Hits, knnHits, rrfRankConstant, req.getSize());
         if (enriched != null && enriched.hasPins()) {
             fused = applyPinsPostFusion(fused, enriched);
         }
@@ -280,13 +280,21 @@ public class SearchService {
      * keyword-only: a semantically close product with zero shared vocabulary can
      * still surface via the kNN list alone.
      */
-    private List<SearchHit> fuseRrf(List<SearchHit> bm25Hits, List<SearchHit> knnHits, int rankConstant) {
+    private List<SearchHit> fuseRrf(List<SearchHit> bm25Hits, List<SearchHit> knnHits, int rankConstant,
+                                     int keywordVisibleSize) {
         Map<String, Double> rrfScore = new HashMap<>();
         Map<String, SearchHit> byId = new HashMap<>();
         List<String> order = new ArrayList<>();
+        // "Semantic match" means: a keyword-only search wouldn't show this on the
+        // results page the user is actually looking at — i.e. it's not in BM25's
+        // top keywordVisibleSize, even though it may still be somewhere in BM25's
+        // full rrfWindowSize candidate pool (which is fetched purely for fusion
+        // quality, not something a keyword-only user would ever page down to).
+        Set<String> bm25VisibleIds = new HashSet<>();
 
         for (int i = 0; i < bm25Hits.size(); i++) {
             SearchHit hit = bm25Hits.get(i);
+            if (i < keywordVisibleSize) bm25VisibleIds.add(hit.getProductId());
             rrfScore.merge(hit.getProductId(), 1.0 / (rankConstant + i + 1), Double::sum);
             if (byId.putIfAbsent(hit.getProductId(), hit) == null) order.add(hit.getProductId());
         }
@@ -300,8 +308,13 @@ public class SearchService {
         for (String id : order) fused.add(byId.get(id));
         // Surface the RRF score as the hit's score so downstream diversity/
         // personalization (which sort by getScore()) operate on a meaningful signal.
+        // semanticMatch flags a hit that never appeared in the BM25 candidate window at
+        // all — i.e. keyword-only search couldn't have surfaced it, at any rank, within
+        // the fetched window. That's the honest, demo-able "found via semantic
+        // similarity" signal, distinct from a hit BM25 also matched but ranked lower.
         for (SearchHit hit : fused) {
             hit.setScore(rrfScore.getOrDefault(hit.getProductId(), 0.0).floatValue());
+            hit.setSemanticMatch(!bm25VisibleIds.contains(hit.getProductId()));
         }
         fused.sort((a, b) -> Float.compare(b.getScore(), a.getScore()));
         return fused;

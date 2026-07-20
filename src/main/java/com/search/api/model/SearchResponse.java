@@ -48,6 +48,7 @@ public class SearchResponse {
         private Integer ratingCount;
         private float score;
         private List<Float> productVector;
+        private Boolean semanticMatch;
 
         public String getProductId() { return productId; }
         public void setProductId(String productId) { this.productId = productId; }
@@ -69,5 +70,7 @@ public class SearchResponse {
         public void setScore(float score) { this.score = score; }
         public List<Float> getProductVector() { return productVector; }
         public void setProductVector(List<Float> productVector) { this.productVector = productVector; }
+        public Boolean getSemanticMatch() { return semanticMatch; }
+        public void setSemanticMatch(Boolean semanticMatch) { this.semanticMatch = semanticMatch; }
     }
 }

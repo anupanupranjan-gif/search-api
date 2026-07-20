@@ -6,8 +6,12 @@ import co.elastic.clients.elasticsearch._types.FieldValue;
 import co.elastic.clients.elasticsearch._types.aggregations.Aggregation;
 import java.util.Map;
 import co.elastic.clients.elasticsearch._types.query_dsl.*;
+import co.elastic.clients.elasticsearch.core.MsearchResponse;
 import co.elastic.clients.elasticsearch.core.SearchRequest;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
+import co.elastic.clients.elasticsearch.core.msearch.MultiSearchItem;
+import co.elastic.clients.elasticsearch.core.msearch.MultiSearchResponseItem;
+import co.elastic.clients.elasticsearch.core.msearch.RequestItem;
 import co.elastic.clients.elasticsearch.core.search.Hit;
 import co.elastic.clients.json.JsonData;
 import com.nexarank.client.NexaRankEnrichedQuery;
@@ -62,6 +66,20 @@ public class SearchService {
     @Value("${search.diversity.max-extra-fetch:40}")
     private int diversityMaxExtraFetch;
 
+    // Hybrid = real fusion retrieval (Reciprocal Rank Fusion), not a linear blend of
+    // raw BM25 + cosine scores. Elastic's own native `rrf` retriever implements the
+    // same algorithm but is Platinum/Enterprise-licensed; this cluster runs Basic, so
+    // this is an app-side equivalent: one _msearch round trip (BM25 channel + kNN
+    // channel), fused in Java by rank rather than by score. rank-constant of 60
+    // matches Elastic's own RRF default. Bounded to the top rrfWindowSize candidates
+    // per channel — pages beyond that window return short/empty, the same accepted
+    // "cheap, page-bounded, not globally correct" tradeoff already used by diversity.
+    @Value("${search.hybrid.rrf.window-size:100}")
+    private int rrfWindowSize;
+
+    @Value("${search.hybrid.rrf.rank-constant:60}")
+    private int rrfRankConstant;
+
     public SearchService(ElasticsearchClient esClient,
                          Predictor<String[], float[][]> embeddingPredictor,
                          CacheService cacheService,
@@ -95,7 +113,7 @@ public class SearchService {
             long took = System.currentTimeMillis() - start;
             log.info("Cache HIT [{}] query='{}' took={}ms", req.getMode(), req.getQuery(), took);
             com.search.api.model.SearchResponse cachedResponse = new com.search.api.model.SearchResponse(
-                    cached.hits().size(), req.getPage(), req.getSize(), req.getMode() + ":cached", took, cached.hits());
+                    cached.totalHits(), req.getPage(), req.getSize(), req.getMode() + ":cached", took, cached.hits());
             cachedResponse.setFacets(cached.facets());
             return cachedResponse;
         }
@@ -135,12 +153,12 @@ public class SearchService {
         // response, keeps the cache exactly as effective as before regardless of how
         // much traffic carries a sessionId (cache hits simply don't get personalized,
         // same trade-off already accepted for BOOST/BURY/PIN/SYNONYM rules on a hit).
-        cacheService.putSearchResults(cacheKey, hits, result.facets());
+        cacheService.putSearchResults(cacheKey, hits, result.facets(), result.totalHits());
 
         List<SearchHit> responseHits = applyPersonalization(hits, finalEnriched);
 
         com.search.api.model.SearchResponse searchResponse = new com.search.api.model.SearchResponse(
-                responseHits.size(), req.getPage(), req.getSize(), req.getMode(), took, responseHits);
+                result.totalHits(), req.getPage(), req.getSize(), req.getMode(), took, responseHits);
         searchResponse.setFacets(result.facets());
         return searchResponse;
     }
@@ -167,50 +185,158 @@ public class SearchService {
         return executeSearch(esReq, facetConfigs);
     }
 
-    // ── Hybrid: weighted combination of vector + BM25 scores ─────────────────
-
+    // ── Hybrid: Reciprocal Rank Fusion of independent BM25 + kNN retrievals ────
+    //
+    // Elastic's guidance: retrieve BM25 and kNN as two independent candidate lists,
+    // then fuse by RANK, not raw score — BM25 (unbounded, corpus-dependent) and
+    // cosine similarity (bounded) aren't on comparable scales, so a fixed linear
+    // blend of the two isn't meaningful across different queries. This is exactly
+    // what Elastic's native `rrf` retriever does, but that requires a Platinum/
+    // Enterprise license (confirmed via a live 403 against this Basic-licensed
+    // cluster: "current license is non-compliant for [Reciprocal Rank Fusion]").
+    // This method is the same algorithm implemented app-side: one _msearch round
+    // trip carrying both queries (so it costs one network hop, not two), fused in
+    // Java with the standard RRF formula (rank-constant 60, matching Elastic's own
+    // default).
     private SearchResult hybridSearch(com.search.api.model.SearchRequest req,
                                    NexaRankEnrichedQuery enriched,
                                    List<Map<String, Object>> facetConfigs) throws Exception {
         float[] queryVector = embed(req.getQuery());
 
-        String scriptSource = """
-            double vectorScore = cosineSimilarity(params.query_vector, 'product_vector') + 1.0;
-            double bm25Score   = _score;
-            return (params.vectorWeight * vectorScore) + (params.keywordWeight * bm25Score);
-        """;
-
         Query bm25Query = buildBm25Query(req.getQuery());
         Query filterQuery = buildFilterQuery(req);
 
-        Query scriptScoreQuery = ScriptScoreQuery.of(ss -> ss
-                .query(filterQuery != null
-                        ? BoolQuery.of(b -> b.must(bm25Query).filter(filterQuery))._toQuery()
-                        : bm25Query)
-                .script(s -> s.inline(i -> i
-                        .source(scriptSource)
-                        .params(Map.of(
-                                "query_vector", JsonData.of(toList(queryVector)),
-                                "vectorWeight", JsonData.of(vectorWeight),
-                                "keywordWeight", JsonData.of(keywordWeight)
-                        ))))
-        )._toQuery();
+        Query bm25Base = filterQuery != null
+                ? BoolQuery.of(b -> b.must(bm25Query).filter(filterQuery))._toQuery()
+                : bm25Query;
+        // BOOST/BURY only here — PIN is applied once, post-fusion, below (the same
+        // limitation kNN already has: pinning can't be expressed inside a kNN clause,
+        // so pinning is handled consistently in Java for the fused list instead).
+        Query bm25Final = nexaRankEnricher.applyScoring(bm25Base, enriched);
 
-        // Apply NexaRank rules
-        Query finalQuery = nexaRankEnricher.applyEnrichment(scriptScoreQuery, enriched);
-
+        int k = rrfWindowSize;
+        int candidates = Math.max(k * 3, vectorCandidates);
         Map<String, Aggregation> aggs = facetAggregationBuilder.buildAggregations(facetConfigs);
-        int fetchSize = effectiveFetchSize(req.getSize(), enriched);
-        SearchRequest esReq = SearchRequest.of(r -> r
-                .index(INDEX)
-                .query(finalQuery)
-                .from(req.getPage() * req.getSize())
-                .size(fetchSize)
-                .aggregations(aggs)
-        );
 
-        SearchResult result = executeSearch(esReq, facetConfigs);
+        final Query finalFilter = filterQuery;
+        RequestItem bm25Item = RequestItem.of(i -> i
+                .header(h -> h.index(INDEX))
+                .body(b -> b.query(bm25Final).from(0).size(rrfWindowSize).aggregations(aggs)));
+
+        RequestItem knnItem = RequestItem.of(i -> i
+                .header(h -> h.index(INDEX))
+                .body(b -> {
+                    b.knn(knn -> {
+                        var knnBuilder = knn.field("product_vector")
+                                .queryVector(toList(queryVector))
+                                .k(k)
+                                .numCandidates(candidates);
+                        if (finalFilter != null) knnBuilder.filter(finalFilter);
+                        return knnBuilder;
+                    });
+                    b.size(rrfWindowSize);
+                    return b;
+                }));
+
+        MsearchResponse<Map> msearchResponse = esClient.msearch(m -> m
+                .index(INDEX)
+                .searches(bm25Item, knnItem), Map.class);
+
+        List<MultiSearchResponseItem<Map>> responses = msearchResponse.responses();
+        MultiSearchItem<Map> bm25Result = responses.get(0).result();
+        MultiSearchItem<Map> knnResult = responses.get(1).result();
+
+        List<SearchHit> bm25Hits = parseHits(bm25Result.hits().hits());
+        List<SearchHit> knnHits = parseHits(knnResult.hits().hits());
+
+        Map<String, Object> facets = facetAggregationBuilder.extractFacets(bm25Result.aggregations(), facetConfigs);
+        long totalHits = bm25Result.hits().total() != null
+                ? bm25Result.hits().total().value()
+                : bm25Hits.size();
+
+        List<SearchHit> fused = fuseRrf(bm25Hits, knnHits, rrfRankConstant);
+        if (enriched != null && enriched.hasPins()) {
+            fused = applyPinsPostFusion(fused, enriched);
+        }
+
+        // Page window into the fused list — bounded by rrfWindowSize per channel,
+        // same "cheap, page-bounded, not globally correct beyond the window" tradeoff
+        // already accepted for diversity below.
+        int fetchSize = effectiveFetchSize(req.getSize(), enriched);
+        int from = req.getPage() * req.getSize();
+        List<SearchHit> windowed = from < fused.size()
+                ? fused.subList(from, Math.min(from + fetchSize, fused.size()))
+                : Collections.emptyList();
+
+        SearchResult result = new SearchResult(new ArrayList<>(windowed), facets, totalHits);
         return applyDiversity(result, enriched, req.getSize());
+    }
+
+    /**
+     * Reciprocal Rank Fusion: score(d) = sum over each candidate list containing d
+     * of 1/(rankConstant + rank), rank being the document's 1-based position in
+     * that list. A document only needs to appear in ONE list to be included — this
+     * (not the fusion formula itself) is what gives hybrid real recall beyond
+     * keyword-only: a semantically close product with zero shared vocabulary can
+     * still surface via the kNN list alone.
+     */
+    private List<SearchHit> fuseRrf(List<SearchHit> bm25Hits, List<SearchHit> knnHits, int rankConstant) {
+        Map<String, Double> rrfScore = new HashMap<>();
+        Map<String, SearchHit> byId = new HashMap<>();
+        List<String> order = new ArrayList<>();
+
+        for (int i = 0; i < bm25Hits.size(); i++) {
+            SearchHit hit = bm25Hits.get(i);
+            rrfScore.merge(hit.getProductId(), 1.0 / (rankConstant + i + 1), Double::sum);
+            if (byId.putIfAbsent(hit.getProductId(), hit) == null) order.add(hit.getProductId());
+        }
+        for (int i = 0; i < knnHits.size(); i++) {
+            SearchHit hit = knnHits.get(i);
+            rrfScore.merge(hit.getProductId(), 1.0 / (rankConstant + i + 1), Double::sum);
+            if (byId.putIfAbsent(hit.getProductId(), hit) == null) order.add(hit.getProductId());
+        }
+
+        List<SearchHit> fused = new ArrayList<>();
+        for (String id : order) fused.add(byId.get(id));
+        // Surface the RRF score as the hit's score so downstream diversity/
+        // personalization (which sort by getScore()) operate on a meaningful signal.
+        for (SearchHit hit : fused) {
+            hit.setScore(rrfScore.getOrDefault(hit.getProductId(), 0.0).floatValue());
+        }
+        fused.sort((a, b) -> Float.compare(b.getScore(), a.getScore()));
+        return fused;
+    }
+
+    /**
+     * Applies PIN once, on the fully-fused list, rather than per-channel. Unlike the
+     * ES-native PinnedQuery used by keyword-only search, this can only pin a product
+     * that's already among the fused candidates (matched BM25 or was in the kNN
+     * window) — it can't force in a product unrelated to the query. Acceptable: a
+     * pinned product is, in practice, almost always also a real match.
+     */
+    private List<SearchHit> applyPinsPostFusion(List<SearchHit> hits, NexaRankEnrichedQuery enriched) {
+        List<String> pinIds = enriched.getPins().stream()
+                .sorted((a, b) -> Integer.compare(a.position(), b.position()))
+                .map(NexaRankEnrichedQuery.PinInstruction::productId)
+                .toList();
+        if (pinIds.isEmpty()) return hits;
+
+        Map<String, SearchHit> byId = new HashMap<>();
+        for (SearchHit h : hits) byId.put(h.getProductId(), h);
+
+        List<SearchHit> result = new ArrayList<>();
+        Set<String> pinned = new HashSet<>();
+        for (String id : pinIds) {
+            SearchHit hit = byId.get(id);
+            if (hit != null) {
+                result.add(hit);
+                pinned.add(id);
+            }
+        }
+        for (SearchHit h : hits) {
+            if (!pinned.contains(h.getProductId())) result.add(h);
+        }
+        return result;
     }
 
     // ── Vector-only: kNN search ───────────────────────────────────────────────
@@ -330,7 +456,7 @@ public class SearchService {
         log.debug("DIVERSITY trimmed {} candidates -> {} (maxPerBrand={}, maxPerCategory={})",
                 hits.size(), diversified.size(), maxPerBrand, maxPerCategory);
 
-        return new SearchResult(diversified, result.facets());
+        return new SearchResult(diversified, result.facets(), result.totalHits());
     }
 
     // ── Personalization: cheap in-memory re-score, applied after (never before)
@@ -404,15 +530,23 @@ public class SearchService {
         return BoolQuery.of(b -> b.filter(filters))._toQuery();
     }
 
-    record SearchResult(List<SearchHit> hits, Map<String, Object> facets) {}
+    record SearchResult(List<SearchHit> hits, Map<String, Object> facets, long totalHits) {}
 
     private SearchResult executeSearch(SearchRequest esReq,
                                         List<Map<String, Object>> facetConfigs) throws Exception {
         SearchResponse<Map> response = esClient.search(esReq, Map.class);
-        Map<String, Object> facets = facetAggregationBuilder.extractFacets(response, facetConfigs);
+        Map<String, Object> facets = facetAggregationBuilder.extractFacets(response.aggregations(), facetConfigs);
+        long totalHits = response.hits().total() != null
+                ? response.hits().total().value()
+                : response.hits().hits().size();
 
+        List<SearchHit> hits = parseHits(response.hits().hits());
+        return new SearchResult(hits, facets, totalHits);
+    }
+
+    private List<SearchHit> parseHits(List<Hit<Map>> esHits) {
         List<SearchHit> hits = new ArrayList<>();
-        for (Hit<Map> hit : response.hits().hits()) {
+        for (Hit<Map> hit : esHits) {
             Map<String, Object> src = hit.source();
             if (src == null) continue;
 
@@ -437,7 +571,7 @@ public class SearchService {
 
             hits.add(sh);
         }
-        return new SearchResult(hits, facets);
+        return hits;
     }
 
     public SearchHit getById(String id) throws Exception {

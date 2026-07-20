@@ -35,6 +35,17 @@ public class NexaRankQueryEnricher {
     }
 
     /**
+     * Apply only BOOST/BURY scoring (via FunctionScore) — no PIN.
+     * Used by the RRF hybrid path, where each retrieval channel (BM25, kNN) is
+     * fused in Java afterwards; pinning is applied once, post-fusion, in
+     * SearchService rather than per-channel here.
+     */
+    public Query applyScoring(Query baseQuery, NexaRankEnrichedQuery enriched) {
+        if (enriched == null || !(enriched.hasBoosts() || enriched.hasBuries())) return baseQuery;
+        return applyFunctionScore(baseQuery, enriched);
+    }
+
+    /**
      * Apply enrichment instructions to an ES query.
      * Handles BOOST, BURY (via FunctionScore) and PIN (via PinnedQuery).
      */

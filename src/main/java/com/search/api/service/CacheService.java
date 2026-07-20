@@ -36,7 +36,7 @@ public class CacheService {
 
     // ── Search results cache ──────────────────────────────────────────────────
 
-    public record CachedSearch(List<SearchResponse.SearchHit> hits, Map<String, Object> facets) {}
+    public record CachedSearch(List<SearchResponse.SearchHit> hits, Map<String, Object> facets, long totalHits) {}
 
     public CachedSearch getSearchResults(String key) {
         try {
@@ -50,9 +50,9 @@ public class CacheService {
         }
     }
 
-    public void putSearchResults(String key, List<SearchResponse.SearchHit> hits, Map<String, Object> facets) {
+    public void putSearchResults(String key, List<SearchResponse.SearchHit> hits, Map<String, Object> facets, long totalHits) {
         try {
-            String val = objectMapper.writeValueAsString(new CachedSearch(hits, facets));
+            String val = objectMapper.writeValueAsString(new CachedSearch(hits, facets, totalHits));
             redis.opsForValue().set("search:" + key, val, searchTtl, TimeUnit.SECONDS);
             log.debug("Cache SET search: {} (TTL {}s)", key, searchTtl);
         } catch (Exception e) {

@@ -1,10 +1,10 @@
 package com.search.api.service;
 
+import co.elastic.clients.elasticsearch._types.aggregations.Aggregate;
 import co.elastic.clients.elasticsearch._types.aggregations.Aggregation;
 import co.elastic.clients.elasticsearch._types.aggregations.HistogramBucket;
 import co.elastic.clients.elasticsearch._types.aggregations.LongTermsBucket;
 import co.elastic.clients.elasticsearch._types.aggregations.StringTermsBucket;
-import co.elastic.clients.elasticsearch.core.SearchResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -50,7 +50,7 @@ public class FacetAggregationBuilder {
         return aggs;
     }
 
-    public Map<String, Object> extractFacets(SearchResponse<?> response,
+    public Map<String, Object> extractFacets(Map<String, Aggregate> aggregations,
                                               List<Map<String, Object>> facetConfigs) {
         Map<String, Object> facets = new LinkedHashMap<>();
 
@@ -61,7 +61,7 @@ public class FacetAggregationBuilder {
             boolean showCount = Boolean.TRUE.equals(facet.get("showCount"));
             String aggKey = "facet_" + fieldName;
 
-            if (fieldName == null || !response.aggregations().containsKey(aggKey)) continue;
+            if (fieldName == null || !aggregations.containsKey(aggKey)) continue;
 
             try {
                 Map<String, Object> facetResult = new LinkedHashMap<>();
@@ -71,7 +71,7 @@ public class FacetAggregationBuilder {
                 facetResult.put("showCount", showCount);
 
                 if ("TERMS".equals(facetType)) {
-                    var termsAgg = response.aggregations().get(aggKey).sterms();
+                    var termsAgg = aggregations.get(aggKey).sterms();
                     List<Map<String, Object>> buckets = new ArrayList<>();
                     for (StringTermsBucket bucket : termsAgg.buckets().array()) {
                         Map<String, Object> b = new LinkedHashMap<>();
@@ -83,7 +83,7 @@ public class FacetAggregationBuilder {
 
                 } else if ("BOOLEAN".equals(facetType)) {
                     // ES aggregates boolean fields as long terms (0/1) with a keyAsString "true"/"false"
-                    var termsAgg = response.aggregations().get(aggKey).lterms();
+                    var termsAgg = aggregations.get(aggKey).lterms();
                     List<Map<String, Object>> buckets = new ArrayList<>();
                     for (LongTermsBucket bucket : termsAgg.buckets().array()) {
                         Map<String, Object> b = new LinkedHashMap<>();
@@ -94,7 +94,7 @@ public class FacetAggregationBuilder {
                     facetResult.put("buckets", buckets);
 
                 } else if ("RANGE".equals(facetType)) {
-                    var histAgg = response.aggregations().get(aggKey).histogram();
+                    var histAgg = aggregations.get(aggKey).histogram();
                     List<Map<String, Object>> buckets = new ArrayList<>();
                     for (HistogramBucket bucket : histAgg.buckets().array()) {
                         Map<String, Object> b = new LinkedHashMap<>();

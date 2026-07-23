@@ -68,4 +68,14 @@ nexarank:
   service-username: ${NEXARANK_USERNAME:admin}
   service-password: ${NEXARANK_PASSWORD:admin123}
   cache-ttl-seconds: ${NEXARANK_CACHE_TTL:30}
+  # nexarank-java-sdk's NexaRankClient (used for rule enrichment) binds its own
+  # in-process cache TTL to "nexarank.cache-ttl" (a duration string), NOT
+  # "nexarank.cache-ttl-seconds" above (that key is only read by FacetClient,
+  # a separate hand-rolled service). Without this, the SDK silently defaulted
+  # to its own 5-minute fallback regardless of NEXARANK_CACHE_TTL — a plain
+  # number with no s/m/h suffix parses as raw seconds, so this stays in sync
+  # with cache-ttl-seconds above via the same env var.
+  cache-ttl: ${NEXARANK_CACHE_TTL:30}
   enabled: ${NEXARANK_ENABLED:true}
+  tenant-id: ${NEXARANK_TENANT_ID:default}
+  project-id: ${NEXARANK_PROJECT_ID:main}

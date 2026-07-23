@@ -80,6 +80,12 @@ public class SearchService {
     @Value("${search.hybrid.rrf.rank-constant:60}")
     private int rrfRankConstant;
 
+    @Value("${nexarank.tenant-id:default}")
+    private String nexaRankTenantId;
+
+    @Value("${nexarank.project-id:main}")
+    private String nexaRankProjectId;
+
     public SearchService(ElasticsearchClient esClient,
                          Predictor<String[], float[][]> embeddingPredictor,
                          CacheService cacheService,
@@ -105,15 +111,18 @@ public class SearchService {
         // Fetch enabled facets from NexaRank (always, even on cache hit)
         List<Map<String, Object>> facetConfigs = facetClient.getEnabledFacets(req.getSelectedFacets());
 
-        // Check cache. The facet config set is folded into the key so that enabling/
-        // disabling a facet (or any other config change) in NexaRank immediately produces
-        // a fresh cache entry instead of serving stale aggregation buckets for up to
-        // cache.search.ttl-seconds — the cached facets map is otherwise frozen at write time
-        // and a same-request refetch of facetConfigs above has no effect on a cache HIT.
+        // Check cache. The facet config set and the rules version are both folded into
+        // the key so that a config/rule change in NexaRank immediately produces a fresh
+        // cache entry instead of serving stale results for up to cache.search.ttl-seconds.
+        // facetConfigs is cheap to refetch every request (above); rule enrichment is not
+        // (it's the LLM-rewrite pipeline), so rules use a cheap version counter instead of
+        // refetching the full enrichment just to detect staleness — see NR-100 (facets)
+        // and the follow-up rules-cache bug this addresses.
         String facetSignature = String.valueOf(facetConfigs);
+        String rulesVersion = cacheService.getRulesVersion(nexaRankTenantId, nexaRankProjectId);
         String cacheKey = cacheService.searchKey(req.getQuery(), req.getMode(),
                 req.getCategory(), req.getBrand(), req.getMinPrice(), req.getMaxPrice(), req.getPage(),
-                facetSignature);
+                facetSignature, rulesVersion);
         CacheService.CachedSearch cached = cacheService.getSearchResults(cacheKey);
         if (cached != null) {
             long took = System.currentTimeMillis() - start;

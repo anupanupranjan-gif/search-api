@@ -113,15 +113,35 @@ public class CacheService {
     // ── Cache key builders ────────────────────────────────────────────────────
 
     public String searchKey(String q, String mode, String category, String brand,
-                            Double minPrice, Double maxPrice, int page, String facetSignature) {
-        return String.format("%s:%s:%s:%s:%s:%s:%d:%s",
+                            Double minPrice, Double maxPrice, int page, String facetSignature,
+                            String rulesVersion) {
+        return String.format("%s:%s:%s:%s:%s:%s:%d:%s:%s",
                 q, mode,
                 category != null ? category : "",
                 brand != null ? brand : "",
                 minPrice != null ? minPrice : "",
                 maxPrice != null ? maxPrice : "",
                 page,
-                facetSignature != null ? facetSignature : "").hashCode() + "";
+                facetSignature != null ? facetSignature : "",
+                rulesVersion != null ? rulesVersion : "").hashCode() + "";
+    }
+
+    // ── Rules cache-invalidation signal ───────────────────────────────────────
+    // A cheap counter bumped by nexarank-api on every rule mutation (create,
+    // approve, promote, demote, toggle, etc). Folding it into the search cache key
+    // lets a rule change invalidate cached queries immediately without search-api
+    // having to call the expensive /rules/enrich pipeline (LLM rewrite, rule
+    // matching) on every request just to detect staleness — see NR-100 for the
+    // same pattern applied to facet config.
+
+    public String getRulesVersion(String tenantId, String projectId) {
+        try {
+            String v = redis.opsForValue().get("rules:version:" + tenantId + ":" + projectId);
+            return v != null ? v : "0";
+        } catch (Exception e) {
+            log.warn("Cache read error for rules version: {}", e.getMessage());
+            return "0";
+        }
     }
 
     // ── Stats ─────────────────────────────────────────────────────────────────

@@ -105,9 +105,15 @@ public class SearchService {
         // Fetch enabled facets from NexaRank (always, even on cache hit)
         List<Map<String, Object>> facetConfigs = facetClient.getEnabledFacets(req.getSelectedFacets());
 
-        // Check cache
+        // Check cache. The facet config set is folded into the key so that enabling/
+        // disabling a facet (or any other config change) in NexaRank immediately produces
+        // a fresh cache entry instead of serving stale aggregation buckets for up to
+        // cache.search.ttl-seconds — the cached facets map is otherwise frozen at write time
+        // and a same-request refetch of facetConfigs above has no effect on a cache HIT.
+        String facetSignature = String.valueOf(facetConfigs);
         String cacheKey = cacheService.searchKey(req.getQuery(), req.getMode(),
-                req.getCategory(), req.getBrand(), req.getMinPrice(), req.getMaxPrice(), req.getPage());
+                req.getCategory(), req.getBrand(), req.getMinPrice(), req.getMaxPrice(), req.getPage(),
+                facetSignature);
         CacheService.CachedSearch cached = cacheService.getSearchResults(cacheKey);
         if (cached != null) {
             long took = System.currentTimeMillis() - start;

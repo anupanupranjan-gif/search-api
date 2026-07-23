@@ -113,14 +113,15 @@ public class CacheService {
     // ── Cache key builders ────────────────────────────────────────────────────
 
     public String searchKey(String q, String mode, String category, String brand,
-                            Double minPrice, Double maxPrice, int page) {
-        return String.format("%s:%s:%s:%s:%s:%s:%d",
+                            Double minPrice, Double maxPrice, int page, String facetSignature) {
+        return String.format("%s:%s:%s:%s:%s:%s:%d:%s",
                 q, mode,
                 category != null ? category : "",
                 brand != null ? brand : "",
                 minPrice != null ? minPrice : "",
                 maxPrice != null ? maxPrice : "",
-                page).hashCode() + "";
+                page,
+                facetSignature != null ? facetSignature : "").hashCode() + "";
     }
 
     // ── Stats ─────────────────────────────────────────────────────────────────

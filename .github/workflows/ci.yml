@@ -22,6 +22,15 @@ jobs:
           java-version: '25'
           distribution: 'temurin'
           cache: maven
+      - name: Build and install nexarank-java-sdk
+        # nexarank-java-sdk isn't published to Maven Central (deferred to Phase 29),
+        # so CI runners can't resolve it — install it into the runner's local repo
+        # first. gpg.skip=true: the SDK's release-signing plugin runs unconditionally
+        # on `verify` (which `install` triggers) and fails without a GPG agent.
+        run: |
+          git clone https://github.com/${{ github.repository_owner }}/nexarank-java-sdk.git /tmp/nexarank-java-sdk
+          cd /tmp/nexarank-java-sdk
+          mvn clean install -DskipTests -Dgpg.skip=true
       - name: Build JAR
         run: mvn clean package -DskipTests
         env:

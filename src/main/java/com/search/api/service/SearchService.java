@@ -145,6 +145,20 @@ public class SearchService {
                     req.setQuery(expandedQuery);
                 }
             }
+            // NR-88 follow-up: a REDIRECT rule means the client should navigate away
+            // rather than render results, so skip the ES query entirely — no point
+            // building/executing/caching a product search for a page the user will
+            // never see. Not cached (unlike the normal hit-list path below): redirect
+            // queries are rare, targeted rules (e.g. "black friday"), not high-volume
+            // traffic, so the repeated enrich() call on each hit is an accepted cost.
+            if (enriched.isRedirect()) {
+                long took = System.currentTimeMillis() - start;
+                log.info("NexaRank REDIRECT matched query='{}' -> {}", req.getQuery(), enriched.getRedirectUrl());
+                com.search.api.model.SearchResponse redirectResponse = new com.search.api.model.SearchResponse(
+                        0, req.getPage(), req.getSize(), req.getMode(), took, List.of());
+                redirectResponse.setRedirectUrl(enriched.getRedirectUrl());
+                return redirectResponse;
+            }
         }
         final NexaRankEnrichedQuery finalEnriched = enriched;
         final List<Map<String, Object>> finalFacetConfigs = facetConfigs;

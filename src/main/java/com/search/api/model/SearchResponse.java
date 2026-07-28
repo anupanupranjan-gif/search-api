@@ -13,6 +13,7 @@ public class SearchResponse {
     private String originalQuery;
     private String rewrittenQuery;
     private Map<String, Object> facets;
+    private String redirectUrl;
 
     public SearchResponse(long total, int page, int size, String mode, long tookMs, List<SearchHit> hits) {
         this.total = total;
@@ -36,6 +37,8 @@ public class SearchResponse {
     public void setOriginalQuery(String originalQuery) { this.originalQuery = originalQuery; }
     public String getRewrittenQuery() { return rewrittenQuery; }
     public void setRewrittenQuery(String rewrittenQuery) { this.rewrittenQuery = rewrittenQuery; }
+    public String getRedirectUrl() { return redirectUrl; }
+    public void setRedirectUrl(String redirectUrl) { this.redirectUrl = redirectUrl; }
 
     public static class SearchHit {
         private String productId;

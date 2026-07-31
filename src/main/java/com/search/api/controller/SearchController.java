@@ -108,9 +108,22 @@ public class SearchController {
                 // Track all search events (async, non-blocking)
                 try {
                     java.net.http.HttpClient httpClient = java.net.http.HttpClient.newHttpClient();
-                    String seJson = String.format(
-                        "{\"query\":\"%s\",\"resultCount\":%d,\"mode\":\"%s\",\"tookMs\":%d}",
-                        finalQuery.replace("\"", "'"), response.getTotal(), mode, response.getTookMs());
+                    // NR-36: facet usage reporting needs to know which facets were
+                    // active on this search. brand/category are dedicated top-level
+                    // params (not part of the generic facet_* map above) but are
+                    // themselves facets from a usage-reporting point of view, so fold
+                    // them in here alongside the generic selections.
+                    Map<String, String> facetsForTracking = new HashMap<>(selectedFacets);
+                    if (brand != null && !brand.isBlank()) facetsForTracking.put("brand", brand);
+                    if (category != null && !category.isBlank()) facetsForTracking.put("category", category);
+
+                    Map<String, Object> seBody = new HashMap<>();
+                    seBody.put("query", finalQuery);
+                    seBody.put("resultCount", response.getTotal());
+                    seBody.put("mode", mode);
+                    seBody.put("tookMs", response.getTookMs());
+                    if (!facetsForTracking.isEmpty()) seBody.put("selectedFacets", facetsForTracking);
+                    String seJson = new com.fasterxml.jackson.databind.ObjectMapper().writeValueAsString(seBody);
                     java.net.http.HttpRequest seReq = java.net.http.HttpRequest.newBuilder()
                         .uri(java.net.URI.create(nexarankBaseUrl + "/search-events"))
                         .header("Content-Type", "application/json")

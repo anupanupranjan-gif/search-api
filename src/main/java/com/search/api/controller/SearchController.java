@@ -105,6 +105,44 @@ public class SearchController {
                     response.setOriginalQuery(q);
                     response.setRewrittenQuery(rewrittenQuery);
                 }
+
+                // NR-59: the original result count, captured before recovery may
+                // replace `response` with a retry — search_events (zero-result-rate,
+                // latency) always reflects what the ORIGINAL query actually did, not
+                // what the user ends up seeing after a silent substitution.
+                long originalTotal = response.getTotal();
+                String suggestedQuery = null;
+                boolean recovered = false;
+
+                if (originalTotal == 0 && !finalQuery.trim().equals("*")) {
+                    suggestedQuery = fetchZeroResultRecoverySuggestion(finalQuery);
+                    if (suggestedQuery != null && !suggestedQuery.isBlank()) {
+                        try {
+                            SearchRequest retryReq = new SearchRequest();
+                            retryReq.setQuery(suggestedQuery);
+                            retryReq.setMode(mode);
+                            retryReq.setCategory(category);
+                            retryReq.setBrand(brand);
+                            retryReq.setMinPrice(minPrice);
+                            retryReq.setMaxPrice(maxPrice);
+                            retryReq.setPage(page);
+                            retryReq.setSize(effectiveSize);
+                            retryReq.setSelectedFacets(selectedFacets);
+                            retryReq.setSessionId(sessionId);
+
+                            SearchResponse retryResponse = searchService.search(retryReq);
+                            if (retryResponse.getTotal() > 0) {
+                                retryResponse.setRecoveredQuery(suggestedQuery);
+                                retryResponse.setRecovered(true);
+                                response = retryResponse;
+                                recovered = true;
+                            }
+                        } catch (Exception re) {
+                            log.debug("Zero-result recovery retry failed for query='{}': {}", finalQuery, re.getMessage());
+                        }
+                    }
+                }
+
                 // Track all search events (async, non-blocking)
                 try {
                     java.net.http.HttpClient httpClient = java.net.http.HttpClient.newHttpClient();
@@ -119,7 +157,7 @@ public class SearchController {
 
                     Map<String, Object> seBody = new HashMap<>();
                     seBody.put("query", finalQuery);
-                    seBody.put("resultCount", response.getTotal());
+                    seBody.put("resultCount", originalTotal);
                     seBody.put("mode", mode);
                     seBody.put("tookMs", response.getTookMs());
                     if (!facetsForTracking.isEmpty()) seBody.put("selectedFacets", facetsForTracking);
@@ -132,9 +170,14 @@ public class SearchController {
                         .POST(java.net.http.HttpRequest.BodyPublishers.ofString(seJson))
                         .build();
                     httpClient.sendAsync(seReq, java.net.http.HttpResponse.BodyHandlers.ofString());
-                    // Also track zero results separately
-                    if (response.getTotal() == 0) {
-                        String zrJson = String.format("{\"query\":\"%s\"}", finalQuery.replace("\"", "'"));
+                    // Also track zero results separately, now annotated (NR-59) with
+                    // whatever recovery attempt just ran above.
+                    if (originalTotal == 0) {
+                        Map<String, Object> zrBody = new HashMap<>();
+                        zrBody.put("query", finalQuery);
+                        zrBody.put("suggestedQuery", suggestedQuery);
+                        zrBody.put("recovered", recovered);
+                        String zrJson = new com.fasterxml.jackson.databind.ObjectMapper().writeValueAsString(zrBody);
                         java.net.http.HttpRequest zrReq = java.net.http.HttpRequest.newBuilder()
                             .uri(java.net.URI.create(nexarankBaseUrl + "/zero-results"))
                             .header("Content-Type", "application/json")
@@ -154,6 +197,41 @@ public class SearchController {
                         .body(ErrorResponse.of("SEARCH_FAILED", "Search failed"));
             }
         });
+    }
+
+    /**
+     * NR-59 — synchronous call (unlike the fire-and-forget search-events/
+     * zero-results tracking above): the retry decision below depends on the
+     * answer, so this has to block. Short timeout and a broad catch keep a
+     * slow/unreachable nexarank-api from turning an already-empty search into
+     * a slow one — worst case this just falls back to the plain empty result,
+     * same as today.
+     */
+    private String fetchZeroResultRecoverySuggestion(String query) {
+        try {
+            java.net.http.HttpClient httpClient = java.net.http.HttpClient.newHttpClient();
+            String reqJson = new com.fasterxml.jackson.databind.ObjectMapper()
+                    .writeValueAsString(Map.of("query", query));
+            java.net.http.HttpRequest req = java.net.http.HttpRequest.newBuilder()
+                    .uri(java.net.URI.create(nexarankBaseUrl + "/suggestions/zero-result-recovery"))
+                    .header("Content-Type", "application/json")
+                    .header("X-Tenant-Id", "default")
+                    .header("X-Project-Id", "main")
+                    .timeout(java.time.Duration.ofSeconds(3))
+                    .POST(java.net.http.HttpRequest.BodyPublishers.ofString(reqJson))
+                    .build();
+            java.net.http.HttpResponse<String> resp = httpClient.send(req, java.net.http.HttpResponse.BodyHandlers.ofString());
+            if (resp.statusCode() != 200) return null;
+            com.fasterxml.jackson.databind.JsonNode json =
+                    new com.fasterxml.jackson.databind.ObjectMapper().readTree(resp.body());
+            // NullNode.asText() returns the literal string "null", not Java null —
+            // isNull() must be checked explicitly rather than relying on asText(default).
+            com.fasterxml.jackson.databind.JsonNode node = json.get("suggestedQuery");
+            return (node == null || node.isNull()) ? null : node.asText();
+        } catch (Exception e) {
+            log.debug("Zero-result recovery suggestion call failed for query='{}': {}", query, e.getMessage());
+            return null;
+        }
     }
 
     @PostMapping("/click")

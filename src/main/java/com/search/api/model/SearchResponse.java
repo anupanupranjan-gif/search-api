@@ -14,6 +14,8 @@ public class SearchResponse {
     private String rewrittenQuery;
     private Map<String, Object> facets;
     private String redirectUrl;
+    private String recoveredQuery;   // NR-59: the alternative query actually used
+    private boolean recovered;       // NR-59: true when the LLM-suggested retry is what's being shown
 
     public SearchResponse(long total, int page, int size, String mode, long tookMs, List<SearchHit> hits) {
         this.total = total;
@@ -39,6 +41,10 @@ public class SearchResponse {
     public void setRewrittenQuery(String rewrittenQuery) { this.rewrittenQuery = rewrittenQuery; }
     public String getRedirectUrl() { return redirectUrl; }
     public void setRedirectUrl(String redirectUrl) { this.redirectUrl = redirectUrl; }
+    public String getRecoveredQuery() { return recoveredQuery; }
+    public void setRecoveredQuery(String recoveredQuery) { this.recoveredQuery = recoveredQuery; }
+    public boolean isRecovered() { return recovered; }
+    public void setRecovered(boolean recovered) { this.recovered = recovered; }
 
     public static class SearchHit {
         private String productId;

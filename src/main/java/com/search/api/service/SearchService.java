@@ -540,19 +540,26 @@ public class SearchService {
         )._toQuery();
     }
 
+    // .keyword: category/brand are analyzed "text" fields in the products index
+    // (ES's default dynamic mapping) - a TermQuery against the bare field name
+    // silently matches nothing (fielddata disabled by default means it doesn't even
+    // error), since a term query does no query-time analysis and the indexed terms
+    // are lowercased/tokenized. Found live 2026-08-20: category=Cell+Phones+%26+Accessories
+    // returned total=0 despite 36 real matching documents, confirmed directly against
+    // ES (`{"term":{"category":...}}` -> 0 hits, `{"term":{"category.keyword":...}}` -> 36).
     private Query buildFilterQuery(com.search.api.model.SearchRequest req) {
         List<Query> filters = new ArrayList<>();
 
         if (req.getCategory() != null && !req.getCategory().isBlank()) {
             filters.add(TermQuery.of(t -> t
-                    .field("category")
+                    .field("category.keyword")
                     .value(FieldValue.of(req.getCategory()))
             )._toQuery());
         }
 
         if (req.getBrand() != null && !req.getBrand().isBlank()) {
             filters.add(TermQuery.of(t -> t
-                    .field("brand")
+                    .field("brand.keyword")
                     .value(FieldValue.of(req.getBrand()))
             )._toQuery());
         }

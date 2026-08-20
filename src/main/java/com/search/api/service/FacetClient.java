@@ -8,16 +8,23 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.time.Duration;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
+// NEVER java.net.http.HttpClient here - Java 25 AArch64 bug (see CLAUDE.md CRITICAL
+// Build Rules). This class originally used it and every call silently returned an
+// empty facet list in production (no exception logged, just a non-200 the code
+// didn't even print) - confirmed live 2026-08-20: the exact same request succeeded
+// instantly from a plain curl pod, but failed 100% of the time through this class's
+// HttpClient instance. Rewritten on HttpURLConnection to match the rest of the
+// codebase's established workaround.
 @Service
 public class FacetClient {
 
@@ -38,7 +45,6 @@ public class FacetClient {
     @Value("${nexarank.cache-ttl-seconds:30}")
     private long cacheTtlSeconds;
 
-    private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
 
     private volatile List<Map<String, Object>> cachedFacets = null;
@@ -48,15 +54,26 @@ public class FacetClient {
 
     @PostConstruct
     public void init() {
-        System.out.println("=== FacetClient INIT: baseUrl=" + baseUrl + " enabled=" + enabled + " ===");
         log.info("FacetClient initialized with baseUrl={} enabled={}", baseUrl, enabled);
     }
 
     public FacetClient() {
         this.objectMapper = new ObjectMapper();
-        this.httpClient = HttpClient.newBuilder()
-                .connectTimeout(Duration.ofSeconds(2))
-                .build();
+    }
+
+    private HttpURLConnection openConnection(String url, String method) throws IOException {
+        HttpURLConnection conn = (HttpURLConnection) URI.create(url).toURL().openConnection();
+        conn.setRequestMethod(method);
+        conn.setConnectTimeout(2000);
+        conn.setReadTimeout(2000);
+        return conn;
+    }
+
+    private String readBody(HttpURLConnection conn) throws IOException {
+        int status = conn.getResponseCode();
+        InputStream is = status >= 200 && status < 300 ? conn.getInputStream() : conn.getErrorStream();
+        if (is == null) return "";
+        return new String(is.readAllBytes(), StandardCharsets.UTF_8);
     }
 
     public List<Map<String, Object>> getEnabledFacets() {
@@ -73,23 +90,21 @@ public class FacetClient {
             String token = getToken();
             if (token == null) return Collections.emptyList();
 
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(baseUrl + "/api/v1/facets?enabledOnly=true"))
-                    .header("Authorization", "Bearer " + token)
-                    .timeout(Duration.ofSeconds(2))
-                    .GET()
-                    .build();
+            HttpURLConnection conn = openConnection(baseUrl + "/api/v1/facets?enabledOnly=true", "GET");
+            conn.setRequestProperty("Authorization", "Bearer " + token);
 
-            HttpResponse<String> response = httpClient.send(request,
-                    HttpResponse.BodyHandlers.ofString());
+            int status = conn.getResponseCode();
+            String body = readBody(conn);
 
-            if (response.statusCode() == 200) {
+            if (status == 200) {
                 List<Map<String, Object>> facets = objectMapper.readValue(
-                        response.body(), new TypeReference<List<Map<String, Object>>>() {});
+                        body, new TypeReference<List<Map<String, Object>>>() {});
                 cachedFacets = facets;
                 facetCacheExpiry = System.currentTimeMillis() + (cacheTtlSeconds * 1000);
                 log.info("FacetClient: fetched {} enabled facets from NexaRank", facets.size());
                 return facets;
+            } else {
+                log.warn("FacetClient: facets fetch returned HTTP {}: {}", status, body);
             }
         } catch (Exception e) {
             log.warn("FacetClient: Failed to fetch facets from NexaRank: {}", e.getMessage());
@@ -120,19 +135,15 @@ public class FacetClient {
                    .append(java.net.URLEncoder.encode(entry.getValue(), java.nio.charset.StandardCharsets.UTF_8));
             }
 
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(url.toString()))
-                    .header("Authorization", "Bearer " + token)
-                    .timeout(Duration.ofSeconds(2))
-                    .GET()
-                    .build();
+            HttpURLConnection conn = openConnection(url.toString(), "GET");
+            conn.setRequestProperty("Authorization", "Bearer " + token);
 
-            HttpResponse<String> response = httpClient.send(request,
-                    HttpResponse.BodyHandlers.ofString());
+            int status = conn.getResponseCode();
+            String body = readBody(conn);
 
-            if (response.statusCode() == 200) {
+            if (status == 200) {
                 List<Map<String, Object>> facets = objectMapper.readValue(
-                        response.body(), new TypeReference<List<Map<String, Object>>>() {});
+                        body, new TypeReference<List<Map<String, Object>>>() {});
                 log.debug("FacetClient: fetched {} context-aware facets for context={}",
                         facets.size(), selectedFacets);
                 return facets;
@@ -142,6 +153,7 @@ public class FacetClient {
         }
         return getEnabledFacets();
     }
+
     private String getToken() {
         if (cachedToken != null && System.currentTimeMillis() < tokenExpiry) {
             return cachedToken;
@@ -150,24 +162,26 @@ public class FacetClient {
             String body = objectMapper.writeValueAsString(
                     Map.of("username", username, "password", password));
 
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(baseUrl + "/api/v1/auth/login"))
-                    .header("Content-Type", "application/json")
-                    .timeout(Duration.ofSeconds(2))
-                    .POST(HttpRequest.BodyPublishers.ofString(body))
-                    .build();
+            HttpURLConnection conn = openConnection(baseUrl + "/api/v1/auth/login", "POST");
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setDoOutput(true);
+            try (OutputStream os = conn.getOutputStream()) {
+                os.write(body.getBytes(StandardCharsets.UTF_8));
+            }
 
-            HttpResponse<String> response = httpClient.send(request,
-                    HttpResponse.BodyHandlers.ofString());
+            int status = conn.getResponseCode();
+            String respBody = readBody(conn);
 
-            if (response.statusCode() == 200) {
+            if (status == 200) {
                 // Login response carries extra fields (role, permissions[], etc.) beyond the
-                // token — read as a tree instead of Map<String,String> so those don't break
+                // token - read as a tree instead of Map<String,String> so those don't break
                 // deserialization (permissions is a JSON array, not a String).
-                com.fasterxml.jackson.databind.JsonNode node = objectMapper.readTree(response.body());
+                com.fasterxml.jackson.databind.JsonNode node = objectMapper.readTree(respBody);
                 cachedToken = node.has("token") ? node.get("token").asText() : null;
                 tokenExpiry = System.currentTimeMillis() + (23 * 60 * 60 * 1000);
                 return cachedToken;
+            } else {
+                log.warn("FacetClient login returned HTTP {}: {}", status, respBody);
             }
         } catch (Exception e) {
             log.warn("FacetClient login failed: {}", e.getMessage());

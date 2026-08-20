@@ -101,7 +101,15 @@
         <dependency>
             <groupId>io.github.anupanupranjan-gif</groupId>
             <artifactId>nexarank-spring-boot-starter</artifactId>
-            <version>1.0.4</version>
+            <!-- Was pinned to 1.0.4, which was never actually available anywhere
+                 (not on Maven Central - local-install only per NR-42 - and never
+                 installed to this machine's local repo either). The SDK moved to
+                 1.0.6 for NR-117 (X-Tenant-Id/X-Project-Id headers on enrich()) and
+                 this pin was never updated to match, so search-api has been
+                 unbuildable from source since NR-117 shipped - only ever running
+                 from a pre-built ghcr.io image. Found 2026-08-20 while rebuilding
+                 from source for the first time this session. -->
+            <version>1.0.6</version>
         </dependency>
     </dependencies>
 

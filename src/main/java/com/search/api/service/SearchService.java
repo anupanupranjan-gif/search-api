@@ -182,7 +182,24 @@ public class SearchService {
         // response, keeps the cache exactly as effective as before regardless of how
         // much traffic carries a sessionId (cache hits simply don't get personalized,
         // same trade-off already accepted for BOOST/BURY/PIN/SYNONYM rules on a hit).
-        cacheService.putSearchResults(cacheKey, hits, result.facets(), result.totalHits());
+        //
+        // Re-read rulesVersion here rather than reusing the value from the lookup
+        // above: a rule mutation landing in the gap between that read and the
+        // (slow, LLM-capable) enrich() call above would otherwise get written to
+        // cache under a stale version tag — content computed WITH the new rule,
+        // filed under the OLD version key. Any request racing the same mutation
+        // and reading the OLD version afterward then hits that entry and never
+        // recomputes, serving pre-rule-change results indefinitely (until TTL or
+        // the next mutation). This was the root cause of the intermittent
+        // "LIVE rule doesn't show up on the next request" staleness bug. Reading
+        // the version again right before the write shrinks that race window from
+        // the full enrich() round trip down to a single Redis round trip.
+        String writeRulesVersion = cacheService.getRulesVersion(nexaRankTenantId, nexaRankProjectId);
+        String writeCacheKey = writeRulesVersion.equals(rulesVersion) ? cacheKey
+                : cacheService.searchKey(req.getQuery(), req.getMode(),
+                    req.getCategory(), req.getBrand(), req.getMinPrice(), req.getMaxPrice(), req.getPage(),
+                    facetSignature, writeRulesVersion);
+        cacheService.putSearchResults(writeCacheKey, hits, result.facets(), result.totalHits());
 
         List<SearchHit> responseHits = applyPersonalization(hits, finalEnriched);
 

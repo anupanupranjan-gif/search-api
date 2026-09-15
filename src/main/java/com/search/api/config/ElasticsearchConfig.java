@@ -33,7 +33,7 @@ public class ElasticsearchConfig {
     @Value("${elasticsearch.username:elastic}")
     private String username;
 
-    @Value("${elasticsearch.password:changeme}")
+    @Value("${elasticsearch.password}")
     private String password;
 
     @Value("${elasticsearch.scheme:https}")

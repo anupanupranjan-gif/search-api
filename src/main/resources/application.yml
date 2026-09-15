@@ -20,7 +20,7 @@ elasticsearch:
   host: ${ES_HOST:localhost}
   port: ${ES_PORT:9200}
   username: ${ES_USERNAME:elastic}
-  password: ${ES_PASSWORD:changeme}
+  password: ${ES_PASSWORD}
   scheme: ${ES_SCHEME:http}
 search:
   vector:

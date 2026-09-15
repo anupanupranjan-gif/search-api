@@ -30,6 +30,42 @@ public class RagService {
     @Value("${ollama.timeout-seconds:10}")
     private int timeoutSeconds;
 
+    // NR-176 (search-api part): these prompts had no config mechanism at all —
+    // externalized the same way ollama.base-url/model/timeout-seconds already
+    // are, rather than adding a DB-backed admin UI like nexarank-api's
+    // LlmConfig (search-api is deliberately stateless, no Postgres/JPA).
+    // Blank (unset) means "use the built-in default" — set via k8s ConfigMap
+    // env vars PROMPTS_RAG_ANSWER / PROMPTS_RAG_COMPARE to override.
+    @Value("${prompts.rag-answer:}")
+    private String ragAnswerPromptOverride;
+
+    @Value("${prompts.rag-compare:}")
+    private String ragComparePromptOverride;
+
+    private static final String DEFAULT_RAG_ANSWER_PROMPT_TEMPLATE = """
+            You are a helpful eCommerce shopping assistant.
+            Answer the user's question based ONLY on the products listed below.
+            Be concise and specific. Do not make up product details.
+            If the answer is not in the product list, say so.
+
+            Products:
+            %s
+
+            Question: %s
+
+            Answer:""";
+
+    private static final String DEFAULT_RAG_COMPARE_PROMPT_TEMPLATE = """
+            You are a helpful eCommerce shopping assistant.
+            Compare the following products clearly and concisely.
+            Highlight key differences in price, brand, and rating.
+            Recommend which is best value and why.
+
+            Products to compare:
+            %s
+
+            Comparison:""";
+
     private final HttpClient httpClient = HttpClient.newBuilder()
             .connectTimeout(Duration.ofSeconds(3))
             .build();
@@ -126,18 +162,10 @@ public class RagService {
             ));
         }
 
-        return String.format("""
-                You are a helpful eCommerce shopping assistant.
-                Answer the user's question based ONLY on the products listed below.
-                Be concise and specific. Do not make up product details.
-                If the answer is not in the product list, say so.
-                
-                Products:
-                %s
-                
-                Question: %s
-                
-                Answer:""", context, question);
+        String template = (ragAnswerPromptOverride != null && !ragAnswerPromptOverride.isBlank())
+                ? ragAnswerPromptOverride
+                : DEFAULT_RAG_ANSWER_PROMPT_TEMPLATE;
+        return String.format(template, context, question);
     }
 
     private String buildComparePrompt(List<SearchHit> products) {
@@ -153,15 +181,9 @@ public class RagService {
             ));
         }
 
-        return String.format("""
-                You are a helpful eCommerce shopping assistant.
-                Compare the following products clearly and concisely.
-                Highlight key differences in price, brand, and rating.
-                Recommend which is best value and why.
-                
-                Products to compare:
-                %s
-                
-                Comparison:""", context);
+        String template = (ragComparePromptOverride != null && !ragComparePromptOverride.isBlank())
+                ? ragComparePromptOverride
+                : DEFAULT_RAG_COMPARE_PROMPT_TEMPLATE;
+        return String.format(template, context);
     }
 }

@@ -58,6 +58,18 @@ ollama:
   base-url: ${OLLAMA_BASE_URL:http://host.docker.internal:11434}
   model: ${OLLAMA_MODEL:gemma3:1b}
   timeout-seconds: ${OLLAMA_TIMEOUT:5}
+# NR-176 (search-api part): RagService/QueryRewriteService's prompt templates
+# were fully hardcoded with no config mechanism at all. Each is now overridable
+# here (or via the matching env var below) — leave unset/blank to keep the
+# built-in default text (see the DEFAULT_*_PROMPT_TEMPLATE constants in the
+# corresponding service class). Unlike nexarank-api's per-tenant LlmConfig,
+# these are deploy-time overrides (env var / ConfigMap + rollout restart),
+# not a runtime admin UI — search-api has no DB to back one with.
+prompts:
+  rag-answer: ${PROMPTS_RAG_ANSWER:}
+  rag-compare: ${PROMPTS_RAG_COMPARE:}
+  query-rewrite: ${PROMPTS_QUERY_REWRITE:}
+  keyword-extraction: ${PROMPTS_KEYWORD_EXTRACTION:}
 cache:
   search:
     ttl-seconds: 300

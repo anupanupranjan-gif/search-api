@@ -28,6 +28,32 @@ public class QueryRewriteService {
     @Value("${ollama.timeout-seconds:5}")
     private int timeoutSeconds;
 
+    // NR-176 (search-api part): see RagService's identical comment — externalized
+    // via k8s ConfigMap env vars PROMPTS_QUERY_REWRITE / PROMPTS_KEYWORD_EXTRACTION,
+    // blank (unset) means "use the built-in default".
+    @Value("${prompts.query-rewrite:}")
+    private String queryRewritePromptOverride;
+
+    @Value("${prompts.keyword-extraction:}")
+    private String keywordExtractionPromptOverride;
+
+    private static final String DEFAULT_QUERY_REWRITE_PROMPT_TEMPLATE = """
+            You are a search query expander for an eCommerce product search engine.
+            Expand the following search query with related terms, synonyms, and product types.
+            Return ONLY the expanded query as a single line of comma-separated terms.
+            Do not explain. Do not add any other text.
+
+            Query: %s
+            Expanded:""";
+
+    private static final String DEFAULT_KEYWORD_EXTRACTION_PROMPT_TEMPLATE = """
+            Extract the key product search terms from this question.
+            Return ONLY 2-4 keywords suitable for a product search engine.
+            No explanation. No punctuation. Just the keywords.
+
+            Question: %s
+            Keywords:""";
+
     private final HttpClient httpClient = HttpClient.newBuilder()
             .connectTimeout(Duration.ofSeconds(3))
             .build();
@@ -86,15 +112,12 @@ public class QueryRewriteService {
 
     public String extractKeywords(String question) {
         try {
+            String keywordTemplate = (keywordExtractionPromptOverride != null && !keywordExtractionPromptOverride.isBlank())
+                    ? keywordExtractionPromptOverride
+                    : DEFAULT_KEYWORD_EXTRACTION_PROMPT_TEMPLATE;
             String requestBody = objectMapper.writeValueAsString(Map.of(
                     "model", ollamaModel,
-                    "prompt", String.format("""
-                            Extract the key product search terms from this question.
-                            Return ONLY 2-4 keywords suitable for a product search engine.
-                            No explanation. No punctuation. Just the keywords.
-                            
-                            Question: %s
-                            Keywords:""", question),
+                    "prompt", String.format(keywordTemplate, question),
                     "stream", false,
                     "options", Map.of("temperature", 0.1, "num_predict", 20)
             ));
@@ -124,13 +147,9 @@ public class QueryRewriteService {
     }
 
     private String buildPrompt(String query) {
-        return String.format("""
-                You are a search query expander for an eCommerce product search engine.
-                Expand the following search query with related terms, synonyms, and product types.
-                Return ONLY the expanded query as a single line of comma-separated terms.
-                Do not explain. Do not add any other text.
-                
-                Query: %s
-                Expanded:""", query);
+        String template = (queryRewritePromptOverride != null && !queryRewritePromptOverride.isBlank())
+                ? queryRewritePromptOverride
+                : DEFAULT_QUERY_REWRITE_PROMPT_TEMPLATE;
+        return String.format(template, query);
     }
 }

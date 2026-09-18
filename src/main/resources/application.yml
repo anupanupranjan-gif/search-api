@@ -81,6 +81,12 @@ nexarank:
   base-url: ${NEXARANK_BASE_URL:http://nexarank-api.default.svc.cluster.local}
   service-username: ${NEXARANK_USERNAME:admin}
   service-password: ${NEXARANK_PASSWORD:admin123}
+  # Sent as X-Api-Key by nexarank-java-sdk's NexaRankClient on every call to
+  # nexarank-api (enrich, click/search-event/zero-result tracking) — required
+  # now that nexarank-api actually verifies it against the same shared secret
+  # (nexarank.internal.api-key there). Blank means the SDK sends no header at
+  # all, and those calls fall back to nexarank-api's anonymous/default scope.
+  api-key: ${NEXARANK_API_KEY:}
   cache-ttl-seconds: ${NEXARANK_CACHE_TTL:30}
   # nexarank-java-sdk's NexaRankClient (used for rule enrichment) binds its own
   # in-process cache TTL to "nexarank.cache-ttl" (a duration string), NOT
